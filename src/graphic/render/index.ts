@@ -5,6 +5,7 @@ import { circle } from '../elements/circle.ts';
 import { ellipse } from '../elements/ellipse.ts';
 import { line } from '../elements/line.ts';
 import { polyline } from '../elements/polyline.ts';
+import { polygon } from '../elements/polygon.ts';
 
 import { createTransformationMatrix } from '../transformation/index.ts';
 
@@ -68,6 +69,10 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
       return `<polyline points="${polyline.points.map((point) => `${point.x + plane.x},${point.y + plane.y}`).join(' ')}" stroke="${polyline.stroke}" stroke-dasharray="${polyline.strokeDasharray}" stroke-linecap="${polyline.strokeLinecap}" stroke-linejoin="${polyline.strokeLinejoin}" transform="${renderTransform(polyline.transform, config)}" opacity="${polyline.opacity}" visibility="${polyline.visibility}" />`;
     }
 
+    function renderPolygon(polygon: polygon, plane: plane): string {
+      return `<polygon points="${polygon.points.map((point) => `${point.x + plane.x},${point.y + plane.y}`).join(' ')}" fill="${polygon.fill}" stroke="${polygon.stroke}" stroke-dasharray="${polygon.strokeDasharray}" stroke-linecap="${polygon.strokeLinecap}" stroke-linejoin="${polygon.strokeLinejoin}" transform="${renderTransform(polygon.transform, config)}" opacity="${polygon.opacity}" visibility="${polygon.visibility}" />`;
+    }
+
     for (var element of plane.elements) {
       switch (element?.type) {
         case 'rect':
@@ -84,6 +89,9 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
           break;
         case 'polyline':
           result += renderPolyline(element, plane);
+          break;
+        case 'polygon':
+          result += renderPolygon(element, plane);
           break;
         default:
           break;

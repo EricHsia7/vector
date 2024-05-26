@@ -1,8 +1,9 @@
-import { points, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, elementType, points } from '../attributes/index.ts';
+import { points, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, elementType, points } from '../attributes/index.ts';
 
-export interface polyline {
+export interface polygon {
   points: points;
 
+  fill?: fill;
   stroke?: stroke;
   strokeWidth?: strokeWidth;
   strokeDasharray?: strokeDasharray;
@@ -15,9 +16,10 @@ export interface polyline {
   type: elementType;
 }
 
-export function buildPolyline(points: points, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): polyline {
+export function buildPolygon(points: points, fill: fill, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): polygon {
   return {
     points: points || [],
+    fill: fill || 'none',
     stroke: stroke || 'none',
     strokeWidth: strokeWidth || 0,
     strokeDasharray: strokeDasharray || '',
@@ -26,6 +28,6 @@ export function buildPolyline(points: points, stroke: stroke, strokeWidth: strok
     transform: transform || [],
     opacity: opacity || 1,
     visibility: visibility || 'visible',
-    type: 'polyline'
+    type: 'polygon'
   };
 }

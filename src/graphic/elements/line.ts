@@ -12,7 +12,7 @@ export interface line {
   strokeLinecap?: strokeLinecap;
   strokeLinejoin?: strokeLinejoin;
 
-  transform?: transform; // Transformations applied to the rectangle
+  transform?: transform; // Transformations applied to the line
   opacity?: opacity;
   visibility?: visibility;
   type: elementType;
