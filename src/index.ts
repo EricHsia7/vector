@@ -43,7 +43,8 @@ window.vector = {
       console.log(JSON.stringify(plane0));
       console.log(
         renderPlaneAsXML(plane0, {
-          flattenTransform: false
+          flattenTransform: false,
+          exceptID: false
         })
       );
     }

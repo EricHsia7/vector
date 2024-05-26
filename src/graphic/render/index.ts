@@ -12,6 +12,7 @@ import { points } from '../attributes/index.js';
 
 interface renderConfig {
   flattenTransform: boolean;
+  exceptID: boolean;
 }
 
 export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
@@ -96,31 +97,31 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
     }
 
     function renderRect(rect: rect, plane: plane): string {
-      return `<rect x="${rect.x + plane.x}" y="${rect.y + plane.y}" width="${rect.width}" height="${rect.height}" rx="${rect.rx}" ry="${rect.ry}" fill="${rect.fill}" stroke="${rect.stroke}" stroke-dasharray="${rect.strokeDasharray}" stroke-linecap="${rect.strokeLinecap}" stroke-linejoin="${rect.strokeLinejoin}" transform="${renderTransform(rect.transform, config)}" opacity="${rect.opacity}" visibility="${rect.visibility}" />`;
+      return `<rect x="${rect.x + plane.x}" y="${rect.y + plane.y}" width="${rect.width}" height="${rect.height}" rx="${rect.rx}" ry="${rect.ry}" fill="${rect.fill}" stroke="${rect.stroke}" stroke-dasharray="${rect.strokeDasharray}" stroke-linecap="${rect.strokeLinecap}" stroke-linejoin="${rect.strokeLinejoin}" transform="${renderTransform(rect.transform, config)}" opacity="${rect.opacity}" visibility="${rect.visibility}" ${config.exceptID ? '' : ` id="${rect.id}" `}/>`;
     }
 
     function renderCircle(circle: circle, plane: plane): string {
-      return `<circle cx="${circle.cx + plane.x}" cy="${circle.cy + plane.y}" r="${circle.r}" fill="${circle.fill}" stroke="${circle.stroke}" stroke-dasharray="${circle.strokeDasharray}" stroke-linecap="${circle.strokeLinecap}" stroke-linejoin="${circle.strokeLinejoin}" transform="${renderTransform(circle.transform, config)}" opacity="${circle.opacity}" visibility="${circle.visibility}" />`;
+      return `<circle cx="${circle.cx + plane.x}" cy="${circle.cy + plane.y}" r="${circle.r}" fill="${circle.fill}" stroke="${circle.stroke}" stroke-dasharray="${circle.strokeDasharray}" stroke-linecap="${circle.strokeLinecap}" stroke-linejoin="${circle.strokeLinejoin}" transform="${renderTransform(circle.transform, config)}" opacity="${circle.opacity}" visibility="${circle.visibility}" ${config.exceptID ? '' : ` id="${circle.id}" `}/>`;
     }
 
     function renderEllipse(ellipse: ellipse, plane: plane): string {
-      return `<ellipse cx="${ellipse.cx + plane.x}" cy="${ellipse.cy + plane.y}" rx="${ellipse.rx}" ry="${ellipse.ry}" fill="${ellipse.fill}" stroke="${ellipse.stroke}" stroke-dasharray="${ellipse.strokeDasharray}" stroke-linecap="${ellipse.strokeLinecap}" stroke-linejoin="${ellipse.strokeLinejoin}" transform="${renderTransform(ellipse.transform, config)}" opacity="${ellipse.opacity}" visibility="${ellipse.visibility}" />`;
+      return `<ellipse cx="${ellipse.cx + plane.x}" cy="${ellipse.cy + plane.y}" rx="${ellipse.rx}" ry="${ellipse.ry}" fill="${ellipse.fill}" stroke="${ellipse.stroke}" stroke-dasharray="${ellipse.strokeDasharray}" stroke-linecap="${ellipse.strokeLinecap}" stroke-linejoin="${ellipse.strokeLinejoin}" transform="${renderTransform(ellipse.transform, config)}" opacity="${ellipse.opacity}" visibility="${ellipse.visibility}" ${config.exceptID ? '' : ` id="${ellipse.id}" `}/>`;
     }
 
     function renderLine(line: line, plane: plane): string {
-      return `<line x1="${line.x1 + plane.x}" y1="${line.y1 + plane.y}" x2="${line.x2 + plane.x}" y2="${line.y2 + plane.y}" stroke="${line.stroke}" stroke-dasharray="${line.strokeDasharray}" stroke-linecap="${line.strokeLinecap}" stroke-linejoin="${line.strokeLinejoin}" transform="${renderTransform(line.transform, config)}" opacity="${line.opacity}" visibility="${line.visibility}" />`;
+      return `<line x1="${line.x1 + plane.x}" y1="${line.y1 + plane.y}" x2="${line.x2 + plane.x}" y2="${line.y2 + plane.y}" stroke="${line.stroke}" stroke-dasharray="${line.strokeDasharray}" stroke-linecap="${line.strokeLinecap}" stroke-linejoin="${line.strokeLinejoin}" transform="${renderTransform(line.transform, config)}" opacity="${line.opacity}" visibility="${line.visibility}" ${config.exceptID ? '' : ` id="${line.id}" `}/>`;
     }
 
     function renderPolyline(polyline: polyline, plane: plane): string {
-      return `<polyline points="${renderPoints(polyline.points, plane)}" stroke="${polyline.stroke}" stroke-dasharray="${polyline.strokeDasharray}" stroke-linecap="${polyline.strokeLinecap}" stroke-linejoin="${polyline.strokeLinejoin}" transform="${renderTransform(polyline.transform, config)}" opacity="${polyline.opacity}" visibility="${polyline.visibility}" />`;
+      return `<polyline points="${renderPoints(polyline.points, plane)}" stroke="${polyline.stroke}" stroke-dasharray="${polyline.strokeDasharray}" stroke-linecap="${polyline.strokeLinecap}" stroke-linejoin="${polyline.strokeLinejoin}" transform="${renderTransform(polyline.transform, config)}" opacity="${polyline.opacity}" visibility="${polyline.visibility}" ${config.exceptID ? '' : ` id="${polyline.id}" `}/>`;
     }
 
     function renderPolygon(polygon: polygon, plane: plane): string {
-      return `<polygon points="${renderPoints(polygon.points, plane)}" fill="${polygon.fill}" stroke="${polygon.stroke}" stroke-dasharray="${polygon.strokeDasharray}" stroke-linecap="${polygon.strokeLinecap}" stroke-linejoin="${polygon.strokeLinejoin}" transform="${renderTransform(polygon.transform, config)}" opacity="${polygon.opacity}" visibility="${polygon.visibility}" />`;
+      return `<polygon points="${renderPoints(polygon.points, plane)}" fill="${polygon.fill}" stroke="${polygon.stroke}" stroke-dasharray="${polygon.strokeDasharray}" stroke-linecap="${polygon.strokeLinecap}" stroke-linejoin="${polygon.strokeLinejoin}" transform="${renderTransform(polygon.transform, config)}" opacity="${polygon.opacity}" visibility="${polygon.visibility}" ${config.exceptID ? '' : ` id="${polygon.id}" `}/>`;
     }
 
     function renderPath(path: path, plane: plane): string {
-      return `<path d="${renderD(path.d, plane)}" fill="${path.fill}" stroke="${path.stroke}" stroke-dasharray="${path.strokeDasharray}" stroke-linecap="${path.strokeLinecap}" stroke-linejoin="${path.strokeLinejoin}" transform="${renderTransform(path.transform, config)}" opacity="${path.opacity}" visibility="${path.visibility}" />`;
+      return `<path d="${renderD(path.d, plane)}" fill="${path.fill}" stroke="${path.stroke}" stroke-dasharray="${path.strokeDasharray}" stroke-linecap="${path.strokeLinecap}" stroke-linejoin="${path.strokeLinejoin}" transform="${renderTransform(path.transform, config)}" opacity="${path.opacity}" visibility="${path.visibility}" ${config.exceptID ? '' : ` id="${path.id}" `}/>`;
     }
 
     for (var element of plane.elements) {
@@ -155,7 +156,7 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
       result += renderElements(subPlane, config);
     }
 
-    return `<g>${result}</g>`;
+    return `<g${config.exceptID ? '' : ` id="${plane.id}"`}>${result}</g>`;
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${plane.width}" height="${plane.height}" viewBox="0 0 ${plane.width} ${plane.height}">${renderElements(plane, config)}</svg>`;
 }
