@@ -56,7 +56,7 @@ module.exports = (env, argv) => {
     output: {
       filename: isProduction ? '[name].[contenthash].min.js' : 'index.js', // Output bundle filename
       path: path.resolve(__dirname, 'dist'), // Output directory for bundled files
-      publicPath: 'https://erichsia7.github.io/vector/dist/',
+      publicPath: './',
       library: {
         name: 'vector',
         type: 'umd',
