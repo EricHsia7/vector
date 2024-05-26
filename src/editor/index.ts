@@ -27,7 +27,7 @@ export function createVectorDocument(width: width, height: height, planes: plane
 }
 
 export function resizeEditor(): void {
-  const canvas: HTMLCanvasElement = document.querySelector('#css_canvas');
+  const canvas: HTMLCanvasElement = document.querySelector('#canvas');
   var viewWidth: number = window.innerWidth;
   var viewHeight: number = window.innerHeight;
   canvas.width = viewWidth;
