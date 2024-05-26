@@ -44,7 +44,7 @@ export function createSkewYMatrix(skewY: skewY): matrix {
 }
 
 export function multiplyMatrices(a: matrix, b: matrix): matrix {
-  const result: matrix = [
+  var result: matrix = [
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]
@@ -53,7 +53,7 @@ export function multiplyMatrices(a: matrix, b: matrix): matrix {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       for (let k = 0; k < 3; k++) {
-        result[i][j] += a[i][k] * b[k][j];
+        result[i][j] = result[i][j] + a[i][k] * b[k][j];
       }
     }
   }
