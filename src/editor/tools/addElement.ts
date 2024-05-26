@@ -73,11 +73,12 @@ export function modifyAddingElement(cursorX: number, cursorY: number): void {
       addingElement.d.push({ type: 'L', x: cursorX, y: cursorY });
     }
   }
+  console.log(addingElement);
 }
 
 export function settleAddingElement(cursorX: number, cursorY: number): void {
   if (adding) {
     modifyAddingElement(cursorX, cursorY);
-    adding = false
+    adding = false;
   }
 }

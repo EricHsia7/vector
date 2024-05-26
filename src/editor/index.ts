@@ -25,3 +25,11 @@ export function createVectorDocument(width: width, height: height, planes: plane
   vectorDocuments[object?.id] = object;
   return object;
 }
+
+export function initializeEditor() {
+  const canvas: HTMLCanvasElement = document.querySelector('#canvas');
+  var viewWidth: number = window.innerWidth;
+  var viewHeight: number = window.innerHeight;
+  canvas.width = viewWidth;
+  canvas.height = viewHeight;
+}

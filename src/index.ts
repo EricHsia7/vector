@@ -5,6 +5,8 @@ import { buildPlane } from './graphic/plane/index.ts';
 import { renderPlaneAsXML } from './graphic/render/index.ts';
 import { initializeTools } from './editor/tools/index.ts';
 
+import './editor/index.css';
+
 window.vector = {
   test: {
     createTransformationMatrix,
