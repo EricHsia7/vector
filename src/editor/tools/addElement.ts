@@ -73,7 +73,7 @@ export function modifyAddingElement(cursorX: number, cursorY: number): void {
       addingElement.d.push({ type: 'L', x: cursorX, y: cursorY });
     }
   }
-  console.log(new Date().getTime(), addingElement);
+  console.log(new Date().getTime(), JSON.stringify(addingElement));
 }
 
 export function settleAddingElement(cursorX: number, cursorY: number): void {
