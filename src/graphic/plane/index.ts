@@ -6,19 +6,21 @@ export interface plane {
   y: number;
   width: number;
   height: number;
+  root: boolean;
   elements: (rect | circle)[];
   subPlanes: plane[];
   type: 'plane';
 }
 
-export function buildPlane(x, y, width, height, elements): plane {
+export function buildPlane(x, y, width, height, root, elements, subPlanes): plane {
   return {
-    x: x || 0,
-    y: y || 0,
+    x: root ? 0 : x || 0,
+    y: root ? 0 : y || 0,
     width: width || 0,
     height: height || 0,
+    root: root || false,
     elements: elements || [],
-    subPlanes: [],
+    subPlanes: subPlanes || [],
     type: 'plane'
   };
 }

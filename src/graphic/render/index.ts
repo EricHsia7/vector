@@ -7,50 +7,56 @@ interface renderConfig {
 }
 
 export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
-  var result = '';
-  function renderTransform(transform: transform, config: renderConfig): string {
-    if (config.flattenTransform) {
-      var transformationMatrix = createTransformationMatrix(transform);
-      var result = `matrix(${transformationMatrix[0][0]},${transformationMatrix[1][0]},${transformationMatrix[0][1]},${transformationMatrix[1][1]},${transformationMatrix[0][2]},${transformationMatrix[1][2]})`;
-      return result;
-    } else {
-      var result = [];
-      var transformLength = transform.length;
-      for (var i = 0; i < transformLength; i++) {
-        switch (transform[i]?.type) {
-          case 'translate':
-            result.push(`translate(${transform[i].x},${transform[i].y})`);
-            break;
-          case 'scale':
-            result.push(`scale(${transform[i].x},${transform[i].y})`);
-            break;
-          case 'rotate':
-            result.push(`rotate(${transform[i].deg})`);
-            break;
-          case 'skewX':
-            result.push(`skewX(${transform[i].deg})`);
-            break;
-          case 'skewY':
-            result.push(`skewY(${transform[i].deg})`);
-            break;
-          default:
-            break;
+  function renderElements(plane: plane, config: renderConfig): string {
+    var result = '';
+    function renderTransform(transform: transform, config: renderConfig): string {
+      if (config.flattenTransform) {
+        var transformationMatrix = createTransformationMatrix(transform);
+        var result = `matrix(${transformationMatrix[0][0]},${transformationMatrix[1][0]},${transformationMatrix[0][1]},${transformationMatrix[1][1]},${transformationMatrix[0][2]},${transformationMatrix[1][2]})`;
+        return result;
+      } else {
+        var result = [];
+        var transformLength = transform.length;
+        for (var i = 0; i < transformLength; i++) {
+          switch (transform[i]?.type) {
+            case 'translate':
+              result.push(`translate(${transform[i].x},${transform[i].y})`);
+              break;
+            case 'scale':
+              result.push(`scale(${transform[i].x},${transform[i].y})`);
+              break;
+            case 'rotate':
+              result.push(`rotate(${transform[i].deg})`);
+              break;
+            case 'skewX':
+              result.push(`skewX(${transform[i].deg})`);
+              break;
+            case 'skewY':
+              result.push(`skewY(${transform[i].deg})`);
+              break;
+            default:
+              break;
+          }
         }
+        return result.join(' ');
       }
-      return result.join(' ');
     }
-  }
-  function renderRect(rect: rect, plane: plane): string {
-    return `<rect x="${rect.x + plane.x}" y="${rect.y + plane.y}" width="${rect.width}" height="${rect.height}" rx="${rect.rx}" ry="${rect.ry}" fill="${rect.fill}" stroke="${rect.stroke}" stroke-dasharray="${rect.strokeDasharray}" stroke-linecap="${rect.strokeLinecap}" stroke-linejoin="${rect.strokeLinejoin}" transform="${renderTransform(rect.transform, config)}" opacity="${rect.opacity}" visibility="${rect.visibility}" />`;
-  }
-  for (var element of plane.elements) {
-    switch (element?.type) {
-      case 'rect':
-        result += renderRect(element, plane);
-        break;
-      default:
-        break;
+    function renderRect(rect: rect, plane: plane): string {
+      return `<rect x="${rect.x + plane.x}" y="${rect.y + plane.y}" width="${rect.width}" height="${rect.height}" rx="${rect.rx}" ry="${rect.ry}" fill="${rect.fill}" stroke="${rect.stroke}" stroke-dasharray="${rect.strokeDasharray}" stroke-linecap="${rect.strokeLinecap}" stroke-linejoin="${rect.strokeLinejoin}" transform="${renderTransform(rect.transform, config)}" opacity="${rect.opacity}" visibility="${rect.visibility}" />`;
     }
+    for (var element of plane.elements) {
+      switch (element?.type) {
+        case 'rect':
+          result += renderRect(element, plane);
+          break;
+        default:
+          break;
+      }
+    }
+    for (var subPlane of plane.subPlanes) {
+      result += renderElements(subPlane, config);
+    }
+    return `<g>${result}</g>`;
   }
-  return result;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${plane.width}" height="${plane.height}" viewBox="0 0 ${plane.width} ${plane.height}">${renderElements(plane, config)}</svg>`;
 }
