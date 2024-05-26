@@ -61,7 +61,7 @@ export function initializeTools(): void {
     }
     settleAddingElement(cursorX, cursorY);
   });
-
+  /*
   canvas.addEventListener(events[3], (e) => {
     var cursorX: number = 0;
     var cursorY: number = 0;
@@ -77,4 +77,5 @@ export function initializeTools(): void {
     }
     settleAddingElement(cursorX, cursorY);
   });
+  */
 }
