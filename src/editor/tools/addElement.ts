@@ -1,4 +1,4 @@
-import { vectorDocument } from '../index.ts';
+import { vectorDocuments, vectorDocument } from '../index.ts';
 import { elementType, stroke, fill, strokeWidth } from '../../graphic/attributes/index.ts';
 import { elements } from '../../graphic/elements/index.ts';
 import { buildRect } from '../../graphic/elements/rect.ts';
@@ -73,12 +73,13 @@ export function modifyAddingElement(cursorX: number, cursorY: number): void {
       addingElement.d.push({ type: 'L', x: cursorX, y: cursorY });
     }
   }
-  console.log(addingElement);
+  console.log(new Date().getTime(), addingElement);
 }
 
 export function settleAddingElement(cursorX: number, cursorY: number): void {
   if (adding) {
-    modifyAddingElement(cursorX, cursorY);
     adding = false;
+    modifyAddingElement(cursorX, cursorY);
+    addingElement = null;
   }
 }
