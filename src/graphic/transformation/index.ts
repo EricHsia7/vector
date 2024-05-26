@@ -1,4 +1,4 @@
-import { translate, scale, rotate, skewX, skewY, matrix, rad, transform } from '../attributes/index.ts';
+import { translate, scale, rotate, skewX, skewY, matrix, rad, transform, coordinate } from '../attributes/index.ts';
 
 export function createTranslationMatrix(translate: translate): matrix {
   return [
@@ -61,7 +61,7 @@ export function multiplyMatrices(a: matrix, b: matrix): matrix {
   return result;
 }
 
-export function flattenTransformIntoMatrix(transform: transform): matrix {
+export function createTransformationMatrix(transform: transform): matrix {
   var identityMatrix: matrix = [
     [1, 0, 0],
     [0, 1, 0],
@@ -70,32 +70,41 @@ export function flattenTransformIntoMatrix(transform: transform): matrix {
   var transformLength = transform.length;
 
   for (var i = 0; i < transformLength; i++) {
-    var transformMatrix: matrix;
+    var transformationMatrix: matrix;
     switch (transform[i]?.type) {
       case 'translate':
-        transformMatrix = createTranslationMatrix(transform[i]);
+        transformationMatrix = createTranslationMatrix(transform[i]);
         break;
       case 'scale':
-        transformMatrix = createScalingMatrix(transform[i]);
+        transformationMatrix = createScalingMatrix(transform[i]);
         break;
       case 'rotate':
-        transformMatrix = createRotationMatrix(transform[i]);
+        transformationMatrix = createRotationMatrix(transform[i]);
         break;
       case 'skewX':
-        transformMatrix = createSkewXMatrix(transform[i]);
+        transformationMatrix = createSkewXMatrix(transform[i]);
         break;
       case 'skewY':
-        transformMatrix = createSkewYMatrix(transform[i]);
+        transformationMatrix = createSkewYMatrix(transform[i]);
         break;
       default:
-        transformMatrix = [
+        transformationMatrix = [
           [1, 0, 0],
           [0, 1, 0],
           [0, 0, 1]
         ];
         break;
     }
-    identityMatrix = multiplyMatrices(transformMatrix, identityMatrix);
+    identityMatrix = multiplyMatrices(transformationMatrix, identityMatrix);
   }
   return identityMatrix; // return a new "identity" matrix
+}
+
+export function transformPoints(points: coordinate[], transform: transform): coordinate[] {
+  function applyTransformationMatrix(matrix: matrix, point: coordinate): coordinate {
+    const [x, y, _] = [matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2], matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2], 1];
+    return { x, y };
+  }
+  const transformationMatrix = createTransformationMatrix(transform);
+  return points.map((point) => applyTransformationMatrix(transformationMatrix, point));
 }

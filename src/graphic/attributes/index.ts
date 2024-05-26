@@ -51,3 +51,8 @@ export interface skewY {
 export type matrix = number[][];
 
 export type transform = (translate | scale | rotate | skewX | skewY)[];
+
+export interface coordinate {
+  x: x;
+  y: y;
+}
