@@ -1,4 +1,4 @@
-export type elementType = 'rect' | 'circle' | 'path';
+export type elementType = 'rect' | 'circle' | 'ellipse' | 'line';
 
 export type x = number; // The x-coordinate of the upper-left corner
 export type y = number; // The y-coordinate of the upper-left corner
@@ -7,10 +7,17 @@ export type cy = number; // The y-coordinate of the center
 export type r = number; // The radius of a circle
 export type width = number; // The width of the rectangle
 export type height = number; // The height of the rectangle
-export type rx = number; // The x-axis radius for rounded corners
-export type ry = number; // The y-axis radius for rounded corners
+export type rx = number; // The x-axis radius (for rounded corners)
+export type ry = number; // The y-axis radius (for rounded corners)
 export type deg = number; // The angle in degrees
 export type rad = number; // The angle in radius
+
+export interface coordinate {
+  x: x;
+  y: y;
+}
+
+export type points = coordinate[]
 
 // Presentation attributes
 export type fill = string | null; // The fill color or pattern
@@ -55,7 +62,3 @@ export type matrix = number[][];
 
 export type transform = (translate | scale | rotate | skewX | skewY)[];
 
-export interface coordinate {
-  x: x;
-  y: y;
-}

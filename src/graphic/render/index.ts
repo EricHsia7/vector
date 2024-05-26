@@ -1,7 +1,12 @@
 import { plane } from '../plane/index.ts';
+
 import { rect } from '../elements/rect.ts';
+import { circle } from '../elements/circle.ts';
+import { ellipse } from '../elements/ellipse.ts';
+import { line } from '../elements/line.ts';
+import { polyline } from '../elements/polyline.ts';
+
 import { createTransformationMatrix } from '../transformation/index.ts';
-import { circle } from '../elements/circle.js';
 
 interface renderConfig {
   flattenTransform: boolean;
@@ -51,6 +56,18 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
       return `<circle cx="${circle.cx + plane.x}" cy="${circle.cy + plane.y}" r="${circle.r}" fill="${circle.fill}" stroke="${circle.stroke}" stroke-dasharray="${circle.strokeDasharray}" stroke-linecap="${circle.strokeLinecap}" stroke-linejoin="${circle.strokeLinejoin}" transform="${renderTransform(circle.transform, config)}" opacity="${circle.opacity}" visibility="${circle.visibility}" />`;
     }
 
+    function renderEllipse(ellipse: ellipse, plane: plane): string {
+      return `<ellipse cx="${ellipse.cx + plane.x}" cy="${ellipse.cy + plane.y}" rx="${ellipse.rx}" ry="${ellipse.ry}" fill="${ellipse.fill}" stroke="${ellipse.stroke}" stroke-dasharray="${ellipse.strokeDasharray}" stroke-linecap="${ellipse.strokeLinecap}" stroke-linejoin="${ellipse.strokeLinejoin}" transform="${renderTransform(ellipse.transform, config)}" opacity="${ellipse.opacity}" visibility="${ellipse.visibility}" />`;
+    }
+
+    function renderLine(line: line, plane: plane): string {
+      return `<line x1="${line.x1 + plane.x}" y1="${line.y1 + plane.y}" x2="${line.x2 + plane.x}" y2="${line.y2 + plane.y}" stroke="${line.stroke}" stroke-dasharray="${line.strokeDasharray}" stroke-linecap="${line.strokeLinecap}" stroke-linejoin="${line.strokeLinejoin}" transform="${renderTransform(line.transform, config)}" opacity="${line.opacity}" visibility="${line.visibility}" />`;
+    }
+
+    function renderPolyline(polyline: polyline, plane: plane): string {
+      return `<polyline points="${polyline.points.map((point) => `${point.x + plane.x},${point.y + plane.y}`).join(' ')}" stroke="${polyline.stroke}" stroke-dasharray="${polyline.strokeDasharray}" stroke-linecap="${polyline.strokeLinecap}" stroke-linejoin="${polyline.strokeLinejoin}" transform="${renderTransform(polyline.transform, config)}" opacity="${polyline.opacity}" visibility="${polyline.visibility}" />`;
+    }
+
     for (var element of plane.elements) {
       switch (element?.type) {
         case 'rect':
@@ -58,6 +75,15 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
           break;
         case 'circle':
           result += renderCircle(element, plane);
+          break;
+        case 'ellipse':
+          result += renderEllipse(element, plane);
+          break;
+        case 'line':
+          result += renderLine(element, plane);
+          break;
+        case 'polyline':
+          result += renderPolyline(element, plane);
           break;
         default:
           break;
@@ -67,7 +93,7 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
     for (var subPlane of plane.subPlanes) {
       result += renderElements(subPlane, config);
     }
-    
+
     return `<g>${result}</g>`;
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${plane.width}" height="${plane.height}" viewBox="0 0 ${plane.width} ${plane.height}">${renderElements(plane, config)}</svg>`;
