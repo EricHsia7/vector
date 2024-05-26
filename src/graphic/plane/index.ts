@@ -1,4 +1,5 @@
-import { x, y, width, height, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, elementType } from '../attributes/index.ts';
+import { uuidv4 } from '../../tools/index.ts';
+import { x, y, width, height, id } from '../attributes/index.ts';
 import { elements } from '../elements/index.ts';
 
 type root = boolean;
@@ -11,6 +12,7 @@ export interface plane {
   root: root;
   elements: elements;
   subPlanes: plane[];
+  id: id;
   type: 'plane';
 }
 
@@ -23,6 +25,7 @@ export function buildPlane(x: x, y: y, width: width, height: height, root: root,
     root: root || false,
     elements: elements || [],
     subPlanes: subPlanes || [],
+    id: uuidv4(),
     type: 'plane'
   };
 }

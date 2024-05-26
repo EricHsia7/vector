@@ -37,10 +37,10 @@ window.vector = {
       plane1.elements.push(rect1);
       plane1.elements.push(circle0);
       plane0.subPlanes.push(plane1);
+      console.log(JSON.stringify(plane0));
       console.log(
-        plane0,
         renderPlaneAsXML(plane0, {
-          flattenTransform: true
+          flattenTransform: false
         })
       );
     }
