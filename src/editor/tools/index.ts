@@ -4,7 +4,7 @@ import { addElement, modifyAddingElement, settleAddingElement } from './addEleme
 var defaultElementType: elementType = 'rect';
 
 export function initializeTools(): void {
-  const canvas = document.querySelector('#canvas');
+  const canvas = document.querySelector('#css_canvas');
   const eventsSet = [
     ['touchstart', 'touchmove', 'touchend', 'touchcancel'],
     ['mousedown', 'mousemove', 'mouseup', 'mouseout']

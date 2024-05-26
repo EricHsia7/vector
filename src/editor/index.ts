@@ -26,10 +26,14 @@ export function createVectorDocument(width: width, height: height, planes: plane
   return object;
 }
 
-export function initializeEditor() {
-  const canvas: HTMLCanvasElement = document.querySelector('#canvas');
+export function resizeEditor(): void {
+  const canvas: HTMLCanvasElement = document.querySelector('#css_canvas');
   var viewWidth: number = window.innerWidth;
   var viewHeight: number = window.innerHeight;
   canvas.width = viewWidth;
   canvas.height = viewHeight;
+}
+
+export function initializeEditor() {
+  resizeEditor();
 }
