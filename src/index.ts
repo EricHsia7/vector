@@ -1,4 +1,4 @@
-import { flattenTransformIntoMatrix } from './transformation/index.ts';
+import { flattenTransformIntoMatrix } from './graphic/transformation/index.ts';
 
 window.vector = {
   test: {
