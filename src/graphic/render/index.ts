@@ -9,7 +9,7 @@ interface renderConfig {
 export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
   var result = '';
   function renderTransform(transform: transform, config: renderConfig): string {
-    if (renderConfig.flattenTransform) {
+    if (config.flattenTransform) {
       var transformationMatrix = createTransformationMatrix(transform);
       var result = `matrix(${transformationMatrix[0][0]},${transformationMatrix[1][0]},${transformationMatrix[0][1]},${transformationMatrix[1][1]},${transformationMatrix[0][2]},${transformationMatrix[1][2]})`;
       return result;
