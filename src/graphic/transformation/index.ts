@@ -53,7 +53,7 @@ export function multiplyMatrices(a: matrix, b: matrix): matrix {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       for (let k = 0; k < 3; k++) {
-        result.splice(i, 1, result[i].splice(j, 1, result[i][j] + a[i][k] * b[k][j]));
+        result = result.splice(i, 1, result[i].splice(j, 1, result[i][j] + a[i][k] * b[k][j]));
       }
     }
   }
@@ -95,7 +95,7 @@ export function flattenTransformIntoMatrix(transform: transform): matrix {
         ];
         break;
     }
-    identityMatrix = multiplyMatrices(transform[i], identityMatrix);
+    identityMatrix = multiplyMatrices(transformMatrix, identityMatrix);
   }
   return identityMatrix; // return a new "identity" matrix
 }
