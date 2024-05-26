@@ -50,10 +50,10 @@ export function multiplyMatrices(a: matrix, b: matrix): matrix {
     [0, 0, 0]
   ];
 
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      for (let k = 0; k < 3; k++) {
-        result = result.splice(i, 1, result[i].splice(j, 1, result[i][j] + a[i][k] * b[k][j]));
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      for (var k = 0; k < 3; k++) {
+        result[i][j] += a[i][k] * b[k][j];
       }
     }
   }
