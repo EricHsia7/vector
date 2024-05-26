@@ -32,6 +32,6 @@ export function buildCircle(cx: cx, cy: cy, r: r, fill: fill, stroke: stroke, st
     transform: transform || [],
     opacity: opacity || 1,
     visibility: visibility || 'visible',
-    type: 'rect'
+    type: 'circle'
   };
 }
