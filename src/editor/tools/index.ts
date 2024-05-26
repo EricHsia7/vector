@@ -31,6 +31,8 @@ export function initializeTools(): void {
   });
 
   canvas.addEventListener(events[1], (e) => {
+    var cursorX: number = 0;
+    var cursorY: number = 0;
     if (isTouchDevice) {
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
@@ -45,6 +47,8 @@ export function initializeTools(): void {
   });
 
   canvas.addEventListener(events[2], (e) => {
+    var cursorX: number = 0;
+    var cursorY: number = 0;
     if (isTouchDevice) {
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
@@ -59,6 +63,8 @@ export function initializeTools(): void {
   });
 
   canvas.addEventListener(events[3], (e) => {
+    var cursorX: number = 0;
+    var cursorY: number = 0;
     if (isTouchDevice) {
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
