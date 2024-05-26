@@ -1,4 +1,4 @@
-export type elementType = 'rect' | 'circle' | 'ellipse' | 'line';
+export type elementType = 'rect' | 'circle' | 'ellipse' | 'line' | 'polyline' | 'polygon' | 'path'
 
 export type x = number; // The x-coordinate of the upper-left corner
 export type y = number; // The y-coordinate of the upper-left corner
