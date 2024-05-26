@@ -2,6 +2,9 @@ export type elementType = 'rect' | 'circle' | 'path';
 
 export type x = number; // The x-coordinate of the upper-left corner
 export type y = number; // The y-coordinate of the upper-left corner
+export type cx = number; // The x-coordinate of the center
+export type cy = number; // The y-coordinate of the center
+export type r = number; //radius
 export type width = number; // The width of the rectangle
 export type height = number; // The height of the rectangle
 export type rx = number; // The x-axis radius for rounded corners
