@@ -1,4 +1,5 @@
-import { points, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, elementType, points } from '../attributes/index.ts';
+import { points, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, points } from '../attributes/index.ts';
+import { uuidv4 } from '../../tools/index.ts';
 
 export interface polyline {
   points: points;
@@ -12,6 +13,7 @@ export interface polyline {
   transform?: transform; // Transformations applied to the polyline
   opacity?: opacity;
   visibility?: visibility;
+  id: id;
   type: elementType;
 }
 
@@ -26,6 +28,7 @@ export function buildPolyline(points: points, stroke: stroke, strokeWidth: strok
     transform: transform || [],
     opacity: opacity || 1,
     visibility: visibility || 'visible',
+    id: uuidv4(),
     type: 'polyline'
   };
 }

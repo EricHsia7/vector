@@ -8,6 +8,7 @@ import { polyline } from '../elements/polyline.ts';
 import { polygon } from '../elements/polygon.ts';
 
 import { createTransformationMatrix } from '../transformation/index.ts';
+import { points } from '../attributes/index.js';
 
 interface renderConfig {
   flattenTransform: boolean;
@@ -49,6 +50,51 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
       }
     }
 
+    function renderPoints(points: points, plane: plane): string {
+      return points.map((point) => `${point.x + plane.x},${point.y + plane.y}`).join(' ');
+    }
+
+    function renderD(d: d, plane: plane): string {
+      var result = [];
+      for (var command of d) {
+        switch (command?.type) {
+          case 'M':
+            result.push(`M ${command.x + plane.x} ${command.y + plane.y}`);
+            break;
+          case 'L':
+            result.push(`L ${command.x + plane.x} ${command.y + plane.y}`);
+            break;
+          case 'H':
+            result.push(`H ${command.x + plane.x}`);
+            break;
+          case 'V':
+            result.push(`V ${command.y + plane.y}`);
+            break;
+          case 'C':
+            result.push(`C ${command.x1 + plane.x} ${command.y1 + plane.y},${command.x2 + plane.x} ${command.y2 + plane.y},${command.x + plane.x} ${command.y + plane.y}`);
+            break;
+          case 'S':
+            result.push(`S ${command.x2 + plane.x} ${command.y2 + plane.y},${command.x + plane.x} ${command.y + plane.y}`);
+            break;
+          case 'Q':
+            result.push(`Q ${command.x1 + plane.x} ${command.y1 + plane.y},${command.x + plane.x} ${command.y + plane.y}`);
+            break;
+          case 'T':
+            result.push(`T ${command.x + plane.x} ${command.y + plane.y}`);
+            break;
+          case 'A':
+            result.push(`A ${command.rx} ${command.ry} ${command.xAxisRotation} ${command.largeArcFlag} ${command.sweepFlag} ${command.x + plane.x} ${command.y + plane.y}`);
+            break;
+          case 'Z':
+            result.push('Z');
+            break;
+          default:
+            break;
+        }
+      }
+      return result.join(' ');
+    }
+
     function renderRect(rect: rect, plane: plane): string {
       return `<rect x="${rect.x + plane.x}" y="${rect.y + plane.y}" width="${rect.width}" height="${rect.height}" rx="${rect.rx}" ry="${rect.ry}" fill="${rect.fill}" stroke="${rect.stroke}" stroke-dasharray="${rect.strokeDasharray}" stroke-linecap="${rect.strokeLinecap}" stroke-linejoin="${rect.strokeLinejoin}" transform="${renderTransform(rect.transform, config)}" opacity="${rect.opacity}" visibility="${rect.visibility}" />`;
     }
@@ -66,11 +112,15 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
     }
 
     function renderPolyline(polyline: polyline, plane: plane): string {
-      return `<polyline points="${polyline.points.map((point) => `${point.x + plane.x},${point.y + plane.y}`).join(' ')}" stroke="${polyline.stroke}" stroke-dasharray="${polyline.strokeDasharray}" stroke-linecap="${polyline.strokeLinecap}" stroke-linejoin="${polyline.strokeLinejoin}" transform="${renderTransform(polyline.transform, config)}" opacity="${polyline.opacity}" visibility="${polyline.visibility}" />`;
+      return `<polyline points="${renderPoints(polyline.points, plane)}" stroke="${polyline.stroke}" stroke-dasharray="${polyline.strokeDasharray}" stroke-linecap="${polyline.strokeLinecap}" stroke-linejoin="${polyline.strokeLinejoin}" transform="${renderTransform(polyline.transform, config)}" opacity="${polyline.opacity}" visibility="${polyline.visibility}" />`;
     }
 
     function renderPolygon(polygon: polygon, plane: plane): string {
-      return `<polygon points="${polygon.points.map((point) => `${point.x + plane.x},${point.y + plane.y}`).join(' ')}" fill="${polygon.fill}" stroke="${polygon.stroke}" stroke-dasharray="${polygon.strokeDasharray}" stroke-linecap="${polygon.strokeLinecap}" stroke-linejoin="${polygon.strokeLinejoin}" transform="${renderTransform(polygon.transform, config)}" opacity="${polygon.opacity}" visibility="${polygon.visibility}" />`;
+      return `<polygon points="${renderPoints(polygon.points, plane)}" fill="${polygon.fill}" stroke="${polygon.stroke}" stroke-dasharray="${polygon.strokeDasharray}" stroke-linecap="${polygon.strokeLinecap}" stroke-linejoin="${polygon.strokeLinejoin}" transform="${renderTransform(polygon.transform, config)}" opacity="${polygon.opacity}" visibility="${polygon.visibility}" />`;
+    }
+
+    function renderPath(path: path, plane: plane): string {
+      return `<path d="${renderD(path.d, plane)}" fill="${path.fill}" stroke="${path.stroke}" stroke-dasharray="${path.strokeDasharray}" stroke-linecap="${path.strokeLinecap}" stroke-linejoin="${path.strokeLinejoin}" transform="${renderTransform(path.transform, config)}" opacity="${path.opacity}" visibility="${path.visibility}" />`;
     }
 
     for (var element of plane.elements) {
@@ -92,6 +142,9 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
           break;
         case 'polygon':
           result += renderPolygon(element, plane);
+          break;
+        case 'path':
+          result += renderPath(element, plane);
           break;
         default:
           break;

@@ -1,4 +1,5 @@
-import { cx, cy, r, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, elementType } from '../attributes/index.ts';
+import { cx, cy, r, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
+import { uuidv4 } from '../../tools/index.ts';
 
 export interface circle {
   cx: cx;
@@ -15,6 +16,7 @@ export interface circle {
   transform?: transform;
   opacity?: opacity;
   visibility?: visibility;
+  id: id;
   type: elementType;
 }
 
@@ -32,6 +34,7 @@ export function buildCircle(cx: cx, cy: cy, r: r, fill: fill, stroke: stroke, st
     transform: transform || [],
     opacity: opacity || 1,
     visibility: visibility || 'visible',
+    id: uuidv4(),
     type: 'circle'
   };
 }

@@ -1,4 +1,5 @@
-import { x, y, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, elementType } from '../attributes/index.ts';
+import { x, y, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
+import { uuidv4 } from '../../tools/index.ts';
 
 export interface line {
   x1: x;
@@ -15,6 +16,7 @@ export interface line {
   transform?: transform; // Transformations applied to the line
   opacity?: opacity;
   visibility?: visibility;
+  id: id;
   type: elementType;
 }
 
@@ -32,6 +34,7 @@ export function buildLine(x1: x, y1: y, x2: x, y2: y, stroke: stroke, strokeWidt
     transform: transform || [],
     opacity: opacity || 1,
     visibility: visibility || 'visible',
+    id: uuidv4(),
     type: 'line'
   };
 }

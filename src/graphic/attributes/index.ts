@@ -17,7 +17,76 @@ export interface coordinate {
   y: y;
 }
 
-export type points = coordinate[]
+export type points = coordinate[];
+
+interface moveTo {
+  type: 'M';
+  x: x;
+  y: y;
+}
+
+interface lineTo {
+  type: 'L';
+  x: x;
+  y: y;
+}
+
+interface horizontalLineTo {
+  type: 'H';
+  x: x;
+}
+
+interface verticalLineTo {
+  type: 'V';
+  y: y;
+}
+
+interface cubicBezierCurve {
+  type: 'C';
+  x1: x;
+  y1: y;
+  x2: x;
+  y2: y;
+  x: x;
+  y: y;
+}
+
+interface smoothCurveTo {
+  type: 'S';
+  x2: x;
+  y2: y;
+}
+
+interface quadraticBezier {
+  type: 'Q';
+  x1: x;
+  y1: y;
+  x: x;
+  y: y;
+}
+
+interface smoothQuadraticTo {
+  type: 'T';
+  x: x;
+  y: y;
+}
+
+interface arc {
+  type: 'A';
+  rx: rx;
+  ry: ry;
+  xAxisRotation: any;
+  largeArcFlag: any;
+  sweepFlag: any;
+  x: x;
+  y: y;
+}
+
+interface closePath {
+  type: 'Z';
+}
+
+export type d = (moveTo | lineTo | horizontalLineTo | verticalLineTo | cubicBezierCurve | smoothCurveTo | quadraticBezier | smoothQuadraticTo | arc | closePath)[];
 
 // Presentation attributes
 export type fill = string | null; // The fill color or pattern
@@ -62,3 +131,4 @@ export type matrix = number[][];
 
 export type transform = (translate | scale | rotate | skewX | skewY)[];
 
+export type id = string;

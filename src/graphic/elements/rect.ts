@@ -1,4 +1,5 @@
-import { x, y, width, height, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, elementType } from '../attributes/index.ts';
+import { x, y, width, height, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
+import { uuidv4 } from '../../tools/index.ts';
 
 export interface rect {
   x: x;
@@ -18,6 +19,7 @@ export interface rect {
   transform?: transform; // Transformations applied to the rectangle
   opacity?: opacity;
   visibility?: visibility;
+  id: id;
   type: elementType;
 }
 
@@ -38,6 +40,7 @@ export function buildRect(x: x, y: y, width: width, height: height, rx: rx, ry: 
     transform: transform || [],
     opacity: opacity || 1,
     visibility: visibility || 'visible',
+    id: uuidv4(),
     type: 'rect'
   };
 }

@@ -38,6 +38,7 @@ window.vector = {
       plane1.elements.push(circle0);
       plane0.subPlanes.push(plane1);
       console.log(
+        plane0,
         renderPlaneAsXML(plane0, {
           flattenTransform: true
         })

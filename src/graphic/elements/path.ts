@@ -1,11 +1,8 @@
-import { cx, cy, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
+import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
 import { uuidv4 } from '../../tools/index.ts';
 
-export interface ellipse {
-  cx: cx;
-  cy: cy;
-  rx: rx;
-  ry: ry;
+export interface path {
+  d: d;
 
   fill?: fill;
   stroke?: stroke;
@@ -14,19 +11,16 @@ export interface ellipse {
   strokeLinecap?: strokeLinecap;
   strokeLinejoin?: strokeLinejoin;
 
-  transform?: transform;
+  transform?: transform; // Transformations applied to the line
   opacity?: opacity;
   visibility?: visibility;
   id: id;
   type: elementType;
 }
 
-export function buildEllipse(cx: cx, cy: cy, rx: rx, ry: ry, fill: fill, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): ellipse {
+export function buildPath(d: d, fill: fill, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): path {
   return {
-    cx: cx || 0,
-    cy: cy || 0,
-    rx: rx || 0,
-    ry: ry || 0,
+    d: d || '',
     fill: fill || 'none',
     stroke: stroke || 'none',
     strokeWidth: strokeWidth || 0,
@@ -37,6 +31,6 @@ export function buildEllipse(cx: cx, cy: cy, rx: rx, ry: ry, fill: fill, stroke:
     opacity: opacity || 1,
     visibility: visibility || 'visible',
     id: uuidv4(),
-    type: 'ellipse'
+    type: 'path'
   };
 }
