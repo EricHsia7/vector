@@ -19,9 +19,8 @@ export function initializeTools(): void {
     var cursorY: number = 0;
     if (isTouchDevice) {
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      cursorX = touch.clientX - rect.left;
-      cursorY = touch.clientY - rect.top;
+      cursorX = touch.clientX;
+      cursorY = touch.clientY;
       e.preventDefault(); // Prevent scrolling
     } else {
       cursorX = e.offsetX;
@@ -35,9 +34,8 @@ export function initializeTools(): void {
     var cursorY: number = 0;
     if (isTouchDevice) {
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      cursorX = touch.clientX - rect.left;
-      cursorY = touch.clientY - rect.top;
+      cursorX = touch.clientX;
+      cursorY = touch.clientY;
       e.preventDefault(); // Prevent scrolling
     } else {
       cursorX = e.offsetX;
@@ -51,9 +49,8 @@ export function initializeTools(): void {
     var cursorY: number = 0;
     if (isTouchDevice) {
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      cursorX = touch.clientX - rect.left;
-      cursorY = touch.clientY - rect.top;
+      cursorX = touch.clientX;
+      cursorY = touch.clientY;
       e.preventDefault(); // Prevent scrolling
     } else {
       cursorX = e.offsetX;
