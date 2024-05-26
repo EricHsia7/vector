@@ -1,4 +1,4 @@
-import { points, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, points } from '../attributes/index.ts';
+import { points, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
 import { uuidv4 } from '../../tools/index.ts';
 
 export interface polyline {
