@@ -97,7 +97,17 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
     }
 
     function renderRect(rect: rect, plane: plane): string {
-      return `<rect x="${rect.x + plane.x}" y="${rect.y + plane.y}" width="${rect.width}" height="${rect.height}" rx="${rect.rx}" ry="${rect.ry}" fill="${rect.fill}" stroke="${rect.stroke}" stroke-dasharray="${rect.strokeDasharray}" stroke-linecap="${rect.strokeLinecap}" stroke-linejoin="${rect.strokeLinejoin}" transform="${renderTransform(rect.transform, config)}" opacity="${rect.opacity}" visibility="${rect.visibility}" ${config.exceptID ? '' : ` id="${rect.id}" `}/>`;
+      var rectWidth: number = Math.abs(rect.width);
+      var rectHeight: number = Math.abs(rect.height);
+      var rectX: number = rect.x;
+      var rectY: number = rect.y;
+      if (rect.width < 0) {
+        rectX -= rectWidth;
+      }
+      if (rect.height < 0) {
+        rectY -= rectHeight;
+      }
+      return `<rect x="${rectX + plane.x}" y="${rectY + plane.y}" width="${rectWidth}" height="${rectHeight}" rx="${rect.rx}" ry="${rect.ry}" fill="${rect.fill}" stroke="${rect.stroke}" stroke-dasharray="${rect.strokeDasharray}" stroke-linecap="${rect.strokeLinecap}" stroke-linejoin="${rect.strokeLinejoin}" transform="${renderTransform(rect.transform, config)}" opacity="${rect.opacity}" visibility="${rect.visibility}" ${config.exceptID ? '' : ` id="${rect.id}" `}/>`;
     }
 
     function renderCircle(circle: circle, plane: plane): string {
