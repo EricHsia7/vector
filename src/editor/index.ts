@@ -1,9 +1,10 @@
-import { id, width, height } from '../../graphic/attributes/index.ts';
-import { plane } from '../../graphic/plane/index.ts';
-import { uuidv4 } from '../../tools/index.ts';
+import { id, width, height } from '../graphic/attributes/index.ts';
+import { plane } from '../graphic/plane/index.ts';
+import { uuidv4 } from '../tools/index.ts';
 
 export var vectorDocuments: object = {};
 export var editingVectorDocumentID: string;
+
 export var currentViewWidth: width = 0;
 export var currentViewHeight: height = 0;
 
