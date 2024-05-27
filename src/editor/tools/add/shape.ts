@@ -10,11 +10,11 @@ import { buildPolygon } from '../../../graphic/elements/polygon.ts';
 import { buildPath } from '../../../graphic/elements/path.ts';
 import { buildPlane, plane } from '../../../graphic/plane/index.ts';
 import { renderAddingShapePlane } from '../../display/index.ts';
-import { currentViewHeight, currentViewWidth } from '../../../index.ts';
+import { currentViewHeight, currentViewWidth } from '../../index.ts';
 
 var addingShapeElement: elements;
 var addingShape: boolean = false;
-var addingShapePlane: plane = buildPlane(0, 0, 0, 0, true);
+export var addingShapePlane: plane = buildPlane(0, 0, 0, 0, true);
 
 var currentFill: fill = '#000';
 var currentStroke: stroke = '#000';
