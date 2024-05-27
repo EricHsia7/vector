@@ -4,6 +4,7 @@ import { buildCircle } from './graphic/elements/circle.ts';
 import { buildPlane } from './graphic/plane/index.ts';
 import { renderPlaneAsXML } from './graphic/render/index.ts';
 import { initializeTools } from './editor/tools/index.ts';
+import { initializeEditor } from './editor/index.ts';
 
 import './editor/index.css';
 
@@ -51,6 +52,7 @@ window.vector = {
   },
   initialize: function () {
     initializeTools();
+    initializeEditor();
     console.log(0);
   }
 };
