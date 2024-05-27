@@ -9,7 +9,7 @@ import { buildPolyline } from '../../../graphic/elements/polyline.ts';
 import { buildPolygon } from '../../../graphic/elements/polygon.ts';
 import { buildPath } from '../../../graphic/elements/path.ts';
 import { buildPlane, plane } from '../../../graphic/plane/index.ts';
-import { renderAddingShapePlane } from '../../display/index.js';
+import { renderAddingShapePlane } from '../../display/index.ts';
 
 var addingShapeElement: elements;
 var addingShape: boolean = false;
@@ -22,23 +22,27 @@ var currentElementType: elementType = 'rect';
 
 export function addShapeElement(cursorX: number, cursorY: number): void {
   if (!addingShape) {
-    if (currentElementType === 'rect') {
-      addingShapeElement = buildRect(cursorX, cursorY, 0, 0, 0, 0, currentFill);
-    }
-    if (currentElementType === 'circle') {
-      addingShapeElement = buildCircle(cursorX, cursorY, cursorX, cursorY, 0, currentFill);
-    }
-    if (currentElementType === 'ellipse') {
-      addingShapeElement = buildEllipse(cursorX, cursorY, 0, 0, currentFill);
-    }
-    if (currentElementType === 'line') {
-      addingShapeElement = buildLine(cursorX, cursorY, cursorX, cursorY, currentStroke, currentStrokeWidth);
-    }
-    if (currentElementType === 'polyline') {
-      addingShapeElement = buildPolyline([{ x: cursorX, y: cursorY }], currentStroke, currentStrokeWidth);
-    }
-    if (currentElementType === 'polygon') {
-      addingShapeElement = buildPolygon([{ x: cursorX, y: cursorY }], currentFill, currentStroke, currentStrokeWidth);
+    switch (currentElementType) {
+      case 'rect':
+        addingShapeElement = buildRect(cursorX, cursorY, 0, 0, 0, 0, currentFill);
+        break;
+      case 'circle':
+        addingShapeElement = buildCircle(cursorX, cursorY, cursorX, cursorY, 0, currentFill);
+        break;
+      case 'ellipse':
+        addingShapeElement = buildEllipse(cursorX, cursorY, 0, 0, currentFill);
+        break;
+      case 'line':
+        addingShapeElement = buildLine(cursorX, cursorY, cursorX, cursorY, currentStroke, currentStrokeWidth);
+        break;
+      case 'polyline':
+        addingShapeElement = buildPolyline([{ x: cursorX, y: cursorY }], currentStroke, currentStrokeWidth);
+        break;
+      case 'polygon':
+        addingShapeElement = buildPolygon([{ x: cursorX, y: cursorY }], currentFill, currentStroke, currentStrokeWidth);
+        break;
+      default:
+        break;
     }
     addingShapePlane.elements = [addingShapeElement];
     renderAddingShapePlane();

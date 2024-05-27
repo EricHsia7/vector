@@ -8,7 +8,7 @@ import { polyline } from '../elements/polyline.ts';
 import { polygon } from '../elements/polygon.ts';
 
 import { createTransformationMatrix } from '../transformation/index.ts';
-import { points } from '../attributes/index.js';
+import { points } from '../attributes/index.ts';
 
 interface renderConfig {
   flattenTransform: boolean;
