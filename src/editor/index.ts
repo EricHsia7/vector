@@ -4,6 +4,8 @@ import { uuidv4 } from '../../tools/index.ts';
 
 export var vectorDocuments: object = {};
 export var editingVectorDocumentID: string;
+export var currentViewWidth: width = 0;
+export var currentViewHeight: height = 0;
 
 interface vectorDocument {
   width: width;
@@ -29,15 +31,15 @@ export function createVectorDocument(width: width, height: height, planes: plane
 
 export function resizeEditor(): void {
   const canvas: HTMLCanvasElement = document.querySelector('#canvas');
-  const viewWidth: number = window.innerWidth;
-  const viewHeight: number = window.innerHeight;
-  canvas.width = viewWidth;
-  canvas.height = viewHeight;
+  currentViewWidth = window.innerWidth;
+  currentViewHeight = window.innerHeight;
+  canvas.width = currentViewWidth;
+  canvas.height = currentViewHeight;
 }
 
 export function initializeEditor() {
   resizeEditor();
   //for development
-  var d: vectorDocument = createVectorDocument(300, 300)
-  editingVectorDocumentID = d.id
+  var d: vectorDocument = createVectorDocument(currentViewWidth, currentViewHeight);
+  editingVectorDocumentID = d.id;
 }
