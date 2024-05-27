@@ -8,7 +8,7 @@ import { polyline } from '../elements/polyline.ts';
 import { polygon } from '../elements/polygon.ts';
 
 import { createTransformationMatrix } from '../transformation/index.ts';
-import { points } from '../attributes/index.ts';
+import { points, transform } from '../attributes/index.ts';
 
 interface renderConfig {
   flattenTransform: boolean;
@@ -25,7 +25,7 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
         return result;
       } else {
         var result = [];
-        var transformLength = transform.length;
+        var transformLength: number = transform.length;
         for (var i = 0; i < transformLength; i++) {
           switch (transform[i]?.type) {
             case 'translate':
