@@ -1,7 +1,13 @@
 import { elementType } from '../../graphic/attributes';
-import { addElement, modifyAddingElement, settleAddingElement } from './addElement.ts';
+import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './add/shape.ts';
 
-var defaultElementType: elementType = 'rect';
+export type tools = 'shape' | 'pen' | 'move' | 'selector';
+
+var currentCursorX: number = 0;
+var currentCursorY: number = 0;
+var currentTouchPointIdentifier: number = 0;
+
+var currentTool: tools = 'shape';
 
 export function initializeTools(): void {
   const canvas = document.querySelector('#canvas');
@@ -14,49 +20,78 @@ export function initializeTools(): void {
   const events = isTouchDevice ? eventsSet[0] : eventsSet[1];
 
   // Event listeners
-  canvas.addEventListener(events[0], (e) => {
-    var cursorX: number = 0;
-    var cursorY: number = 0;
+  canvas.addEventListener(events[0], (event) => {
+    event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
-      const touch = e.touches[0];
-      cursorX = touch.clientX;
-      cursorY = touch.clientY;
-      e.preventDefault(); // Prevent scrolling
+      const touch = event.touches[0];
+      currentCursorX = touch.clientX;
+      currentCursorY = touch.clientY;
+      currentTouchPointIdentifier = touch.identifier * 1;
     } else {
-      cursorX = e.offsetX;
-      cursorY = e.offsetY;
+      currentCursorX = event.offsetX;
+      currentCursorY = event.offsetY;
     }
-    addElement(cursorX, cursorY, defaultElementType);
+    switch (currentTool) {
+      case 'shape':
+        addShapeElement(currentCursorX, currentCursorY);
+        break;
+      default:
+        break;
+    }
   });
 
-  canvas.addEventListener(events[1], (e) => {
-    var cursorX: number = 0;
-    var cursorY: number = 0;
+  canvas.addEventListener(events[1], (event) => {
+    event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
-      const touch = e.touches[0];
-      cursorX = touch.clientX;
-      cursorY = touch.clientY;
-      e.preventDefault(); // Prevent scrolling
+      var touches: [] = [];
+      for (var t in event.touches) {
+        if (event.touches.hasOwnProperty(t) && typeof event.touches[t] === 'object') {
+          touches.push(event.touches[t]);
+        }
+      }
+      const touch = touches.filter((p) => p.identifier === currentTouchPointIdentifier)[0];
+      if (touch) {
+        currentCursorX = touch.clientX;
+        currentCursorY = touch.clientY;
+      }
     } else {
-      cursorX = e.offsetX;
-      cursorY = e.offsetY;
+      currentCursorX = event.offsetX;
+      currentCursorY = event.offsetY;
     }
-    modifyAddingElement(cursorX, cursorY);
+    switch (currentTool) {
+      case 'shape':
+        modifyAddingShapeElement(currentCursorX, currentCursorY);
+        break;
+      default:
+        break;
+    }
   });
 
-  canvas.addEventListener(events[2], (e) => {
-    var cursorX: number = 0;
-    var cursorY: number = 0;
+  canvas.addEventListener(events[2], (event) => {
+    event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
-      const touch = e.touches[0];
-      cursorX = touch.clientX;
-      cursorY = touch.clientY;
-      e.preventDefault(); // Prevent scrolling
+      var touches = [];
+      for (var t in event.changedTouches) {
+        if (event.changedTouches.hasOwnProperty(t) && typeof event.changedTouches[t] === 'object') {
+          touches.push(event.changedTouches[t]);
+        }
+      }
+      const touch = touches.filter((p) => p.identifier === currentTouchPointIdentifier)[0];
+      if (touch) {
+        currentCursorX = touch.clientX;
+        currentCursorY = touch.clientY;
+      }
     } else {
-      cursorX = e.offsetX;
-      cursorY = e.offsetY;
+      currentCursorX = event.offsetX;
+      currentCursorY = event.offsetY;
     }
-    settleAddingElement(cursorX, cursorY);
+    switch (currentTool) {
+      case 'shape':
+        settleAddingShapeElement(currentCursorX, currentCursorY);
+        break;
+      default:
+        break;
+    }
   });
   /*
   canvas.addEventListener(events[3], (e) => {
@@ -72,7 +107,7 @@ export function initializeTools(): void {
       cursorX = e.offsetX;
       cursorY = e.offsetY;
     }
-    settleAddingElement(cursorX, cursorY);
+    settleAddingShapeElement(cursorX, cursorY);
   });
   */
 }

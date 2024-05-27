@@ -7,7 +7,7 @@
   background: var(--v-cssvar-ffffff);
 }
 
-.css_svg_box {
+.css_root_plane {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -16,7 +16,7 @@
   overflow: hidden;
 }
 
-.css_svg_box svg {
+.css_root_plane svg {
   position: absolute;
   top: 0px;
   left: 0px;

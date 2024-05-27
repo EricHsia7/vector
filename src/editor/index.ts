@@ -2,7 +2,8 @@ import { id, width, height } from '../../graphic/attributes/index.ts';
 import { plane } from '../../graphic/plane/index.ts';
 import { uuidv4 } from '../../tools/index.ts';
 
-var vectorDocuments: object = {};
+export var vectorDocuments: object = {};
+export var editingVectorDocumentID: string;
 
 interface vectorDocument {
   width: width;
@@ -28,12 +29,15 @@ export function createVectorDocument(width: width, height: height, planes: plane
 
 export function resizeEditor(): void {
   const canvas: HTMLCanvasElement = document.querySelector('#canvas');
-  var viewWidth: number = window.innerWidth;
-  var viewHeight: number = window.innerHeight;
+  const viewWidth: number = window.innerWidth;
+  const viewHeight: number = window.innerHeight;
   canvas.width = viewWidth;
   canvas.height = viewHeight;
 }
 
 export function initializeEditor() {
   resizeEditor();
+  //for development
+  var d: vectorDocument = createVectorDocument(300, 300)
+  editingVectorDocumentID = d.id
 }
