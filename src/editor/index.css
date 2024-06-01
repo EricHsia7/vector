@@ -5,6 +5,11 @@
   width: 100%;
   height: 100%;
   background: var(--v-cssvar-ffffff);
+  display: none;
+}
+
+.css_editor[displayed="true"] {
+  display: block;
 }
 
 .css_root_plane {
