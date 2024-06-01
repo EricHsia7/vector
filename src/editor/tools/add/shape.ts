@@ -1,4 +1,4 @@
-import { vectorDocuments, vectorDocument, editingVectorDocumentID } from '../../../index.ts';
+import { editingVectorDocument, vectorDocument, editingVectorDocumentID } from '../../../index.ts';
 import { elementType, stroke, fill, strokeWidth } from '../../../graphic/attributes/index.ts';
 import { elements } from '../../../graphic/elements/index.ts';
 import { buildRect } from '../../../graphic/elements/rect.ts';
@@ -101,6 +101,7 @@ export function settleAddingShapeElement(cursorX: number, cursorY: number): void
   if (addingShape) {
     addingShape = false;
     modifyAddingShapeElement(cursorX, cursorY);
+    editingVectorDocument.elements = editingVectorDocument.elements.concat(addingShapePlane.elements);
     renderAddingShapePlane();
     addingShapePlane.elements = [];
     addingShapeElement = null;

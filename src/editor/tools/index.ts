@@ -7,7 +7,8 @@ var currentCursorX: number = 0;
 var currentCursorY: number = 0;
 var currentTouchPointIdentifier: number = 0;
 
-var currentTool: tools = 'shape';
+export var currentTool: tools = 'shape';
+export var selectedElements: string[] = [];
 
 export function initializeTools(): void {
   const canvas = document.querySelector('#canvas');

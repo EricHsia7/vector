@@ -2,7 +2,7 @@ import { id, width, height } from '../graphic/attributes/index.ts';
 import { plane } from '../graphic/plane/index.ts';
 import { uuidv4 } from '../tools/index.ts';
 
-export var vectorDocuments: object = {};
+export var editingVectorDocument: object = {};
 export var editingVectorDocumentID: string;
 
 export var currentViewWidth: width = 0;
@@ -28,7 +28,8 @@ export function createVectorDocument(width: width, height: height, planes: plane
     name: name || 'Untitled',
     type: 'vectorDocument'
   };
-  vectorDocuments[object?.id] = object;
+  editingVectorDocument = object;
+  editingVectorDocumentID = object.id;
   return object;
 }
 

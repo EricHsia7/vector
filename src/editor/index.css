@@ -12,7 +12,7 @@
   display: block;
 }
 
-.css_root_plane {
+.css_editor_plane {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -21,7 +21,7 @@
   overflow: hidden;
 }
 
-.css_root_plane svg {
+.css_editor_plane svg {
   position: absolute;
   top: 0px;
   left: 0px;

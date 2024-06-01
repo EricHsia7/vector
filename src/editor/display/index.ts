@@ -9,3 +9,12 @@ export function renderAddingShapePlane(): void {
   });
   addingShapePlaneElement.innerHTML = xml;
 }
+
+export function renderEditorPlane(): void {
+  const addingEditorPlaneElement: HTMLElement = document.querySelector('.css_editor .css_editor_plane');
+  var xml: string = renderPlaneAsXML(addingShapePlane, {
+    flattenTransform: false,
+    exceptID: false
+  });
+  addingEditorPlaneElement.innerHTML = xml;
+}
