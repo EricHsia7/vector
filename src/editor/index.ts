@@ -55,7 +55,4 @@ export function resizeEditor(): void {
 
 export function initializeEditor() {
   resizeEditor();
-  //for development
-  var d: vectorDocument = createVectorDocument(currentViewWidth, currentViewHeight);
-  editingVectorDocumentID = d.id;
 }
