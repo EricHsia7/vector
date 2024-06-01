@@ -76,7 +76,7 @@
   justify-content: center;
 }
 
-.css_new_document .css_new_document_properties .css_new_document_property .css_new_document_property_value input[type="text"] {
+.css_new_document .css_new_document_properties .css_new_document_property .css_new_document_property_value input {
   position: absolute;
   width: 100%;
   height: 35px;
