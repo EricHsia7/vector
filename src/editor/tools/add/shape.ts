@@ -102,8 +102,9 @@ export function settleAddingShapeElement(cursorX: number, cursorY: number): void
     addingShape = false;
     modifyAddingShapeElement(cursorX, cursorY);
     editingVectorDocument.elements = editingVectorDocument.elements.concat(addingShapePlane.elements);
-    renderAddingShapePlane();
+    renderEditorPlane();
     addingShapePlane.elements = [];
     addingShapeElement = null;
+    renderAddingShapePlane();
   }
 }
