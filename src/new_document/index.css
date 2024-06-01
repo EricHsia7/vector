@@ -21,7 +21,6 @@
   width: clamp(350px, 70%, 550px);
   height: clamp(250px, 70%, 450px);
   transform: translate(-50%, -50%);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);
   border-radius: var(--v-cssvar-border-radius-default);
   background: var(--v-cssvar-f9f9fb);
   display: none;

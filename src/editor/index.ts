@@ -8,6 +8,8 @@ export var editingVectorDocumentID: string;
 export var currentViewWidth: width = 0;
 export var currentViewHeight: height = 0;
 
+const editorElement: HTMLElement = document.querySelector('.css_editor');
+
 interface vectorDocument {
   width: width;
   height: height;
@@ -28,6 +30,19 @@ export function createVectorDocument(width: width, height: height, planes: plane
   };
   vectorDocuments[object?.id] = object;
   return object;
+}
+
+export function openEditor(): void {
+  editorElement.setAttribute('displayed', true);
+}
+
+export function closeEditor(): void {
+  editorElement.setAttribute('displayed', false);
+}
+
+export function openDocument(id: id): void {
+  editingVectorDocumentID = id;
+  openEditor();
 }
 
 export function resizeEditor(): void {
