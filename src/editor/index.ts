@@ -1,5 +1,5 @@
 import { id, width, height } from '../graphic/attributes/index.ts';
-import { plane } from '../graphic/plane/index.ts';
+import { buildPlane, plane } from '../graphic/plane/index.ts';
 import { uuidv4 } from '../tools/index.ts';
 
 interface vectorDocument {
@@ -23,7 +23,7 @@ export function createVectorDocument(width: width, height: height, planes: plane
   var object: vectorDocument = {
     width: width || 0,
     height: height || 0,
-    planes: planes || [],
+    planes: planes || [buildPlane(0, 0, width || 0, height || 0, true, null, null)],
     id: id || `v_${uuidv4()}`,
     name: name || 'Untitled',
     type: 'vectorDocument'
