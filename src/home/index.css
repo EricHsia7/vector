@@ -15,6 +15,8 @@
   font-size: 30px;
   font-weight: 700;
   color: var(--v-cssvar-333333);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .css_home .css_home_buttons {
@@ -23,6 +25,8 @@
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   grid-row-gap: 10px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .css_home .css_home_buttons .css_home_button {
@@ -32,4 +36,6 @@
   align-items: center;
   background: var(--v-cssvar-ededf2);
   border-radius: var(--v-cssvar-border-radius-default);
+  user-select: none;
+  -webkit-user-select: none;
 }

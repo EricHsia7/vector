@@ -3,7 +3,7 @@
   top: 50%;
   left: 50%;
   width: clamp(350px, 70%, 550px);
-  height: clamp(350px, 70%, 550px);
+  height: clamp(250px, 70%, 450px);
   transform: translate(-50%, -50%);
   box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);
   border-radius: var(--v-cssvar-border-radius-default);
@@ -27,6 +27,8 @@
   align-items: center;
   font-weight: 500;
   font-size: 18px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .css_new_document .css_new_document_ratio_preview {
@@ -35,6 +37,8 @@
   left: 0px;
   width: calc(100% - 200px);
   height: calc(100% - 50px - 40px);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .css_new_document .css_new_document_properties {
@@ -63,6 +67,8 @@
   display: flex;
   align-items: center;
   color: var(--v-cssvar-333333);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .css_new_document .css_new_document_properties .css_new_document_property .css_new_document_property_value {
@@ -120,6 +126,8 @@
   grid-gap: 10px;
   padding: 10px;
   box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .css_new_document .css_new_document_buttons .css_new_document_button {
@@ -130,4 +138,6 @@
   border-radius: var(--v-cssvar-border-radius-small);
   color: var(--v-cssvar-333333);
   font-weight: 500;
+  user-select: none;
+  -webkit-user-select: none;
 }
