@@ -12,6 +12,7 @@ import './index.css';
 import './home/index.css';
 import './new_document/index.css';
 import './editor/index.css';
+import './editor/tools/index.css';
 
 window.vector = {
   test: {

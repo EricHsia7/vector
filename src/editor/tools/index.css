@@ -1,0 +1,71 @@
+.css_editor_tools {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  width: 55px;
+  height: calc(55px * 4);
+  display: grid;
+  padding: 5px;
+  grid-template-rows: repeat(4, 1fr);
+  box-sizing: border-box;
+  grid-row-gap: 5px;
+  background: var(--v-cssvar-ededf2);
+  border-radius: 15px;
+  overflow: hidden;
+  transform: translateY(-50%);
+}
+
+.css_editor_tools .css_editor_tool {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.css_editor_tools .css_editor_tool[using="true"] {
+  background: var(--v-cssvar-ffffff);
+  box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.1);
+}
+
+.css_editor_shape_tool_options {
+  position: absolute;
+  top: 50%;
+  left: calc(15px + 55px + 15px);
+  width: 55px;
+  height: calc(55px * 5);
+  padding: 5px;
+  grid-template-rows: repeat(5, 1fr);
+  box-sizing: border-box;
+  grid-row-gap: 5px;
+  background: var(--v-cssvar-ededf2);
+  border-radius: 15px;
+  overflow: hidden;
+  transform: translateY(-50%);
+  display: none;
+}
+
+.css_editor_shape_tool_options[displayed="true"] {
+  display: grid;
+}
+
+.css_editor_shape_tool_options .css_editor_shape_tool_option {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.css_editor_shape_tool_options .css_editor_shape_tool_option[using="true"] {
+  background: var(--v-cssvar-ffffff);
+  box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.1);
+}
