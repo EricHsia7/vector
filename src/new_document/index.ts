@@ -15,8 +15,8 @@ export function closeNewDocument(): void {
 
 export function createDocumentWithInputs(): void {
   const name: string = String(newDocumentElement.querySelector('#new_document_name')) || 'Untitled';
-  const width: number = parseInt(newDocumentElement.querySelector('#new_document_width')) || 64;
-  const height: number = parseInt(newDocumentElement.querySelector('#new_document_height')) || 64;
+  const width: number = parseInt(newDocumentElement.querySelector('#new_document_width').value) || 64;
+  const height: number = parseInt(newDocumentElement.querySelector('#new_document_height').value) || 64;
   var creation: vectorDocument = createVectorDocument(width, height, null, null, name);
   openDocument(creation.id);
 }
