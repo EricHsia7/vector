@@ -5,7 +5,7 @@ import { buildPlane } from './graphic/plane/index.ts';
 import { renderPlaneAsXML } from './graphic/render/index.ts';
 import { initializeTools } from './editor/tools/index.ts';
 import { initializeEditor } from './editor/index.ts';
-import { openNewDocument, closeNewDocument } from './new_document/index.ts';
+import { openNewDocument, closeNewDocument, createDocumentWithInputs } from './new_document/index.ts';
 
 import './theme.css';
 import './index.css';
@@ -58,7 +58,8 @@ window.vector = {
   exports: {
     newDocument: {
       openNewDocument,
-      closeNewDocument
+      closeNewDocument,
+      createDocumentWithInputs
     }
   },
   initialize: function () {
