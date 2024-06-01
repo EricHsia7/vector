@@ -7,6 +7,8 @@ import { initializeTools } from './editor/tools/index.ts';
 import { initializeEditor } from './editor/index.ts';
 import { openNewDocument, closeNewDocument } from './new_document/index.ts';
 
+import './theme.css';
+import './index.css';
 import './home/index.css';
 import './new_document/index.css';
 import './editor/index.css';
