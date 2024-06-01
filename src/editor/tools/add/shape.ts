@@ -101,7 +101,7 @@ export function settleAddingShapeElement(cursorX: number, cursorY: number): void
   if (addingShape) {
     addingShape = false;
     modifyAddingShapeElement(cursorX, cursorY);
-    editingVectorDocument.elements = editingVectorDocument.elements.concat(addingShapePlane.elements);
+    editingVectorDocument.planes[0].elements = editingVectorDocument.planes[0].elements.concat(addingShapePlane.elements);
     renderEditorPlane();
     addingShapePlane.elements = [];
     addingShapeElement = null;
