@@ -1,7 +1,7 @@
 import { elementType } from '../../graphic/attributes';
 import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './add/shape.ts';
 
-export type tools = 'shape' | 'pen' | 'move' | 'selector';
+export type tools = 'shape' | 'ballpen' | 'fountainpen' | 'move' | 'selector';
 
 var currentCursorX: number = 0;
 var currentCursorY: number = 0;
@@ -111,4 +111,26 @@ export function initializeTools(): void {
     settleAddingShapeElement(cursorX, cursorY);
   });
   */
+}
+
+export function switchTool(tool: number): void {
+  switch (tool) {
+    case 0:
+      currentTool = 'shape';
+      break;
+    case 1:
+      currentTool = 'ballpen';
+      break;
+    case 2:
+      currentTool = 'fountainpen';
+      break;
+    case 3:
+      currentTool = 'move';
+      break;
+    case 4:
+      currentTool = 'selector';
+      break;
+    default:
+      break;
+  }
 }

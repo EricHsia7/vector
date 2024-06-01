@@ -19,11 +19,13 @@ export var addingShapePlane: plane = buildPlane(0, 0, 0, 0, true);
 var currentFill: fill = '#000';
 var currentStroke: stroke = '#000';
 var currentStrokeWidth: strokeWidth = 3;
-var currentElementType: elementType = 'rect';
+var currentShapeType: elementType = 'rect';
+
+export function switchShapeType(): void {}
 
 export function addShapeElement(cursorX: number, cursorY: number): void {
   if (!addingShape) {
-    switch (currentElementType) {
+    switch (currentShapeType) {
       case 'rect':
         addingShapeElement = buildRect(cursorX, cursorY, 0, 0, 0, 0, currentFill);
         break;
