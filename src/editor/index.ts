@@ -3,7 +3,7 @@ import { plane } from '../graphic/plane/index.ts';
 import { uuidv4 } from '../tools/index.ts';
 
 export var editingVectorDocument: object = {};
-export var editingVectorDocumentID: string;
+export var editingVectorDocumentID: string = '';
 
 export var currentViewWidth: width = 0;
 export var currentViewHeight: height = 0;

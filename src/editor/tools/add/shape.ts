@@ -1,4 +1,4 @@
-import { editingVectorDocument, vectorDocument, editingVectorDocumentID } from '../../../index.ts';
+import { editingVectorDocument, vectorDocument, editingVectorDocumentID } from '../../index.ts';
 import { elementType, stroke, fill, strokeWidth } from '../../../graphic/attributes/index.ts';
 import { elements } from '../../../graphic/elements/index.ts';
 import { buildRect } from '../../../graphic/elements/rect.ts';
