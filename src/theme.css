@@ -54,6 +54,8 @@
   --v-cssvar-border-radius-small: 8px;
 
   --v-cssvar-transition-duration: 0.32s;
+
+  --v-cssvar-backdrop-filter-blur:blur(15px);
 }
 
 @media (prefers-color-scheme: dark) {
