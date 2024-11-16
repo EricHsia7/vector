@@ -234,7 +234,9 @@ export function smoothPath(path: path): path {
   }
 
   const points = samplePath(path, 3);
+  console.log(0, points)
   const simplifiedPoints = simplifyPoints(points, 3);
+  console.log(1, simplifiedPoints)
   const simplifiedPointsLength = simplifiedPoints.length;
   let simplifiedCommands = [];
   for (let i = 0; i < simplifiedPointsLength; i++) {
@@ -246,6 +248,7 @@ export function smoothPath(path: path): path {
       simplifiedCommands.push({ type: 'Q', x1: currentSimplifiedPoint.x, y1: currentSimplifiedPoint.y, x: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
     }
   }
+  console.log(2, simplifiedCommands)
   path.d = simplifiedCommands;
   return path;
 }
