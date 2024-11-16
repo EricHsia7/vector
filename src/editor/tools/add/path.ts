@@ -10,8 +10,8 @@ let addingPathElements: elements = [];
 let addingPath: boolean = false;
 export let addingPathPlane: plane = buildPlane(0, 0, 0, 0, true);
 
-let currentStroke: stroke = '#000';
-let currentStrokeWidth: strokeWidth = 3;
+let currentStroke: stroke = '#888888';
+let currentStrokeWidth: strokeWidth = 5;
 let currentShapeType: elementType = 'path';
 
 let currentPathType: 'mono' | 'fountain' = 'mono';
@@ -30,6 +30,7 @@ export function addPathElement(cursorX: number, cursorY: number): void {
       default:
         break;
     }
+
     addingPathPlane.width = currentViewWidth;
     addingPathPlane.height = currentViewHeight;
     addingPathPlane.elements = addingPathElements;
@@ -72,6 +73,7 @@ export function settleAddingPathElement(cursorX: number, cursorY: number): void 
       default:
         break;
     }
+
     addingPathPlane.elements = addingPathElements;
     editingVectorDocument.planes[0].elements = editingVectorDocument.planes[0].elements.concat(addingPathPlane.elements);
     renderEditorPlane();

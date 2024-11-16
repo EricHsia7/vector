@@ -100,28 +100,24 @@ export function samplePath(path: path, precision: number): points {
         points.push(currentPoint);
         previousControlPoint = null;
         break;
-
       case 'L':
         const lineEnd = { x: command.x, y: command.y };
         points.push(...interpolateLinear(currentPoint, lineEnd, precision));
         currentPoint = lineEnd;
         previousControlPoint = null;
         break;
-
       case 'H':
         const horizontalEnd = { x: command.x, y: currentPoint.y };
         points.push(...interpolateLinear(currentPoint, horizontalEnd, precision));
         currentPoint = horizontalEnd;
         previousControlPoint = null;
         break;
-
       case 'V':
         const verticalEnd = { x: currentPoint.x, y: command.y };
         points.push(...interpolateLinear(currentPoint, verticalEnd, precision));
         currentPoint = verticalEnd;
         previousControlPoint = null;
         break;
-
       case 'C':
         const cubicStart = currentPoint;
         const cubicControl1 = { x: command.x1, y: command.y1 };
@@ -131,7 +127,6 @@ export function samplePath(path: path, precision: number): points {
         currentPoint = cubicEnd;
         previousControlPoint = cubicControl2;
         break;
-
       case 'S':
         const smoothStart = currentPoint;
         const smoothControl1 = previousControlPoint ? { x: 2 * smoothStart.x - previousControlPoint.x, y: 2 * smoothStart.y - previousControlPoint.y } : smoothStart;
@@ -141,7 +136,6 @@ export function samplePath(path: path, precision: number): points {
         currentPoint = smoothEnd;
         previousControlPoint = smoothControl2;
         break;
-
       case 'Q':
         const quadStart = currentPoint;
         const quadControl = { x: command.x, y: command.y };
@@ -150,7 +144,6 @@ export function samplePath(path: path, precision: number): points {
         currentPoint = quadEnd;
         previousControlPoint = quadControl;
         break;
-
       case 'T':
         const smoothQuadStart = currentPoint;
         const smoothQuadControl = previousControlPoint ? { x: 2 * smoothQuadStart.x - previousControlPoint.x, y: 2 * smoothQuadStart.y - previousControlPoint.y } : smoothQuadStart;
@@ -159,7 +152,6 @@ export function samplePath(path: path, precision: number): points {
         currentPoint = smoothQuadEnd;
         previousControlPoint = smoothQuadControl;
         break;
-
       case 'A':
         const arcStart = currentPoint;
         const arcEnd = { x: command.x, y: command.y };
@@ -167,14 +159,12 @@ export function samplePath(path: path, precision: number): points {
         currentPoint = arcEnd;
         previousControlPoint = null;
         break;
-
       case 'Z':
         if (points.length > 0) {
           points.push(points[0]); // Close path by connecting to the start
         }
         previousControlPoint = null;
         break;
-
       default:
         throw new Error(`Unsupported command type: ${command.type}`);
     }
