@@ -3,7 +3,7 @@ import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from
 import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './shape';
 
 const editorElement: HTMLElement = document.querySelector('.css_editor');
-const editorCanvasElement: HTMLCanvasElement = editorElement.querySelector('#css_editor_canvas');
+const editorCanvasElement: HTMLCanvasElement = editorElement.querySelector('.css_editor_canvas');
 const toolbarElement: HTMLElement = editorElement.querySelector('.css_editor_toolbar');
 const toolbarButtonElements: HTMLElement = toolbarElement.querySelectorAll('.css_editor_toolbar_button');
 

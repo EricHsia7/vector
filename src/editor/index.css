@@ -12,7 +12,7 @@
   display: block;
 }
 
-#css_editor_canvas {
+.css_editor .css_editor_canvas {
   position: absolute;
   top: 0px;
   left: 0px;
