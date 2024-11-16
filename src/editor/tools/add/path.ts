@@ -4,7 +4,7 @@ import { elements } from '../../../graphic/elements/index';
 import { buildPlane, plane } from '../../../graphic/plane/index';
 import { renderAddingPathPlane, renderEditorPlane } from '../../display/index';
 import { currentViewHeight, currentViewWidth } from '../../index';
-import { buildPath } from '../../../graphic/elements/path';
+import { buildPath, samplePath } from '../../../graphic/elements/path';
 
 let addingPathElement: elements = [];
 let addingPath: boolean = false;
@@ -62,6 +62,9 @@ export function settleAddingPathElement(cursorX: number, cursorY: number): void 
     modifyAddingPathElement(cursorX, cursorY);
     editingVectorDocument.planes[0].elements = editingVectorDocument.planes[0].elements.concat(addingPathPlane.elements);
     renderEditorPlane();
+
+    console.log(new Date().getTime(), samplePath(addingPathElement, 3));
+
     addingPathPlane.elements = [];
     addingPathElement = null;
     renderAddingPathPlane();

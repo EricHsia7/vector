@@ -20,6 +20,7 @@ window.vector = {
   test: {
     createTransformationMatrix,
     transformPoints,
+    samplePath,
     r: function () {
       var plane0 = buildPlane(0, 0, 300, 300, true);
       var rect0 = buildRect(
