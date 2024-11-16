@@ -1,10 +1,10 @@
-import { editingVectorDocument } from '../../index';
-import { stroke, strokeWidth } from '../../../graphic/attributes/index';
-import { elements } from '../../../graphic/elements/index';
-import { buildPlane, plane } from '../../../graphic/plane/index';
-import { renderAddingPathPlane, renderEditorPlane } from '../../display/index';
-import { currentViewHeight, currentViewWidth } from '../../index';
-import { buildPath, smoothPath } from '../../../graphic/elements/path';
+import { editingVectorDocument } from '../index';
+import { stroke, strokeWidth } from '../../graphic/attributes/index';
+import { elements } from '../../graphic/elements/index';
+import { buildPlane, plane } from '../../graphic/plane/index';
+import { renderAddingPathPlane, renderEditorPlane } from '../display/index';
+import { currentViewHeight, currentViewWidth } from '../index';
+import { buildPath, smoothPath } from '../../graphic/elements/path';
 
 let addingPathElements: elements = [];
 let addingPath: boolean = false;

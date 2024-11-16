@@ -1,15 +1,15 @@
-import { editingVectorDocument } from '../../index';
-import { elementType, stroke, fill, strokeWidth } from '../../../graphic/attributes/index';
-import { elements } from '../../../graphic/elements/index';
-import { buildRect } from '../../../graphic/elements/rect';
-import { buildCircle } from '../../../graphic/elements/circle';
-import { buildEllipse } from '../../../graphic/elements/ellipse';
-import { buildLine } from '../../../graphic/elements/line';
-import { buildPolyline } from '../../../graphic/elements/polyline';
-import { buildPolygon } from '../../../graphic/elements/polygon';
-import { buildPlane, plane } from '../../../graphic/plane/index';
-import { renderAddingShapePlane, renderEditorPlane } from '../../display/index';
-import { currentViewHeight, currentViewWidth } from '../../index';
+import { editingVectorDocument } from '../index';
+import { elementType, stroke, fill, strokeWidth } from '../../graphic/attributes/index';
+import { elements } from '../../graphic/elements/index';
+import { buildRect } from '../../graphic/elements/rect';
+import { buildCircle } from '../../graphic/elements/circle';
+import { buildEllipse } from '../../graphic/elements/ellipse';
+import { buildLine } from '../../graphic/elements/line';
+import { buildPolyline } from '../../graphic/elements/polyline';
+import { buildPolygon } from '../../graphic/elements/polygon';
+import { buildPlane, plane } from '../../graphic/plane/index';
+import { renderAddingShapePlane, renderEditorPlane } from '../display/index';
+import { currentViewHeight, currentViewWidth } from '../index';
 
 let addingShapeElements: elements = [];
 let addingShape: boolean = false;
