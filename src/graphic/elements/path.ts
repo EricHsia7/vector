@@ -11,7 +11,7 @@ export interface path {
   strokeLinecap?: strokeLinecap;
   strokeLinejoin?: strokeLinejoin;
 
-  transform?: transform; // Transformations applied to the line
+  transform?: transform; // Transformations applied to the path
   opacity?: opacity;
   visibility?: visibility;
   id: id;

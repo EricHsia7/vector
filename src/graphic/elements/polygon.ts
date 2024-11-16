@@ -11,7 +11,7 @@ export interface polygon {
   strokeLinecap?: strokeLinecap;
   strokeLinejoin?: strokeLinejoin;
 
-  transform?: transform; // Transformations applied to the polyline
+  transform?: transform; // Transformations applied to the polygon
   opacity?: opacity;
   visibility?: visibility;
   id: id;
