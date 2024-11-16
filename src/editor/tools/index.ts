@@ -1,7 +1,8 @@
 import { elementType } from '../../graphic/attributes';
+import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './add/path';
 import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './add/shape';
 
-export type tools = 'shape' | 'ballpen' | 'fountainpen' | 'move' | 'selector';
+export type tools = 'shape' | 'pen' | 'move' | 'selector';
 
 let currentCursorX: number = 0;
 let currentCursorY: number = 0;
@@ -36,6 +37,9 @@ export function initializeTools(): void {
       case 'shape':
         addShapeElement(currentCursorX, currentCursorY);
         break;
+      case 'pen':
+        addPathElement(currentCursorX, currentCursorY);
+        break;
       default:
         break;
     }
@@ -63,6 +67,9 @@ export function initializeTools(): void {
       case 'shape':
         modifyAddingShapeElement(currentCursorX, currentCursorY);
         break;
+      case 'pen':
+        modifyAddingPathElement(currentCursorX, currentCursorY);
+        break;
       default:
         break;
     }
@@ -89,6 +96,9 @@ export function initializeTools(): void {
     switch (currentTool) {
       case 'shape':
         settleAddingShapeElement(currentCursorX, currentCursorY);
+        break;
+      case 'pen':
+        settleAddingPathElement(currentCursorX, currentCursorY);
         break;
       default:
         break;
