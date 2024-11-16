@@ -43,12 +43,12 @@ interface verticalLineTo {
 
 interface cubicBezierCurve {
   type: 'C';
-  x1: x;
-  y1: y;
-  x2: x;
-  y2: y;
-  x: x;
-  y: y;
+  x1: x; // starting control point x
+  y1: y; // starting control point y
+  x2: x; // ending control point x
+  y2: y; // ending control point y
+  x: x; // ending point x
+  y: y; // ending point x
 }
 
 interface smoothCurveTo {
@@ -59,8 +59,8 @@ interface smoothCurveTo {
 
 interface quadraticBezier {
   type: 'Q';
-  x1: x;
-  y1: y;
+  x1: x; // control point x
+  y1: y; // control point y
   x: x;
   y: y;
 }

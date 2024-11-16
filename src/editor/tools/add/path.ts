@@ -6,7 +6,7 @@ import { renderAddingPathPlane, renderEditorPlane } from '../../display/index';
 import { currentViewHeight, currentViewWidth } from '../../index';
 import { buildPath, smoothPath } from '../../../graphic/elements/path';
 
-let addingPathElement: elements = [];
+let addingPathElements: elements = [];
 let addingPath: boolean = false;
 export let addingPathPlane: plane = buildPlane(0, 0, 0, 0, true);
 
@@ -14,25 +14,25 @@ let currentStroke: stroke = '#000';
 let currentStrokeWidth: strokeWidth = 3;
 let currentShapeType: elementType = 'path';
 
-let currentPenType: 'ballpen' | 'fountainpen' = 'ballpen';
+let currentPathType: 'mono' | 'fountain' = 'mono';
 
 export function switchPenType(): void {}
 
 export function addPathElement(cursorX: number, cursorY: number): void {
   if (!addingPath) {
-    switch (currentPenType) {
-      case 'ballpen':
-        addingPathElement = buildPath([{ type: 'M', x: cursorX, y: cursorY }], null, currentStroke, currentStrokeWidth);
+    switch (currentPathType) {
+      case 'mono':
+        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], null, currentStroke, currentStrokeWidth));
         break;
-      case 'fountainpen':
-        addingPathElement = buildPath([{ type: 'M', x: cursorX, y: cursorY }], null, currentStroke, currentStrokeWidth);
+      case 'fountain':
+        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], null, currentStroke, currentStrokeWidth));
         break;
       default:
         break;
     }
     addingPathPlane.width = currentViewWidth;
     addingPathPlane.height = currentViewHeight;
-    addingPathPlane.elements = [addingPathElement];
+    addingPathPlane.elements = addingPathElements;
     renderAddingPathPlane();
     addingPath = true;
   }
@@ -40,32 +40,43 @@ export function addPathElement(cursorX: number, cursorY: number): void {
 
 export function modifyAddingPathElement(cursorX: number, cursorY: number): void {
   if (addingPath) {
-    switch (currentPenType) {
-      case 'ballpen':
-        addingPathElement.d.push({ type: 'L', x: cursorX, y: cursorY });
+    switch (currentPathType) {
+      case 'mono':
+        for (let addingPathElement of addingPathElements) {
+          addingPathElement.d.push({ type: 'L', x: cursorX, y: cursorY });
+        }
         break;
-      case 'fountainpen':
+      case 'fountain':
         break;
       default:
         break;
     }
 
-    addingPathPlane.elements = [addingPathElement];
+    addingPathPlane.elements = addingPathElements;
     renderAddingPathPlane();
   }
-  console.log(new Date().getTime(), JSON.stringify(addingPathElement));
 }
 
 export function settleAddingPathElement(cursorX: number, cursorY: number): void {
   if (addingPath) {
     addingPath = false;
     modifyAddingPathElement(cursorX, cursorY);
-    addingPathElement = smoothPath(addingPathElement);
-    addingPathPlane.elements = [addingPathElement];
+    switch (currentPathType) {
+      case 'mono':
+        addingPathElements = addingPathElements.map((addingPathElement) => {
+          return smoothPath(addingPathElement);
+        });
+        break;
+      case 'fountain':
+        break;
+      default:
+        break;
+    }
+    addingPathPlane.elements = addingPathElements;
     editingVectorDocument.planes[0].elements = editingVectorDocument.planes[0].elements.concat(addingPathPlane.elements);
     renderEditorPlane();
     addingPathPlane.elements = [];
-    addingPathElement = null;
+    addingPathElements = [];
     renderAddingPathPlane();
   }
 }

@@ -60,16 +60,16 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
       for (var command of d) {
         switch (command?.type) {
           case 'M':
-            result.push(`M${command.x + plane.x},${command.y + plane.y}`);
+            result.push(`M ${command.x + plane.x} ${command.y + plane.y}`);
             break;
           case 'L':
-            result.push(`L${command.x + plane.x},${command.y + plane.y}`);
+            result.push(`L ${command.x + plane.x} ${command.y + plane.y}`);
             break;
           case 'H':
-            result.push(`H${command.x + plane.x}`);
+            result.push(`H ${command.x + plane.x}`);
             break;
           case 'V':
-            result.push(`V${command.y + plane.y}`);
+            result.push(`V ${command.y + plane.y}`);
             break;
           case 'C':
             result.push(`C ${command.x1 + plane.x} ${command.y1 + plane.y},${command.x2 + plane.x} ${command.y2 + plane.y},${command.x + plane.x} ${command.y + plane.y}`);
@@ -78,7 +78,7 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
             result.push(`S ${command.x2 + plane.x} ${command.y2 + plane.y},${command.x + plane.x} ${command.y + plane.y}`);
             break;
           case 'Q':
-            result.push(`Q${command.x1 + plane.x},${command.y1 + plane.y},${command.x + plane.x},${command.y + plane.y}`);
+            result.push(`Q ${command.x1 + plane.x} ${command.y1 + plane.y} ${command.x + plane.x} ${command.y + plane.y}`);
             break;
           case 'T':
             result.push(`T ${command.x + plane.x} ${command.y + plane.y}`);
