@@ -1,5 +1,5 @@
 import { elementType } from '../../graphic/attributes';
-import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './add/shape.ts';
+import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './add/shape';
 
 export type tools = 'shape' | 'ballpen' | 'fountainpen' | 'move' | 'selector';
 

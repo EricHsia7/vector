@@ -1,4 +1,4 @@
-import { createVectorDocument, openDocument, vectorDocument } from '../editor/index.ts';
+import { createVectorDocument, openDocument, vectorDocument } from '../editor/index';
 
 const newDocumentElement: HTMLElement = document.querySelector('.css_new_document');
 const newDocumentModalOverlayElement: HTMLElement = document.querySelector('.css_new_document_modal_overlay');

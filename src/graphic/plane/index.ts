@@ -1,6 +1,6 @@
-import { uuidv4 } from '../../tools/index.ts';
-import { x, y, width, height, id } from '../attributes/index.ts';
-import { elements } from '../elements/index.ts';
+import { uuidv4 } from '../../tools/index';
+import { x, y, width, height, id } from '../attributes/index';
+import { elements } from '../elements/index';
 
 type root = boolean;
 

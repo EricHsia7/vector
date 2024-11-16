@@ -1,5 +1,5 @@
-import { points, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
-import { uuidv4 } from '../../tools/index.ts';
+import { points, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index';
+import { uuidv4 } from '../../tools/index';
 
 export interface polygon {
   points: points;

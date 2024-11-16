@@ -1,11 +1,12 @@
-import { createTransformationMatrix, transformPoints } from './graphic/transformation/index.ts';
-import { buildRect } from './graphic/elements/rect.ts';
-import { buildCircle } from './graphic/elements/circle.ts';
-import { buildPlane } from './graphic/plane/index.ts';
-import { renderPlaneAsXML } from './graphic/render/index.ts';
-import { initializeTools, switchTool } from './editor/tools/index.ts';
-import { initializeEditor } from './editor/index.ts';
-import { openNewDocument, closeNewDocument, createDocumentWithInputs } from './new_document/index.ts';
+import { createTransformationMatrix, transformPoints } from './graphic/transformation/index';
+import { buildRect } from './graphic/elements/rect';
+import { buildCircle } from './graphic/elements/circle';
+import { buildPlane } from './graphic/plane/index';
+import { renderPlaneAsXML } from './graphic/render/index';
+import { initializeTools, switchTool } from './editor/tools/index';
+import { initializeEditor } from './editor/index';
+import { openNewDocument, closeNewDocument, createDocumentWithInputs } from './new_document/index';
+import { switchShapeType } from './editor/tools/add/shape';
 
 import './theme.css';
 import './index.css';
@@ -13,7 +14,6 @@ import './home/index.css';
 import './new_document/index.css';
 import './editor/index.css';
 import './editor/tools/index.css';
-import { switchShapeType } from './editor/tools/add/shape.js';
 
 window.vector = {
   test: {

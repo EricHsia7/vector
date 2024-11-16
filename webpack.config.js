@@ -111,7 +111,7 @@ module.exports = (env, argv) => {
     ],
     target: ['web', 'es6'], // Target the browser environment (es6 is the default for browsers)
     mode: 'production', // Set the mode to 'production' or 'development'
-    entry: './src/index.ts', // Entry point of your application
+    entry: './src/index', // Entry point of your application
     output: {
       filename: isProduction ? '[contenthash].min.js' : 'index.js', // Output bundle filename
       path: path.resolve(__dirname, 'dist'), // Output directory for bundled files
@@ -143,7 +143,7 @@ module.exports = (env, argv) => {
       ]
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'], // File extensions to resolve
+      extensions: ['', '.tsx', '.js', '.jsx', '.css'], // File extensions to resolve
       mainFields: ['browser', 'module', 'main']
     },
     optimization: {

@@ -1,14 +1,14 @@
-import { plane } from '../plane/index.ts';
+import { plane } from '../plane/index';
 
-import { rect } from '../elements/rect.ts';
-import { circle } from '../elements/circle.ts';
-import { ellipse } from '../elements/ellipse.ts';
-import { line } from '../elements/line.ts';
-import { polyline } from '../elements/polyline.ts';
-import { polygon } from '../elements/polygon.ts';
+import { rect } from '../elements/rect';
+import { circle } from '../elements/circle';
+import { ellipse } from '../elements/ellipse';
+import { line } from '../elements/line';
+import { polyline } from '../elements/polyline';
+import { polygon } from '../elements/polygon';
 
-import { createTransformationMatrix } from '../transformation/index.ts';
-import { points, transform } from '../attributes/index.ts';
+import { createTransformationMatrix } from '../transformation/index';
+import { points, transform } from '../attributes/index';
 
 interface renderConfig {
   flattenTransform: boolean;

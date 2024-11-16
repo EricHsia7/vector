@@ -1,5 +1,5 @@
-import { x, y, width, height, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index.ts';
-import { uuidv4 } from '../../tools/index.ts';
+import { x, y, width, height, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index';
+import { uuidv4 } from '../../tools/index';
 
 export interface rect {
   x: x;

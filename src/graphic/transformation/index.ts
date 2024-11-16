@@ -1,4 +1,4 @@
-import { translate, scale, rotate, skewX, skewY, matrix, rad, transform, coordinate } from '../attributes/index.ts';
+import { translate, scale, rotate, skewX, skewY, matrix, rad, transform, coordinate } from '../attributes/index';
 
 export function createTranslationMatrix(translate: translate): matrix {
   return [
