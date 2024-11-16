@@ -1,3 +1,4 @@
+import { elementType } from '../../graphic/attributes';
 import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './path';
 import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './shape';
 
@@ -128,7 +129,23 @@ export function initializeTools(): void {
 
 export function switchTool(tool: number): void {
   console.log(0, currentTool);
-  currentTool = ['select', 'shape', 'path', 'move'][tool];
+  switch (tool) {
+    case 0:
+      currentTool = 'selector';
+      break;
+    case 1:
+      currentTool = 'shape';
+      break;
+    case 2:
+      currentTool = 'pen';
+      break;
+    case 3:
+      currentTool = 'move';
+      break;
+    default:
+      break;
+  }
+  // currentTool = ['select', 'shape', 'path', 'move'][tool];
   console.log(1, currentTool);
   let index = 0;
   for (const toolbarButton of toolbarButtonElements) {
