@@ -18,6 +18,7 @@ export var currentViewWidth: width = 0;
 export var currentViewHeight: height = 0;
 
 const editorElement: HTMLElement = document.querySelector('.css_editor');
+const editorCanvasElement: HTMLCanvasElement = editorElement.querySelector('#css_editor_canvas');
 
 export function createVectorDocument(width: width, height: height, planes: Array<plane>, id: id, name: string): vectorDocument {
   var object: vectorDocument = {
@@ -47,11 +48,10 @@ export function openDocument(id: id): void {
 }
 
 export function resizeEditor(): void {
-  const canvas: HTMLCanvasElement = document.querySelector('#css_editor_canvas');
   currentViewWidth = window.innerWidth;
   currentViewHeight = window.innerHeight;
-  canvas.width = currentViewWidth;
-  canvas.height = currentViewHeight;
+  editorCanvasElement.width = currentViewWidth;
+  editorCanvasElement.height = currentViewHeight;
 }
 
 export function initializeEditor() {

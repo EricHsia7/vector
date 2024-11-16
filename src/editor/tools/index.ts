@@ -1,10 +1,10 @@
 import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './path';
 import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './shape';
 
-const editor = document.querySelector('.css_editor');
-const editorCanvas = editor.querySelector('#css_editor_canvas');
-const toolbar = editor.querySelector('.css_editor_toolbar');
-const toolbarButtons = toolbar.querySelectorAll('.css_editor_toolbar_button');
+const editorElement: HTMLElement = document.querySelector('.css_editor');
+const editorCanvasElement: HTMLCanvasElement = editorElement.querySelector('#css_editor_canvas');
+const toolbarElement: HTMLElement = editorElement.querySelector('.css_editor_toolbar');
+const toolbarButtonElements: HTMLElement = toolbarElement.querySelectorAll('.css_editor_toolbar_button');
 
 export type tools = 'shape' | 'path' | 'move' | 'select';
 
@@ -25,7 +25,7 @@ export function initializeTools(): void {
   const events = isTouchDevice ? eventsSet[0] : eventsSet[1];
 
   // Event listeners
-  editorCanvas.addEventListener(events[0], (event) => {
+  editorCanvasElement.addEventListener(events[0], (event) => {
     event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
       const touch = event.touches[0];
@@ -48,7 +48,7 @@ export function initializeTools(): void {
     }
   });
 
-  editorCanvas.addEventListener(events[1], (event) => {
+  editorCanvasElement.addEventListener(events[1], (event) => {
     event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
       var touches: [] = [];
@@ -78,7 +78,7 @@ export function initializeTools(): void {
     }
   });
 
-  editorCanvas.addEventListener(events[2], (event) => {
+  editorCanvasElement.addEventListener(events[2], (event) => {
     event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
       var touches = [];
@@ -131,7 +131,7 @@ export function switchTool(tool: number): void {
   currentTool = ['select', 'shape', 'path', 'move'][tool];
   console.log(1, currentTool);
   let index = 0;
-  for (const toolbarButton of toolbarButtons) {
+  for (const toolbarButton of toolbarButtonElements) {
     if (index === tool) {
       toolbarButton.setAttribute('using', 'true');
     } else {
