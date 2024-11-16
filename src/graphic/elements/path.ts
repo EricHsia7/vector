@@ -240,10 +240,14 @@ export function smoothPath(path: path): path {
   for (let i = 0; i < simplifiedPointsLength; i++) {
     const currentSimplifiedPoint = simplifiedPoints[i];
     const nextSimplifiedPoint = simplifiedPoints[i + 1] || currentSimplifiedPoint;
-    if (i === 0 || i === simplifiedPointsLength - 1 || i === simplifiedPointsLength - 2) {
+    if (i === 0) {
       simplifiedCommands.push({ type: 'M', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y });
     } else {
-      simplifiedCommands.push({ type: 'Q', x1: currentSimplifiedPoint.x, y1: currentSimplifiedPoint.y, x: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
+      if (i === simplifiedPointsLength - 1) {
+        simplifiedCommands.push({ type: 'L', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y });
+      } else {
+        simplifiedCommands.push({ type: 'Q', x1: currentSimplifiedPoint.x, y1: currentSimplifiedPoint.y, x: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
+      }
     }
   }
   path.d = simplifiedCommands;

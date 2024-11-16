@@ -60,7 +60,7 @@ export function settleAddingPathElement(cursorX: number, cursorY: number): void 
   if (addingPath) {
     addingPath = false;
     modifyAddingPathElement(cursorX, cursorY);
-    addingPathElement = smoothPath(addingPathElement, 3);
+    addingPathElement = smoothPath(addingPathElement);
     addingPathPlane.elements = [addingPathElement];
     editingVectorDocument.planes[0].elements = editingVectorDocument.planes[0].elements.concat(addingPathPlane.elements);
     renderEditorPlane();
