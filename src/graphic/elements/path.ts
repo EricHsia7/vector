@@ -174,4 +174,70 @@ export function samplePath(path: path, precision: number): points {
   return points;
 }
 
-export function smoothPath(path: path): path {}
+export function smoothPath(path: path): path {
+  function simplifyPoints(points: points, tolerance: number): points {
+    function distanceToSegment(point: coordinate, start: coordinate, end: coordinate): number {
+      var dx = end.x - start.x;
+      var dy = end.y - start.y;
+      var d = dx * dx + dy * dy;
+      var t = ((point.x - start.x) * dx + (point.y - start.y) * dy) / d;
+
+      if (t < 0) {
+        dx = point.x - start.x;
+        dy = point.y - start.y;
+      } else if (t > 1) {
+        dx = point.x - end.x;
+        dy = point.y - end.y;
+      } else {
+        var closestPoint = { x: start.x + t * dx, y: start.y + t * dy };
+        dx = point.x - closestPoint.x;
+        dy = point.y - closestPoint.y;
+      }
+
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    if (points.length < 3) {
+      return points;
+    }
+
+    let dmax = 0;
+    let index = 0;
+
+    // Find the point with the maximum distance
+    for (let i = 1; i < points.length - 1; i++) {
+      let d = distanceToSegment(points[i], points[0], points[points.length - 1]);
+      if (d > dmax) {
+        index = i;
+        dmax = d;
+      }
+    }
+
+    // If max distance is greater than tolerance, split the curve
+    if (dmax > tolerance) {
+      let leftPoints = points.slice(0, index + 1);
+      let rightPoints = points.slice(index);
+      let simplifiedLeft = simplifyPoints(leftPoints, tolerance);
+      let simplifiedRight = simplifyPoints(rightPoints, tolerance);
+      return simplifiedLeft.slice(0, simplifiedLeft.length - 1).concat(simplifiedRight);
+    } else {
+      return [points[0], points[points.length - 1]];
+    }
+  }
+
+  const points = samplePath(path, 3);
+  const simplifiedPoints = simplifyPoints(points, 0.8);
+  const simplifiedPointsLength = simplifiedPoints.length;
+  let simplifiedCommands = [];
+  for (let i = 0; i < simplifiedPointsLength; i++) {
+    const currentSimplifiedPoint = simplifiedPoints[i];
+    const nextSimplifiedPoint = simplifiedPoints[i + 1] || currentSimplifiedPoint;
+    if (i === 0 || i === simplifiedPointsLength - 1) {
+      simplifiedCommands.push({ type: 'M', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y });
+    } else {
+      simplifiedCommands.push({ type: 'Q', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y, x1: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y1: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
+    }
+  }
+  path.d = simplifiedCommands;
+  return path;
+}
