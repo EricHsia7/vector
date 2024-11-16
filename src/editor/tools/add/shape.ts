@@ -1,4 +1,4 @@
-import { editingVectorDocument, vectorDocument, editingVectorDocumentID } from '../../index';
+import { editingVectorDocument } from '../../index';
 import { elementType, stroke, fill, strokeWidth } from '../../../graphic/attributes/index';
 import { elements } from '../../../graphic/elements/index';
 import { buildRect } from '../../../graphic/elements/rect';
@@ -7,19 +7,18 @@ import { buildEllipse } from '../../../graphic/elements/ellipse';
 import { buildLine } from '../../../graphic/elements/line';
 import { buildPolyline } from '../../../graphic/elements/polyline';
 import { buildPolygon } from '../../../graphic/elements/polygon';
-import { buildPath } from '../../../graphic/elements/path';
 import { buildPlane, plane } from '../../../graphic/plane/index';
 import { renderAddingShapePlane, renderEditorPlane } from '../../display/index';
 import { currentViewHeight, currentViewWidth } from '../../index';
 
-var addingShapeElement: elements;
-var addingShape: boolean = false;
-export var addingShapePlane: plane = buildPlane(0, 0, 0, 0, true);
+let addingShapeElement: elements = [];
+let addingShape: boolean = false;
+export let addingShapePlane: plane = buildPlane(0, 0, 0, 0, true);
 
-var currentFill: fill = '#000';
-var currentStroke: stroke = '#000';
-var currentStrokeWidth: strokeWidth = 3;
-var currentShapeType: elementType = 'rect';
+let currentFill: fill = '#000';
+let currentStroke: stroke = '#000';
+let currentStrokeWidth: strokeWidth = 3;
+let currentShapeType: elementType = 'rect';
 
 export function switchShapeType(): void {}
 
@@ -51,11 +50,6 @@ export function addShapeElement(cursorX: number, cursorY: number): void {
     addingShapePlane.height = currentViewHeight;
     addingShapePlane.elements = [addingShapeElement];
     renderAddingShapePlane();
-    /*
-    if (type === 'path') {
-      addingShapeElement = buildPath([{ type: 'M', x: cursorX, y: cursorY }], null, currentFill, currentStrokeWidth);
-    }
-    */
     addingShape = true;
   }
 }

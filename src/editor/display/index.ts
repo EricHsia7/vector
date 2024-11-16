@@ -1,5 +1,6 @@
 import { renderPlaneAsXML } from '../../graphic/render/index';
 import { editingVectorDocument } from '../index';
+import { addingPathPlane } from '../tools/add/path';
 import { addingShapePlane } from '../tools/add/shape';
 
 export function renderAddingShapePlane(): void {
@@ -9,6 +10,15 @@ export function renderAddingShapePlane(): void {
     exceptID: false
   });
   addingShapePlaneElement.innerHTML = xml;
+}
+
+export function renderAddingPathPlane(): void {
+  const addingPathPlaneElement: HTMLElement = document.querySelector('.css_editor .css_adding_path_plane');
+  var xml: string = renderPlaneAsXML(addingPathPlane, {
+    flattenTransform: false,
+    exceptID: false
+  });
+  addingPathPlaneElement.innerHTML = xml;
 }
 
 export function renderEditorPlane(): void {

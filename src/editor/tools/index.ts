@@ -116,19 +116,16 @@ export function initializeTools(): void {
 export function switchTool(tool: number): void {
   switch (tool) {
     case 0:
-      currentTool = 'shape';
+      currentTool = 'selector';
       break;
     case 1:
-      currentTool = 'ballpen';
+      currentTool = 'shape';
       break;
     case 2:
-      currentTool = 'fountainpen';
+      currentTool = 'pen';
       break;
     case 3:
       currentTool = 'move';
-      break;
-    case 4:
-      currentTool = 'selector';
       break;
     default:
       break;
