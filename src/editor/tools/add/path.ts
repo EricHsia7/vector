@@ -11,7 +11,7 @@ let addingPath: boolean = false;
 export let addingPathPlane: plane = buildPlane(0, 0, 0, 0, true);
 
 let currentStroke: stroke = '#888888';
-let currentStrokeWidth: strokeWidth = 5;
+let currentStrokeWidth: strokeWidth = 3;
 let currentShapeType: elementType = 'path';
 
 let currentPathType: 'mono' | 'fountain' = 'mono';

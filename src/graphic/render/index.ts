@@ -131,7 +131,7 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
     }
 
     function renderPath(path: path, plane: plane): string {
-      return `<path d="${renderD(path.d, plane)}" fill="${path.fill}" stroke="${path.stroke}" stroke-dasharray="${path.strokeDasharray}" stroke-linecap="${path.strokeLinecap}" stroke-linejoin="${path.strokeLinejoin}" transform="${renderTransform(path.transform, config)}" opacity="${path.opacity}" visibility="${path.visibility}" ${config.exceptID ? '' : ` id="${path.id}" `}/>`;
+      return `<path d="${renderD(path.d, plane)}" fill="${path.fill}" stroke="${path.stroke}" stroke-width="${path.strokeWidth}" stroke-dasharray="${path.strokeDasharray}" stroke-linecap="${path.strokeLinecap}" stroke-linejoin="${path.strokeLinejoin}" transform="${renderTransform(path.transform, config)}" opacity="${path.opacity}" visibility="${path.visibility}" ${config.exceptID ? '' : ` id="${path.id}" `}/>`;
     }
 
     for (var element of plane.elements) {

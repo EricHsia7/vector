@@ -58,7 +58,7 @@ window.vector = {
       );
     }
   },
-  toolbar : {
+  toolbar: {
     switchTool,
     switchShapeType
   },

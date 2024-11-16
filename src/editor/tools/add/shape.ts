@@ -15,8 +15,8 @@ let addingShapeElements: elements = [];
 let addingShape: boolean = false;
 export let addingShapePlane: plane = buildPlane(0, 0, 0, 0, true);
 
-let currentFill: fill = '#000';
-let currentStroke: stroke = '#000';
+let currentFill: fill = '#000000';
+let currentStroke: stroke = '#888888';
 let currentStrokeWidth: strokeWidth = 3;
 let currentShapeType: elementType = 'rect';
 
