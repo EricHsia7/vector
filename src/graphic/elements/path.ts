@@ -36,22 +36,27 @@ export function buildPath(d: d, fill: fill, stroke: stroke, strokeWidth: strokeW
 }
 
 export function samplePath(path: path, precision: number): points {
-  let commands = path.d;
-  const points: points = [];
+  const commands = path.d;
+  let points: points = [];
 
-  function interpolateLinear(p1: coordinate, p2: coordinate, step: number): points {
-    const segmentPoints: points = [];
-    const dx = (p2.x - p1.x) / step;
-    const dy = (p2.y - p1.y) / step;
-    for (let i = 1; i <= step; i++) {
-      segmentPoints.push({ x: p1.x + dx * i, y: p1.y + dy * i });
+  function interpolateLinear(p1: coordinate, p2: coordinate, precision: number): points {
+    let segmentPoints: points = [];
+    const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    const step = distance / precision;
+    for (let i = 0; i < step; i++) {
+      const x = p1.x + (p2.x - p1.x) * (i / step);
+      const y = p1.y + (p2.x - p1.y) * (i / step);
+      segmentPoints.push({ x, y });
     }
     return segmentPoints;
   }
 
-  function interpolateCubicBezier(p0: coordinate, c1: coordinate, c2: coordinate, p1: coordinate, step: number): points {
-    const segmentPoints: points = [];
-    for (let t = 0; t <= 1; t += 1 / step) {
+  function interpolateCubicBezier(p0: coordinate, c1: coordinate, c2: coordinate, p1: coordinate, precision: number): points {
+    let segmentPoints: points = [];
+    const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    const step = distance / precision;
+    for (let i = 0; i < step; i++) {
+      const t = Math.min(Math.max(i / step, 0), 1);
       const x = Math.pow(1 - t, 3) * p0.x + 3 * Math.pow(1 - t, 2) * t * c1.x + 3 * (1 - t) * Math.pow(t, 2) * c2.x + Math.pow(t, 3) * p1.x;
       const y = Math.pow(1 - t, 3) * p0.y + 3 * Math.pow(1 - t, 2) * t * c1.y + 3 * (1 - t) * Math.pow(t, 2) * c2.y + Math.pow(t, 3) * p1.y;
       segmentPoints.push({ x, y });
@@ -59,9 +64,12 @@ export function samplePath(path: path, precision: number): points {
     return segmentPoints;
   }
 
-  function interpolateQuadraticBezier(p0: coordinate, c: coordinate, p1: coordinate, step: number): points {
-    const segmentPoints: points = [];
-    for (let t = 0; t <= 1; t += 1 / step) {
+  function interpolateQuadraticBezier(p0: coordinate, c: coordinate, p1: coordinate, precision: number): points {
+    let segmentPoints: points = [];
+    const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    const step = distance / precision;
+    for (let i = 0; i < step; i++) {
+      const t = Math.min(Math.max(i / step, 0), 1);
       const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * c.x + Math.pow(t, 2) * p1.x;
       const y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * c.y + Math.pow(t, 2) * p1.y;
       segmentPoints.push({ x, y });
@@ -70,7 +78,7 @@ export function samplePath(path: path, precision: number): points {
   }
 
   function interpolateArc(p0: coordinate, rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: coordinate, step: number): points {
-    const segmentPoints: points = [];
+    let segmentPoints: points = [];
     for (let t = 0; t <= 1; t += 1 / step) {
       const theta = t * Math.PI * 2;
       segmentPoints.push({
