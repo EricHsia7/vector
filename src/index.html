@@ -60,12 +60,12 @@
       <div class="css_editor_plane"></div>
       <div class="css_adding_shape_plane"></div>
       <div class="css_adding_path_plane"></div>
-      <canvas id="canvas"></canvas>
+      <canvas id="css_editor_canvas"></canvas>
       <div class="css_editor_toolbar">
-        <div class="css_editor_tool" using="false" onclick="vector.toolbar.switchTool(0)">selector</div>
-        <div class="css_editor_tool" using="true" onclick="vector.toolbar.switchTool(1)">shape</div>
-        <div class="css_editor_tool" using="false" onclick="vector.toolbar.switchTool(2)">pen</div>
-        <div class="css_editor_tool" using="false" onclick="vector.toolbar.switchTool(3)">move</div>
+        <div class="css_editor_toolbar_button" using="false" onclick="vector.toolbar.switchTool(0)" name="select">select</div>
+        <div class="css_editor_toolbar_button" using="true" onclick="vector.toolbar.switchTool(1)" name="shape">shape</div>
+        <div class="css_editor_toolbar_button" using="false" onclick="vector.toolbar.switchTool(2)" name="path"></div>
+        <div class="css_editor_toolbar_button" using="false" onclick="vector.toolbar.switchTool(3)" name="move">move</div>
       </div>
       <div class="css_editor_shape_tool_options" displayed="true">
         <div class="css_editor_shape_tool_option" using="true">rect</div>

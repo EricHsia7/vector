@@ -1,8 +1,12 @@
-import { elementType } from '../../graphic/attributes';
 import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './path';
 import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './shape';
 
-export type tools = 'shape' | 'pen' | 'move' | 'selector';
+const editor = document.querySelector('.css_editor');
+const editorCanvas = editor.querySelector('#css_editor_canvas');
+const toolbar = editor.querySelector('.css_editor_toolbar');
+const toolbarButtons = toolbar.querySelectorAll('.css_editor_toolbar_button');
+
+export type tools = 'shape' | 'path' | 'move' | 'select';
 
 let currentCursorX: number = 0;
 let currentCursorY: number = 0;
@@ -12,7 +16,6 @@ export let currentTool: tools = 'shape';
 export let selectedElements: string[] = [];
 
 export function initializeTools(): void {
-  const canvas = document.querySelector('#canvas');
   const eventsSet = [
     ['touchstart', 'touchmove', 'touchend', 'touchcancel'],
     ['mousedown', 'mousemove', 'mouseup', 'mouseout']
@@ -22,7 +25,7 @@ export function initializeTools(): void {
   const events = isTouchDevice ? eventsSet[0] : eventsSet[1];
 
   // Event listeners
-  canvas.addEventListener(events[0], (event) => {
+  editorCanvas.addEventListener(events[0], (event) => {
     event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
       const touch = event.touches[0];
@@ -37,7 +40,7 @@ export function initializeTools(): void {
       case 'shape':
         addShapeElement(currentCursorX, currentCursorY);
         break;
-      case 'pen':
+      case 'path':
         addPathElement(currentCursorX, currentCursorY);
         break;
       default:
@@ -45,7 +48,7 @@ export function initializeTools(): void {
     }
   });
 
-  canvas.addEventListener(events[1], (event) => {
+  editorCanvas.addEventListener(events[1], (event) => {
     event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
       var touches: [] = [];
@@ -67,7 +70,7 @@ export function initializeTools(): void {
       case 'shape':
         modifyAddingShapeElement(currentCursorX, currentCursorY);
         break;
-      case 'pen':
+      case 'path':
         modifyAddingPathElement(currentCursorX, currentCursorY);
         break;
       default:
@@ -75,7 +78,7 @@ export function initializeTools(): void {
     }
   });
 
-  canvas.addEventListener(events[2], (event) => {
+  editorCanvas.addEventListener(events[2], (event) => {
     event.preventDefault(); // Prevent scrolling
     if (isTouchDevice) {
       var touches = [];
@@ -97,7 +100,7 @@ export function initializeTools(): void {
       case 'shape':
         settleAddingShapeElement(currentCursorX, currentCursorY);
         break;
-      case 'pen':
+      case 'path':
         settleAddingPathElement(currentCursorX, currentCursorY);
         break;
       default:
@@ -124,20 +127,14 @@ export function initializeTools(): void {
 }
 
 export function switchTool(tool: number): void {
-  switch (tool) {
-    case 0:
-      currentTool = 'selector';
-      break;
-    case 1:
-      currentTool = 'shape';
-      break;
-    case 2:
-      currentTool = 'pen';
-      break;
-    case 3:
-      currentTool = 'move';
-      break;
-    default:
-      break;
+  currentTool = ['select', 'shape', 'path', 'move'][tool];
+  let index = 0;
+  for (const toolbarButton of toolbarButtons) {
+    if (index === tool) {
+      toolbarButton.setAttribute('using', 'true');
+    } else {
+      toolbarButton.setAttribute('using', 'false');
+    }
+    index += 1;
   }
 }

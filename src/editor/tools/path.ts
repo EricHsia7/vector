@@ -1,5 +1,5 @@
 import { editingVectorDocument } from '../../index';
-import { elementType, stroke, strokeWidth } from '../../../graphic/attributes/index';
+import { stroke, strokeWidth } from '../../../graphic/attributes/index';
 import { elements } from '../../../graphic/elements/index';
 import { buildPlane, plane } from '../../../graphic/plane/index';
 import { renderAddingPathPlane, renderEditorPlane } from '../../display/index';

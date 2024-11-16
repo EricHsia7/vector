@@ -47,7 +47,7 @@ export function openDocument(id: id): void {
 }
 
 export function resizeEditor(): void {
-  const canvas: HTMLCanvasElement = document.querySelector('#canvas');
+  const canvas: HTMLCanvasElement = document.querySelector('#css_editor_canvas');
   currentViewWidth = window.innerWidth;
   currentViewHeight = window.innerHeight;
   canvas.width = currentViewWidth;
