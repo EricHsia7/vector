@@ -70,8 +70,8 @@ export function samplePath(path: path, precision: number): points {
     const step = distance / precision;
     for (let i = 0; i < step; i++) {
       const t = Math.min(Math.max(i / step, 0), 1);
-      const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * c.x + Math.pow(t, 2) * p1.x;
-      const y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * c.y + Math.pow(t, 2) * p1.y;
+      const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * p1.x + Math.pow(t, 2) * c.x;
+      const y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * p1.y + Math.pow(t, 2) * c.y;
       segmentPoints.push({ x, y });
     }
     return segmentPoints;
