@@ -1,4 +1,4 @@
-import { translate, scale, rotate, skewX, skewY, matrix, rad, transform, coordinate } from '../attributes/index';
+import { translate, scale, rotate, skewX, skewY, matrix, rad, transform, point } from '../attributes/index';
 
 export function createTranslationMatrix(translate: translate): matrix {
   return [
@@ -100,8 +100,8 @@ export function createTransformationMatrix(transform: transform): matrix {
   return identityMatrix; // return a new "identity" matrix
 }
 
-export function transformPoints(points: coordinate[], transform: transform): coordinate[] {
-  function applyTransformationMatrix(matrix: matrix, point: coordinate): coordinate {
+export function transformPoints(points: point[], transform: transform): point[] {
+  function applyTransformationMatrix(matrix: matrix, point: point): point {
     const [x, y, _] = [matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2], matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2], 1];
     return { x, y };
   }

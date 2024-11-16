@@ -1,4 +1,4 @@
-export type elementType = 'rect' | 'circle' | 'ellipse' | 'line' | 'polyline' | 'polygon' | 'path'
+export type elementType = 'rect' | 'circle' | 'ellipse' | 'line' | 'polyline' | 'polygon' | 'path';
 
 export type x = number; // The x-coordinate of the upper-left corner
 export type y = number; // The y-coordinate of the upper-left corner
@@ -12,12 +12,12 @@ export type ry = number; // The y-axis radius (for rounded corners)
 export type deg = number; // The angle in degrees
 export type rad = number; // The angle in radius
 
-export interface coordinate {
+export interface point {
   x: x;
   y: y;
 }
 
-export type points = coordinate[];
+export type points = Array<point>;
 
 interface moveTo {
   type: 'M';

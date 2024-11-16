@@ -1,4 +1,4 @@
-import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, coordinate, points } from '../attributes/index';
+import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, point, points } from '../attributes/index';
 import { uuidv4 } from '../../tools/index';
 
 export interface path {
@@ -39,19 +39,20 @@ export function samplePath(path: path, precision: number): points {
   const commands = path.d;
   let points: points = [];
 
-  function interpolateLinear(p0: coordinate, p1: coordinate, precision: number): points {
+  function interpolateLinear(p0: point, p1: point, precision: number): points {
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const step = distance / precision;
     for (let i = 0; i < step; i++) {
-      const x = p0.x + (p1.x - p0.x) * (i / step);
-      const y = p0.y + (p1.y - p0.y) * (i / step);
+      const t = Math.min(Math.max(i / step, 0), 1);
+      const x = p0.x + (p1.x - p0.x) * t;
+      const y = p0.y + (p1.y - p0.y) * t;
       segmentPoints.push({ x, y });
     }
     return segmentPoints;
   }
 
-  function interpolateCubicBezier(p0: coordinate, c1: coordinate, c2: coordinate, p1: coordinate, precision: number): points {
+  function interpolateCubicBezier(p0: point, c1: point, c2: point, p1: point, precision: number): points {
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const step = distance / precision;
@@ -64,7 +65,7 @@ export function samplePath(path: path, precision: number): points {
     return segmentPoints;
   }
 
-  function interpolateQuadraticBezier(p0: coordinate, c: coordinate, p1: coordinate, precision: number): points {
+  function interpolateQuadraticBezier(p0: point, c: point, p1: point, precision: number): points {
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const step = distance / precision;
@@ -77,7 +78,7 @@ export function samplePath(path: path, precision: number): points {
     return segmentPoints;
   }
 
-  function interpolateArc(p0: coordinate, rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: coordinate, step: number): points {
+  function interpolateArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: point, step: number): points {
     let segmentPoints: points = [];
     for (let t = 0; t <= 1; t += 1 / step) {
       const theta = t * Math.PI * 2;
@@ -89,8 +90,8 @@ export function samplePath(path: path, precision: number): points {
     return segmentPoints;
   }
 
-  let currentPoint: coordinate = { x: 0, y: 0 };
-  let previousControlPoint: coordinate | null = null;
+  let currentPoint: point = { x: 0, y: 0 };
+  let previousControlPoint: point | null = null;
 
   for (const command of commands) {
     switch (command.type) {
@@ -184,11 +185,11 @@ export function samplePath(path: path, precision: number): points {
 
 export function smoothPath(path: path): path {
   function simplifyPoints(points: points, tolerance: number): points {
-    function distanceToSegment(point: coordinate, start: coordinate, end: coordinate): number {
-      var dx = end.x - start.x;
-      var dy = end.y - start.y;
-      var d = dx * dx + dy * dy;
-      var t = ((point.x - start.x) * dx + (point.y - start.y) * dy) / d;
+    function distanceToSegment(point: point, start: point, end: point): number {
+      let dx = end.x - start.x;
+      let dy = end.y - start.y;
+      let d = dx * dx + dy * dy;
+      let t = ((point.x - start.x) * dx + (point.y - start.y) * dy) / d;
 
       if (t < 0) {
         dx = point.x - start.x;
@@ -237,6 +238,7 @@ export function smoothPath(path: path): path {
   const simplifiedPoints = simplifyPoints(points, 1);
   const simplifiedPointsLength = simplifiedPoints.length;
   let simplifiedCommands = [];
+
   for (let i = 0; i < simplifiedPointsLength; i++) {
     const currentSimplifiedPoint = simplifiedPoints[i];
     const nextSimplifiedPoint = simplifiedPoints[i + 1] || currentSimplifiedPoint;
