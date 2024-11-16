@@ -233,7 +233,7 @@ export function smoothPath(path: path): path {
     }
   }
 
-  const points = samplePath(path, 10);
+  const points = samplePath(path, 3);
   const simplifiedPoints = simplifyPoints(points, 3);
   const simplifiedPointsLength = simplifiedPoints.length;
   let simplifiedCommands = [];
