@@ -5,7 +5,7 @@ import { uuidv4 } from '../tools/index';
 interface vectorDocument {
   width: width;
   height: height;
-  planes: plane[];
+  planes: Array<plane>;
   id: id;
   name: string;
   type: 'vectorDocument';
@@ -19,7 +19,7 @@ export var currentViewHeight: height = 0;
 
 const editorElement: HTMLElement = document.querySelector('.css_editor');
 
-export function createVectorDocument(width: width, height: height, planes: plane[], id: id, name: string): vectorDocument {
+export function createVectorDocument(width: width, height: height, planes: Array<plane>, id: id, name: string): vectorDocument {
   var object: vectorDocument = {
     width: width || 0,
     height: height || 0,

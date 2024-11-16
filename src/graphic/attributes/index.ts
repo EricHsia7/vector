@@ -127,8 +127,8 @@ export interface skewY {
   type: 'skewY';
 }
 
-export type matrix = number[][];
+export type matrix = Array<Array<number>>;
 
-export type transform = (translate | scale | rotate | skewX | skewY)[];
+export type transform = Array<translate | scale | rotate | skewX | skewY>;
 
 export type id = string;

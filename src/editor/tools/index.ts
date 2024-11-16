@@ -13,7 +13,7 @@ let currentCursorY: number = 0;
 let currentTouchPointIdentifier: number = 0;
 
 export let currentTool: tools = 'shape';
-export let selectedElements: string[] = [];
+export let selectedElements: Array<string> = [];
 
 export function initializeTools(): void {
   const eventsSet = [

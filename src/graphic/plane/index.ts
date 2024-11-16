@@ -11,12 +11,12 @@ export interface plane {
   height: height;
   root: root;
   elements: elements;
-  subPlanes: plane[];
+  subPlanes: Array<plane>;
   id: id;
   type: 'plane';
 }
 
-export function buildPlane(x: x, y: y, width: width, height: height, root: root, elements: elements, subPlanes: plane[]): plane {
+export function buildPlane(x: x, y: y, width: width, height: height, root: root, elements: elements, subPlanes: Array<plane>): plane {
   return {
     x: root ? 0 : x || 0,
     y: root ? 0 : y || 0,
