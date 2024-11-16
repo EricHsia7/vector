@@ -1,7 +1,7 @@
 import { renderPlaneAsXML } from '../../graphic/render/index';
 import { editingVectorDocument } from '../index';
-import { addingPathPlane } from '../tools/add/path';
-import { addingShapePlane } from '../tools/add/shape';
+import { addingPathPlane } from '../tools/path';
+import { addingShapePlane } from '../tools/shape';
 
 export function renderEditorPlane(): void {
   const addingEditorPlaneElement: HTMLElement = document.querySelector('.css_editor .css_editor_plane');

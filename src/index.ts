@@ -6,7 +6,7 @@ import { renderPlaneAsXML } from './graphic/render/index';
 import { initializeTools, switchTool } from './editor/tools/index';
 import { initializeEditor } from './editor/index';
 import { openNewDocument, closeNewDocument, createDocumentWithInputs } from './new_document/index';
-import { switchShapeType } from './editor/tools/add/shape';
+import { switchShapeType } from './editor/tools/shape';
 
 import './theme.css';
 import './index.css';

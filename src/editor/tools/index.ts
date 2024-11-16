@@ -1,6 +1,6 @@
 import { elementType } from '../../graphic/attributes';
-import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './add/path';
-import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './add/shape';
+import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './path';
+import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './shape';
 
 export type tools = 'shape' | 'pen' | 'move' | 'selector';
 
