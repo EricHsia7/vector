@@ -39,13 +39,13 @@ export function samplePath(path: path, precision: number): points {
   const commands = path.d;
   let points: points = [];
 
-  function interpolateLinear(p1: coordinate, p2: coordinate, precision: number): points {
+  function interpolateLinear(p0: coordinate, p1: coordinate, precision: number): points {
     let segmentPoints: points = [];
-    const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const step = distance / precision;
     for (let i = 0; i < step; i++) {
-      const x = p1.x + (p2.x - p1.x) * (i / step);
-      const y = p1.y + (p2.x - p1.y) * (i / step);
+      const x = p0.x + (p1.x - p0.x) * (i / step);
+      const y = p0.y + (p1.x - p0.y) * (i / step);
       segmentPoints.push({ x, y });
     }
     return segmentPoints;
@@ -243,7 +243,7 @@ export function smoothPath(path: path): path {
     if (i === 0 || i === simplifiedPointsLength - 1) {
       simplifiedCommands.push({ type: 'M', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y });
     } else {
-      simplifiedCommands.push({ type: 'Q', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y, x1: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y1: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
+      simplifiedCommands.push({ type: 'Q', x1: currentSimplifiedPoint.x, y1: currentSimplifiedPoint.y, x: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
     }
   }
   path.d = simplifiedCommands;
