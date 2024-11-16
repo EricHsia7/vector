@@ -55,8 +55,8 @@
 
 .css_editor_shape_tool_options .css_editor_shape_tool_option {
   position: relative;
-  width: 45px;
-  height: 45px;
+  width: 35px;
+  height: 35px;
   box-sizing: border-box;
   border-radius: 10px;
   overflow: hidden;
