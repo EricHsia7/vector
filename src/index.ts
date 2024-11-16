@@ -62,7 +62,7 @@ window.vector = {
     switchTool,
     switchShapeType
   },
-  exports: {
+  documents: {
     newDocument: {
       openNewDocument,
       closeNewDocument,

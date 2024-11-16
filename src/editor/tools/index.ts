@@ -127,7 +127,9 @@ export function initializeTools(): void {
 }
 
 export function switchTool(tool: number): void {
+  console.log(0, currentTool);
   currentTool = ['select', 'shape', 'path', 'move'][tool];
+  console.log(1, currentTool);
   let index = 0;
   for (const toolbarButton of toolbarButtons) {
     if (index === tool) {
