@@ -3,12 +3,12 @@ import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } f
 
 export type tools = 'shape' | 'ballpen' | 'fountainpen' | 'move' | 'selector';
 
-var currentCursorX: number = 0;
-var currentCursorY: number = 0;
-var currentTouchPointIdentifier: number = 0;
+let currentCursorX: number = 0;
+let currentCursorY: number = 0;
+let currentTouchPointIdentifier: number = 0;
 
-export var currentTool: tools = 'shape';
-export var selectedElements: string[] = [];
+export let currentTool: tools = 'shape';
+export let selectedElements: string[] = [];
 
 export function initializeTools(): void {
   const canvas = document.querySelector('#canvas');
