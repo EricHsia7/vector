@@ -232,11 +232,11 @@ export function smoothPath(path: path): path {
       return [points[0], points[points.length - 1]];
     }
   }
-
-  const points = samplePath(path, 3);
-  console.log(0, points)
+  console.log(-1, path);
+  const points = samplePath(path, 10);
+  console.log(0, points);
   const simplifiedPoints = simplifyPoints(points, 3);
-  console.log(1, simplifiedPoints)
+  console.log(1, simplifiedPoints);
   const simplifiedPointsLength = simplifiedPoints.length;
   let simplifiedCommands = [];
   for (let i = 0; i < simplifiedPointsLength; i++) {
@@ -248,7 +248,7 @@ export function smoothPath(path: path): path {
       simplifiedCommands.push({ type: 'Q', x1: currentSimplifiedPoint.x, y1: currentSimplifiedPoint.y, x: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
     }
   }
-  console.log(2, simplifiedCommands)
+  console.log(2, simplifiedCommands);
   path.d = simplifiedCommands;
   return path;
 }
