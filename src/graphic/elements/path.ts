@@ -143,8 +143,8 @@ export function samplePath(path: path, precision: number): points {
 
       case 'Q':
         const quadStart = currentPoint;
-        const quadControl = { x: command.x1, y: command.y1 };
-        const quadEnd = { x: command.x, y: command.y };
+        const quadControl = { x: command.x, y: command.y };
+        const quadEnd = { x: command.x1, y: command.y1 };
         points.push(...interpolateQuadraticBezier(quadStart, quadControl, quadEnd, precision));
         currentPoint = quadEnd;
         previousControlPoint = quadControl;
