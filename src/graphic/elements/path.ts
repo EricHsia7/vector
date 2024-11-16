@@ -45,7 +45,7 @@ export function samplePath(path: path, precision: number): points {
     const step = distance / precision;
     for (let i = 0; i < step; i++) {
       const x = p0.x + (p1.x - p0.x) * (i / step);
-      const y = p0.y + (p1.x - p0.y) * (i / step);
+      const y = p0.y + (p1.y - p0.y) * (i / step);
       segmentPoints.push({ x, y });
     }
     return segmentPoints;
@@ -232,6 +232,7 @@ export function smoothPath(path: path): path {
       return [points[0], points[points.length - 1]];
     }
   }
+
   console.log(-1, path);
   const points = samplePath(path, 10);
   console.log(0, points);
