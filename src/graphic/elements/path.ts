@@ -78,15 +78,80 @@ export function samplePath(path: path, precision: number): points {
     return segmentPoints;
   }
 
-  function interpolateArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: point, step: number): points {
-    let segmentPoints: points = [];
-    for (let t = 0; t <= 1; t += 1 / step) {
-      const theta = t * Math.PI * 2;
-      segmentPoints.push({
-        x: p0.x + rx * Math.cos(theta),
-        y: p0.y + ry * Math.sin(theta)
-      });
+  function interpolateArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: point, precision: number): points {
+    const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    const step = Math.round(distance / precision);
+    /**
+     * Interpolates points on an arc defined by the SVG path command "A".
+     *
+     * Parameters:
+     * - rx, ry: Radii of the ellipse.
+     * - xAxisRotation: Rotation of the ellipse's x-axis in degrees.
+     * - largeArcFlag: 1 for the large arc, 0 for the small arc.
+     * - sweepFlag: 1 for clockwise, 0 for counterclockwise.
+     * - start, end: {x, y} coordinates of the start and end points.
+     * - numPoints: Number of points to interpolate along the arc.
+     *
+     * Returns:
+     * - Array of {x, y} pairs representing the interpolated points.
+     */
+
+    // Convert rotation to radians
+    const xAxisRotationRad = (xAxisRotation * Math.PI) / 180;
+
+    // Translate start and end points to center the ellipse at origin
+    const dx = (p0.x - p1.x) / 2;
+    const dy = (p0.y - p1.y) / 2;
+    const cosPhi = Math.cos(xAxisRotationRad);
+    const sinPhi = Math.sin(xAxisRotationRad);
+
+    const x1Prime = cosPhi * dx + sinPhi * dy;
+    const y1Prime = -sinPhi * dx + cosPhi * dy;
+
+    // Corrected radii to ensure proper scaling
+    rx = Math.abs(rx);
+    ry = Math.abs(ry);
+    const lambdaFactor = Math.pow(x1Prime, 2) / Math.pow(rx, 2) + Math.pow(y1Prime, 2) / Math.pow(ry, 2);
+    if (lambdaFactor > 1) {
+      rx *= Math.sqrt(lambdaFactor);
+      ry *= Math.sqrt(lambdaFactor);
     }
+
+    // Compute center of the ellipse
+    let numerator = Math.pow(rx, 2) * Math.pow(ry, 2) - Math.pow(rx, 2) * Math.pow(y1Prime, 2) - Math.pow(ry, 2) * Math.pow(x1Prime, 2);
+    const denominator = Math.pow(rx, 2) * Math.pow(y1Prime, 2) + Math.pow(ry, 2) * Math.pow(x1Prime, 2);
+    if (numerator < 0) numerator = 0; // Handle rounding issues
+
+    let factor = Math.sqrt(numerator / denominator);
+    if (largeArcFlag !== sweepFlag) {
+      factor = -factor;
+    }
+
+    const cxPrime = (factor * rx * y1Prime) / ry;
+    const cyPrime = (-factor * ry * x1Prime) / rx;
+
+    const cx = cosPhi * cxPrime - sinPhi * cyPrime + (p0.x + p1.x) / 2;
+    const cy = sinPhi * cxPrime + cosPhi * cyPrime + (p0.y + p1.y) / 2;
+
+    // Compute start and end angles
+    const theta1 = Math.atan2((y1Prime - cyPrime) / ry, (x1Prime - cxPrime) / rx);
+    let deltaTheta = Math.atan2((-y1Prime - cyPrime) / ry, (-x1Prime - cxPrime) / rx) - theta1;
+
+    if (sweepFlag === 0 && deltaTheta > 0) {
+      deltaTheta -= 2 * Math.PI;
+    } else if (sweepFlag === 1 && deltaTheta < 0) {
+      deltaTheta += 2 * Math.PI;
+    }
+
+    // Generate points along the arc
+    const t = Array.from({ length: step }, (_, i) => i / (step - 1));
+    const angles = t.map((ti) => theta1 + deltaTheta * ti);
+
+    const segmentPoints = angles.map((angle) => {
+      const x = cx + rx * Math.cos(angle) * cosPhi - ry * Math.sin(angle) * sinPhi;
+      const y = cy + rx * Math.cos(angle) * sinPhi + ry * Math.sin(angle) * cosPhi;
+      return { x, y };
+    });
     return segmentPoints;
   }
 
