@@ -6,14 +6,15 @@ const editorElement: HTMLElement = document.querySelector('.css_editor');
 const editorCanvasElement: HTMLCanvasElement = editorElement.querySelector('.css_editor_canvas');
 const toolbarElement: HTMLElement = editorElement.querySelector('.css_editor_toolbar');
 const toolbarButtonElements: HTMLElement = toolbarElement.querySelectorAll('.css_editor_toolbar_button');
+const shapeOptionsElement: HTMLElement = editorElement.querySelector('.css_editor_toolbar_shape_options');
 
-export type tools = 'shape' | 'path' | 'move' | 'select';
+export type tools = 'select' | 'shape' | 'path' | 'move';
 
 let currentCursorX: number = 0;
 let currentCursorY: number = 0;
 let currentTouchPointIdentifier: number = 0;
 
-export let currentTool: tools = 'shape';
+export let currentTool: tools = 'select';
 export let selectedElements: Array<string> = [];
 
 export function initializeTools(): void {
@@ -134,6 +135,20 @@ export function initializeTools(): void {
 
 export function switchTool(tool: number): void {
   currentTool = ['select', 'shape', 'path', 'move'][tool];
+  if (currentTool === 'select') {
+  } else {
+  }
+  if (currentTool === 'shape') {
+    shapeOptionsElement.setAttribute('displayed', 'true');
+  } else {
+    shapeOptionsElement.setAttribute('displayed', 'false');
+  }
+  if (currentTool === 'path') {
+  } else {
+  }
+  if (currentTool === 'move') {
+  } else {
+  }
   let index = 0;
   for (const toolbarButton of toolbarButtonElements) {
     if (index === tool) {

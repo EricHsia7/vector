@@ -73,8 +73,8 @@ export function modifyAddingShapeElement(cursorX: number, cursorY: number): void
         case 'ellipse':
           addingShapeElement.cx = (addingShapeElement.x + cursorX) / 2;
           addingShapeElement.cy = (addingShapeElement.y + cursorY) / 2;
-          addingShapeElement.rx = cursorX - addingShapeElement.x;
-          addingShapeElement.ry = cursorY - addingShapeElement.y;
+          addingShapeElement.rx = Math.abs(cursorX - addingShapeElement.x);
+          addingShapeElement.ry = Math.abs(cursorY - addingShapeElement.y);
           break;
         case 'line':
           addingShapeElement.x2 = cursorX;

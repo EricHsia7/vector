@@ -15,6 +15,7 @@ import './new_document/index.css';
 import './editor/index.css';
 import './editor/planes.css';
 import './editor/tools/index.css';
+import './editor/tools/shape.css';
 
 window.vector = {
   test: {
