@@ -11,6 +11,10 @@ import { buildPlane, plane } from '../../graphic/plane/index';
 import { renderAddingShapePlane, renderEditorPlane } from '../display/index';
 import { currentViewHeight, currentViewWidth } from '../index';
 
+const editorElement: HTMLElement = document.querySelector('.css_editor');
+const shapeOptionsElement: HTMLElement = editorElement.querySelector('.css_editor_toolbar_shape_options');
+const shapeOptionsButtonElements: HTMLElement = shapeOptionsElement.querySelectorAll('.css_editor_toolbar_shape_options_button');
+
 let addingShapeElements: elements = [];
 let addingShape: boolean = false;
 export let addingShapePlane: plane = buildPlane(0, 0, 0, 0, true);
@@ -19,8 +23,6 @@ let currentFill: fill = '#000000';
 let currentStroke: stroke = '#888888';
 let currentStrokeWidth: strokeWidth = 3;
 let currentShapeType: elementType = 'rect';
-
-export function switchShapeType(): void {}
 
 export function addShapeElement(cursorX: number, cursorY: number): void {
   if (!addingShape) {
@@ -102,5 +104,18 @@ export function settleAddingShapeElement(cursorX: number, cursorY: number): void
     addingShapePlane.elements = [];
     addingShapeElements = [];
     renderAddingShapePlane();
+  }
+}
+
+export function switchShapeType(shape: number): void {
+  currentShapeType = ['rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon'][shape];
+  let index = 0;
+  for (const shapeOptionsButtonElement of shapeOptionsButtonElements) {
+    if (index === shape) {
+      shapeOptionsButtonElement.setAttribute('using', 'true');
+    } else {
+      shapeOptionsButtonElement.setAttribute('using', 'false');
+    }
+    index += 1;
   }
 }
