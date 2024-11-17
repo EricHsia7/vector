@@ -10,6 +10,7 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { execSync } = require('child_process');
 const MangleCssClassPlugin = require('mangle-css-class-webpack-plugin');
+const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity');
 
 async function makeDirectory(path) {
   // Check if the path already exists
@@ -41,22 +42,15 @@ async function createTextFile(filePath, data, encoding = 'utf-8') {
   }
 }
 
-function generateRandomString(length) {
-  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    result += charset[randomIndex];
-  }
-  return result;
-}
-
 const workflowRunNumber = parseInt(execSync('echo $GITHUB_RUN_NUMBER').toString().trim());
 const commitHash = execSync('git rev-parse HEAD').toString().trim();
+const branchName = execSync('git branch --show-current').toString().trim();
 const thisVersion = {
   build: workflowRunNumber,
   hash: commitHash.substring(0, 7),
-  fullHash: commitHash
+  fullHash: commitHash,
+  branchName: branchName,
+  timeStamp: new Date().toISOString()
 };
 
 async function outputVersionJSON() {
@@ -71,32 +65,46 @@ module.exports = (env, argv) => {
   return {
     plugins: [
       new MiniCssExtractPlugin({
-        filename: '[contenthash].min.css' // Output CSS filename
+        filename: isProduction ? '[contenthash].min.css' : 'index.css'
+        // Output CSS filename
       }),
       new MangleCssClassPlugin({
-        classNameRegExp: '(css_|v-cssvar-)[a-z0-9_-]*',
+        classNameRegExp: '(css_|b-cssvar-)[a-z0-9_-]*',
         mangleCssVariables: true,
         /*ignorePrefix: [''],*/
-        log: true
+        log: false
       }),
       new webpack.DefinePlugin({
         'process.env': {
-          VERSION: JSON.stringify(thisVersion.hash) // You can adjust the length of the random string here (e.g., 8 characters)
+          HASH: JSON.stringify(thisVersion.hash),
+          FULL_HASH: JSON.stringify(thisVersion.fullHash),
+          BRANCH_NAME: JSON.stringify(thisVersion.branchName),
+          TIME_STAMP: JSON.stringify(thisVersion.timeStamp)
         }
       }),
       new HtmlWebpackPlugin({
         template: './src/index.html', // Path to your custom HTML template file
-        inject: 'head' // Specify 'body' to insert the script tags just before the closing </body> tag
+        inject: 'head',
+        minify: {
+          collapseWhitespace: true,
+          keepClosingSlash: true,
+          removeComments: true,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: false,
+          removeStyleLinkTypeAttributes: false,
+          useShortDoctype: false,
+          minifyJS: true // This option minifies inline JavaScript
+        }
       }),
       new WorkboxPlugin.GenerateSW({
         clientsClaim: true,
         skipWaiting: true,
         exclude: [/\.map$/, /LICENSE\.txt$/],
-        include: [/\.js|css|png$/],
+        include: [/\.js|css|png$/, /index\.html$/],
         cacheId: `vector-${thisVersion.hash}`,
         runtimeCaching: [
           {
-            urlPattern: new RegExp('^https://fonts.googleapis.com'),
+            urlPattern: /^https:\/\/fonts\.googleapis\.com/,
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'google-fonts-stylesheets'
@@ -104,9 +112,13 @@ module.exports = (env, argv) => {
           }
         ]
       }),
+      new SubresourceIntegrityPlugin({
+        hashFuncNames: ['sha256', 'sha384'], // Hash algorithms you want to use
+        enabled: true
+      }),
       new BundleAnalyzerPlugin({
         analyzerMode: 'static', // Generate static HTML report
-        reportFilename: 'dist/bundle-analysis-report.html' // Output file path and name
+        reportFilename: 'bundle-analysis-report/index.html' // Output file path and name
       })
     ],
     target: ['web', 'es6'], // Target the browser environment (es6 is the default for browsers)
@@ -116,6 +128,7 @@ module.exports = (env, argv) => {
       filename: isProduction ? '[contenthash].min.js' : 'index.js', // Output bundle filename
       path: path.resolve(__dirname, 'dist'), // Output directory for bundled files
       publicPath: './',
+      crossOriginLoading: 'anonymous', // Required for SRI
       library: {
         name: 'vector',
         type: 'umd',
@@ -126,8 +139,8 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.js|ts|jsx|tsx?$/, // Use babel-loader for TypeScript files
-          exclude: /node_modules/,
+          test: /\.js|ts|jsx|tsx$/, // Use babel-loader for TypeScript files
+          exclude: [/node_modules/, /index\.html/],
           use: {
             loader: 'babel-loader',
             options: {
@@ -137,7 +150,7 @@ module.exports = (env, argv) => {
           }
         },
         {
-          test: /\.css|less?$/,
+          test: /\.css|less$/,
           use: [MiniCssExtractPlugin.loader, 'css-loader']
         }
       ]
@@ -171,8 +184,8 @@ module.exports = (env, argv) => {
       ],
       splitChunks: {
         chunks: 'all',
-        minSize: 20000,
-        maxSize: 90000,
+        minSize: 25000,
+        maxSize: 51200,
         cacheGroups: {
           // Define your cache groups here with specific rules
           default: {
@@ -187,7 +200,7 @@ module.exports = (env, argv) => {
     devtool: 'source-map',
     devServer: {
       contentBase: path.join(__dirname, 'dist'),
-      hot: true
+      hot: false
     }
     // Add any additional plugins and configurations as needed
   };
