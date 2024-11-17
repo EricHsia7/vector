@@ -3,7 +3,7 @@
   top: 50%;
   left: calc(15px + 45px + 10px);
   width: 45px;
-  height: calc(45px * 6);
+  height: calc(45px * 6 - 5px);
   padding: 5px;
   grid-template-rows: repeat(6, 1fr);
   box-sizing: border-box;

@@ -3,7 +3,7 @@
   top: 50%;
   left: 15px;
   width: 45px;
-  height: calc(45px * 4);
+  height: calc(45px * 4 - 5px);
   display: grid;
   padding: 5px;
   grid-template-rows: repeat(4, 1fr);
