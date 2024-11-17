@@ -34,7 +34,7 @@ export function addShapeElement(cursorX: number, cursorY: number): void {
         addingShapeElements.push(buildCircle(cursorX, cursorY, cursorX, cursorY, 0, currentFill));
         break;
       case 'ellipse':
-        addingShapeElements.push(buildEllipse(cursorX, cursorY, 0, 0, currentFill));
+        addingShapeElements.push(buildEllipse(cursorX, cursorY, cursorX, cursorY, 0, 0, currentFill));
         break;
       case 'line':
         addingShapeElements.push(buildLine(cursorX, cursorY, cursorX, cursorY, currentStroke, currentStrokeWidth));
@@ -68,7 +68,7 @@ export function modifyAddingShapeElement(cursorX: number, cursorY: number): void
         case 'circle':
           addingShapeElement.cx = (addingShapeElement.x + cursorX) / 2;
           addingShapeElement.cy = (addingShapeElement.y + cursorY) / 2;
-          addingShapeElement.r = Math.sqrt(Math.pow(cursorX - addingShapeElement.x, 2) + Math.pow(cursorY - addingShapeElement.y, 2)) / 2;
+          addingShapeElement.r = Math.hypot(cursorX - addingShapeElement.x, cursorY - addingShapeElement.y) / 2;
           break;
         case 'ellipse':
           addingShapeElement.cx = (addingShapeElement.x + cursorX) / 2;

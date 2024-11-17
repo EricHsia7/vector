@@ -1,7 +1,9 @@
-import { cx, cy, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index';
+import { cx, cy, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, x, y } from '../attributes/index';
 import { uuidv4 } from '../../tools/index';
 
 export interface ellipse {
+  x: x;
+  y: y;
   cx: cx;
   cy: cy;
   rx: rx;
@@ -21,8 +23,10 @@ export interface ellipse {
   type: elementType;
 }
 
-export function buildEllipse(cx: cx, cy: cy, rx: rx, ry: ry, fill: fill, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): ellipse {
+export function buildEllipse(x: x, y: y, cx: cx, cy: cy, rx: rx, ry: ry, fill: fill, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): ellipse {
   return {
+    x: x || 0,
+    y: y || 0,
     cx: cx || 0,
     cy: cy || 0,
     rx: rx || 0,
