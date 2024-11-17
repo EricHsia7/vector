@@ -56,4 +56,12 @@ export function resizeEditor(): void {
 
 export function initializeEditor() {
   resizeEditor();
+  window.addEventListener('resize', function () {
+    resizeEditor();
+  });
+  if (window.screen) {
+    window.screen.orientation.addEventListener('change', function () {
+      resizeEditor();
+    });
+  }
 }
