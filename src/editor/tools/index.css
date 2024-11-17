@@ -29,10 +29,10 @@
 
 .css_editor .css_editor_toolbar .css_editor_toolbar_button[using="true"] {
   background: var(--v-cssvar-ffffff);
-  box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.1); */
 }
 
-.css_editor .css_editor_toolbar .css_editor_toolbar_button  span.css_material_symbols_rounded {
+.css_editor .css_editor_toolbar .css_editor_toolbar_button span.css_material_symbols_rounded {
   width: 20px;
   height: 20px;
   color: var(--v-cssvar-333333);
