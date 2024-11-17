@@ -1,5 +1,5 @@
 import { cx, cy, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, x, y } from '../attributes/index';
-import { uuidv4 } from '../../tools/index';
+import { uuidv4 } from '../../utilities/index';
 
 export interface ellipse {
   x: x;

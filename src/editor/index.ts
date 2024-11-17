@@ -1,6 +1,6 @@
 import { id, width, height } from '../graphic/attributes/index';
 import { buildPlane, plane } from '../graphic/plane/index';
-import { uuidv4 } from '../tools/index';
+import { uuidv4 } from '../utilities/index';
 
 interface vectorDocument {
   width: width;

@@ -7,11 +7,16 @@ import { initializeTools, switchTool } from './editor/tools/index';
 import { initializeEditor } from './editor/index';
 import { openNewDocument, closeNewDocument, createDocumentWithInputs } from './new_document/index';
 import { switchShapeType } from './editor/tools/shape';
+import { loadCSS } from './utilities/lazy-css';
 
 import './theme.css';
 import './index.css';
+import './icons.css';
+
 import './home/index.css';
+
 import './new_document/index.css';
+
 import './editor/index.css';
 import './editor/planes.css';
 import './editor/tools/index.css';
@@ -74,6 +79,10 @@ window.vector = {
     initializeTools();
     initializeEditor();
     console.log(0);
+  },
+  secondlyInitialize:function()  {
+    loadCSS('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap', 'noto_sans_tc');
+    loadCSS('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200', 'material_symbols');
   }
 };
 

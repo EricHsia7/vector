@@ -1,4 +1,4 @@
-import { uuidv4 } from '../../tools/index';
+import { uuidv4 } from '../../utilities/index';
 import { x, y, width, height, id } from '../attributes/index';
 import { elements } from '../elements/index';
 

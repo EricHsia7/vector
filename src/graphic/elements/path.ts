@@ -1,5 +1,5 @@
 import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, point, points } from '../attributes/index';
-import { uuidv4 } from '../../tools/index';
+import { uuidv4 } from '../../utilities/index';
 
 export interface path {
   d: d;

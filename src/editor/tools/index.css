@@ -1,4 +1,4 @@
-.css_editor_toolbar {
+.css_editor .css_editor_toolbar {
   position: absolute;
   top: 50%;
   left: 15px;
@@ -15,7 +15,7 @@
   transform: translateY(-50%);
 }
 
-.css_editor_toolbar .css_editor_toolbar_button {
+.css_editor .css_editor_toolbar .css_editor_toolbar_button {
   position: relative;
   width: 35px;
   height: 35px;
@@ -27,7 +27,13 @@
   align-items: center;
 }
 
-.css_editor_toolbar .css_editor_toolbar_button[using="true"] {
+.css_editor .css_editor_toolbar .css_editor_toolbar_button[using="true"] {
   background: var(--v-cssvar-ffffff);
   box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.1);
+}
+
+.css_editor .css_editor_toolbar .css_editor_toolbar_button  span.css_material_symbols_rounded {
+  width: 20px;
+  height: 20px;
+  color: var(--v-cssvar-333333);
 }
