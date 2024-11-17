@@ -96,17 +96,15 @@
         </div>
       </div>
     </div>
-
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        try {
-          window.vector.initialize();
-        } catch (e) {
-          console.log(e);
-        }
+        vector.initialize();
+      });
+      window.addEventListener('load', function () {
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register('./service-worker.js');
         }
+        vector.secondlyInitialize();
       });
     </script>
   </body>
