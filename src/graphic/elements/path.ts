@@ -90,8 +90,6 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
     const step = Math.round(distance / precision);
 
-    const { rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y } = arc;
-
     // Convert xAxisRotation to radians
     const rotationRad = (xAxisRotation * Math.PI) / 180;
 
