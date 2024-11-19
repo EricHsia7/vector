@@ -324,8 +324,8 @@ export function buildPathFromElement(element: element): path {
     const y = element.y;
     const width = element.width;
     const height = element.height;
-    const rx = element.rx || 0;
-    const ry = element.ry || 0;
+    let rx = element.rx || 0;
+    let ry = element.ry || 0;
 
     let commands: d = [];
     if (rx === 0 && ry === 0) {
