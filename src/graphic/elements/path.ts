@@ -86,80 +86,76 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     return segmentPoints;
   }
 
-  function interpolateArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: point, precision: number): points {
-    const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+  function interpolateArc(rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: point, p2: point, precision: number): points {
+    const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
     const step = Math.round(distance / precision);
-    /**
-     * Interpolates points on an arc defined by the SVG path command "A".
-     *
-     * Parameters:
-     * - rx, ry: Radii of the ellipse.
-     * - xAxisRotation: Rotation of the ellipse's x-axis in degrees.
-     * - largeArcFlag: 1 for the large arc, 0 for the small arc.
-     * - sweepFlag: 1 for clockwise, 0 for counterclockwise.
-     * - start, end: {x, y} coordinates of the start and end points.
-     * - numPoints: Number of points to interpolate along the arc.
-     *
-     * Returns:
-     * - Array of {x, y} pairs representing the interpolated points.
-     */
 
-    // Convert rotation to radians
-    const xAxisRotationRad = (xAxisRotation * Math.PI) / 180;
+    const { rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y } = arc;
 
-    // Translate start and end points to center the ellipse at origin
-    const dx = (p0.x - p1.x) / 2;
-    const dy = (p0.y - p1.y) / 2;
-    const cosPhi = Math.cos(xAxisRotationRad);
-    const sinPhi = Math.sin(xAxisRotationRad);
+    // Convert xAxisRotation to radians
+    const rotationRad = (xAxisRotation * Math.PI) / 180;
 
-    const x1Prime = cosPhi * dx + sinPhi * dy;
-    const y1Prime = -sinPhi * dx + cosPhi * dy;
+    // Arc endpoints
+    const x1 = p1.x;
+    const y1 = p1.y;
+    const x2 = p2.x;
+    const y2 = p2.y;
 
-    // Corrected radii to ensure proper scaling
-    rx = Math.abs(rx);
-    ry = Math.abs(ry);
-    const lambdaFactor = Math.pow(x1Prime, 2) / Math.pow(rx, 2) + Math.pow(y1Prime, 2) / Math.pow(ry, 2);
-    if (lambdaFactor > 1) {
-      rx *= Math.sqrt(lambdaFactor);
-      ry *= Math.sqrt(lambdaFactor);
+    // Calculate the midpoint between the two endpoints
+    const dx = (x2 - x1) / 2;
+    const dy = (y2 - y1) / 2;
+
+    // Rotate the midpoint to the ellipse's local coordinates
+    const cosRot = Math.cos(rotationRad);
+    const sinRot = Math.sin(rotationRad);
+
+    const x1p = cosRot * dx + sinRot * dy;
+    const y1p = -sinRot * dx + cosRot * dy;
+
+    // Corrected radii
+    const rxSq = rx * rx;
+    const rySq = ry * ry;
+    const x1pSq = x1p * x1p;
+    const y1pSq = y1p * y1p;
+
+    // Ensure radii are large enough
+    let radiiCheck = x1pSq / rxSq + y1pSq / rySq;
+    if (radiiCheck > 1) {
+      const scaleFactor = Math.sqrt(radiiCheck);
+      rx *= scaleFactor;
+      ry *= scaleFactor;
     }
 
-    // Compute center of the ellipse
-    let numerator = Math.pow(rx, 2) * Math.pow(ry, 2) - Math.pow(rx, 2) * Math.pow(y1Prime, 2) - Math.pow(ry, 2) * Math.pow(x1Prime, 2);
-    const denominator = Math.pow(rx, 2) * Math.pow(y1Prime, 2) + Math.pow(ry, 2) * Math.pow(x1Prime, 2);
-    if (numerator < 0) numerator = 0; // Handle rounding issues
+    // Compute center
+    const cxpSign = largeArcFlag !== sweepFlag ? 1 : -1;
+    const sq = Math.max(0, (rxSq * rySq - rxSq * y1pSq - rySq * x1pSq) / (rxSq * y1pSq + rySq * x1pSq));
+    const coef = cxpSign * Math.sqrt(sq);
+    const cxp = coef * ((rx * y1p) / ry);
+    const cyp = coef * (-(ry * x1p) / rx);
 
-    let factor = Math.sqrt(numerator / denominator);
-    if (largeArcFlag !== sweepFlag) {
-      factor = -factor;
+    // Translate back to the original coordinate system
+    const cx = cosRot * cxp - sinRot * cyp + (x1 + x2) / 2;
+    const cy = sinRot * cxp + cosRot * cyp + (y1 + y2) / 2;
+
+    // Start and end angles
+    const startAngle = Math.atan2((y1p - cyp) / ry, (x1p - cxp) / rx);
+    const endAngle = Math.atan2((y2 - cy) / ry, (x2 - cx) / rx);
+
+    // Determine sweep direction and normalize angles
+    const deltaAngle = sweepFlag ? (endAngle - startAngle) % (2 * Math.PI) : (startAngle - endAngle) % (2 * Math.PI);
+
+    const sweep = sweepFlag ? deltaAngle : -deltaAngle;
+
+    // Sample points
+    let segmentPoints = [];
+    for (let i = 0; i <= step; i++) {
+      const t = i / step;
+      const angle = startAngle + t * sweep;
+      const px = cx + rx * Math.cos(angle) * cosRot - ry * Math.sin(angle) * sinRot;
+      const py = cy + rx * Math.cos(angle) * sinRot + ry * Math.sin(angle) * cosRot;
+      segmentPoints.push({ x: px, y: py });
     }
 
-    const cxPrime = (factor * rx * y1Prime) / ry;
-    const cyPrime = (-factor * ry * x1Prime) / rx;
-
-    const cx = cosPhi * cxPrime - sinPhi * cyPrime + (p0.x + p1.x) / 2;
-    const cy = sinPhi * cxPrime + cosPhi * cyPrime + (p0.y + p1.y) / 2;
-
-    // Compute start and end angles
-    const theta1 = Math.atan2((y1Prime - cyPrime) / ry, (x1Prime - cxPrime) / rx);
-    let deltaTheta = Math.atan2((-y1Prime - cyPrime) / ry, (-x1Prime - cxPrime) / rx) - theta1;
-
-    if (sweepFlag === 0 && deltaTheta > 0) {
-      deltaTheta -= 2 * Math.PI;
-    } else if (sweepFlag === 1 && deltaTheta < 0) {
-      deltaTheta += 2 * Math.PI;
-    }
-
-    // Generate points along the arc
-    const t = Array.from({ length: step }, (_, i) => i / (step - 1));
-    const angles = t.map((ti) => theta1 + deltaTheta * ti);
-
-    const segmentPoints = angles.map((angle) => {
-      const x = cx + rx * Math.cos(angle) * cosPhi - ry * Math.sin(angle) * sinPhi;
-      const y = cy + rx * Math.cos(angle) * sinPhi + ry * Math.sin(angle) * cosPhi;
-      return { x, y };
-    });
     return segmentPoints;
   }
 
@@ -228,7 +224,7 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
       case 'A':
         const arcStart = currentPoint;
         const arcEnd = { x: command.x, y: command.y };
-        points.push(...interpolateArc(arcStart, command.rx, command.ry, command.xAxisRotation, command.largeArcFlag, command.sweepFlag, arcEnd, precision));
+        points.push(...interpolateArc(command.rx, command.ry, command.xAxisRotation, command.largeArcFlag, command.sweepFlag, arcStart, arcEnd, precision));
         currentPoint = arcEnd;
         previousControlPoint = null;
         break;
