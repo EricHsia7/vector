@@ -6,6 +6,7 @@ import { ellipse } from './ellipse';
 import { line } from './line';
 import { polyline } from './polyline';
 import { polygon } from './polygon';
+import { element } from './index';
 
 export interface path {
   d: d;
@@ -424,6 +425,9 @@ export function buildPathFromElement(element: element): path {
       break;
     case 'polygon':
       commands = polyToCommands(element);
+      break;
+    case 'path':
+      commands = element.d;
       break;
     default:
       throw new Error(`Unsupported element: ${element?.type}`);
