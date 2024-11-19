@@ -6,4 +6,5 @@ import { polyline } from './polyline';
 import { polygon } from './polygon';
 import { path } from './path';
 
-export type elements = Array<rect | circle | ellipse | line | polyline | polygon | path>;
+export type element = rect | circle | ellipse | line | polyline | polygon | path;
+export type elements = Array<element>;

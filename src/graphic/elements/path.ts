@@ -1,5 +1,11 @@
 import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, point, points } from '../attributes/index';
 import { uuidv4 } from '../../utilities/index';
+import { rect } from './rect';
+import { circle } from './circle';
+import { ellipse } from './ellipse';
+import { line } from './line';
+import { polyline } from './polyline';
+import { polygon } from './polygon';
 
 export interface path {
   d: d;
@@ -309,4 +315,118 @@ export function smoothPath(path: path): path {
   }
   path.d = simplifiedCommands;
   return path;
+}
+
+export function buildPathFromElement(element: element): path {
+  function rectToCommands(element: rect): d {
+    const x = element.x;
+    const y = element.y;
+    const width = element.width;
+    const height = element.height;
+    const rx = element.rx || 0;
+    const ry = element.ry || 0;
+
+    let commands: d = [];
+    if (rx === 0 && ry === 0) {
+      commands.push({ type: 'M', x: x, y: y });
+      commands.push({ type: 'H', x: x + width });
+      commands.push({ type: 'V', y: y + height });
+      commands.push({ type: 'H', x: x });
+      commands.push({ type: 'Z' });
+    } else {
+      rx = rx || ry;
+      ry = ry || rx;
+      commands.push({ type: 'M', x: x + rx, y: y });
+      commands.push({ type: 'H', x: x + width - rx });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + width, y: y + ry });
+      commands.push({ type: 'V', y: y + height - ry });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + width - rx, y: y + height });
+      commands.push({ type: 'H', x: x + rx });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x, y: y + height - ry });
+      commands.push({ type: 'V', y: y + ry });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + rx, y: y });
+      commands.push({ type: 'Z' });
+    }
+    return commands;
+  }
+
+  function circleToCommands(element: circle): d {
+    const cx = element.cx;
+    const cy = element.cy;
+    const r = element.r;
+    let commands: d = [];
+    commands.push({ type: 'M', x: cx - r, y: cy });
+    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + r, y: cy });
+    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx - r, y: cy });
+    commands.push({ type: 'Z' });
+    return commands;
+  }
+
+  function ellipseToCommands(element: ellipse): d {
+    const cx = element.cx;
+    const cy = element.cy;
+    const rx = element.rx;
+    const ry = element.ry;
+    let commands: d = [];
+    commands.push({ type: 'M', x: cx - rx, y: cy });
+    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + rx, y: cy });
+    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx - rx, y: cy });
+    commands.push({ type: 'Z' });
+    return commands;
+  }
+
+  function lineToCommands(element: line): d {
+    const x1 = element.x1;
+    const y1 = element.y1;
+    const x2 = element.x2;
+    const y2 = element.y2;
+    let commands: d = [];
+    commands.push({ type: 'M', x: x1, y: y1 });
+    commands.push({ type: 'L', x: x2, y: y2 });
+    return commands;
+  }
+
+  function polyToCommands(element: polyline | polygon): d {
+    const points = element.points;
+    let commands: d = [];
+    let index = 0;
+    for (const point of points) {
+      const x = point.x;
+      const y = point.y;
+      if (index === 0) {
+        commands.push({ type: 'M', x: x, y: y });
+      } else {
+        commands.push({ type: 'L', x: x, y: y });
+      }
+      index += 1;
+    }
+    if (element.type === 'polygon') {
+      commands.push({ type: 'Z' });
+    }
+    return commands;
+  }
+  let commands = [];
+  switch (element.type) {
+    case 'rect':
+      commands = rectToCommands(element);
+      break;
+    case 'circle':
+      commands = circleToCommands(element);
+      break;
+    case 'ellipse':
+      commands = ellipseToCommands(element);
+      break;
+    case 'line':
+      commands = lineToCommands(element);
+      break;
+    case 'polyline':
+      commands = polyToCommands(element);
+      break;
+    case 'polygon':
+      commands = polyToCommands(element);
+      break;
+    default:
+      throw new Error(`Unsupported element: ${element?.type}`);
+  }
+  return buildPath(commands, element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
 }
