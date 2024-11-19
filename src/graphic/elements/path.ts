@@ -87,21 +87,25 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
   }
 
   function interpolateArc(rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: point, p2: point, precision: number): points {
+    console.log(0);
     const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
     const step = Math.round(distance / precision);
-
+    console.log(1, distance, step);
     // Convert xAxisRotation to radians
     const rotationRad = (xAxisRotation * Math.PI) / 180;
+    console.log(2, rotationRad);
 
     // Arc endpoints
     const x1 = p1.x;
     const y1 = p1.y;
     const x2 = p2.x;
     const y2 = p2.y;
+    console.log(3, x1, y1, x2, y2);
 
     // Calculate the midpoint between the two endpoints
     const dx = (x2 - x1) / 2;
     const dy = (y2 - y1) / 2;
+    console.log(4, dx, dy);
 
     // Rotate the midpoint to the ellipse's local coordinates
     const cosRot = Math.cos(rotationRad);
@@ -109,12 +113,14 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
 
     const x1p = cosRot * dx + sinRot * dy;
     const y1p = -sinRot * dx + cosRot * dy;
+    console.log(5, cosRot, sinRot, x1p, y1p);
 
     // Corrected radii
     const rxSq = rx * rx;
     const rySq = ry * ry;
     const x1pSq = x1p * x1p;
     const y1pSq = y1p * y1p;
+    console.log(6, rxSq, rySq, x1pSq, y1pSq);
 
     // Ensure radii are large enough
     let radiiCheck = x1pSq / rxSq + y1pSq / rySq;
@@ -123,6 +129,7 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
       rx *= scaleFactor;
       ry *= scaleFactor;
     }
+    console.log(7, radiiCheck);
 
     // Compute center
     const cxpSign = largeArcFlag !== sweepFlag ? 1 : -1;
@@ -152,7 +159,9 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
       const px = cx + rx * Math.cos(angle) * cosRot - ry * Math.sin(angle) * sinRot;
       const py = cy + rx * Math.cos(angle) * sinRot + ry * Math.sin(angle) * cosRot;
       segmentPoints.push({ x: px, y: py });
+      console.log(8, i, px, py);
     }
+    console.log(9);
 
     return segmentPoints;
   }
