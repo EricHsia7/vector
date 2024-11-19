@@ -146,7 +146,7 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
 
     // Sample points
     let segmentPoints = [];
-    for (let i = 0; i <= step; i++) {
+    for (let i = 0; i < step; i++) {
       const t = i / step;
       const angle = startAngle + t * sweep;
       const px = cx + rx * Math.cos(angle) * cosRot - ry * Math.sin(angle) * sinRot;
