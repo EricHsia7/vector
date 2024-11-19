@@ -75,9 +75,9 @@ interface arc {
   type: 'A';
   rx: rx;
   ry: ry;
-  xAxisRotation: any;
-  largeArcFlag: any;
-  sweepFlag: any;
+  xAxisRotation: number;
+  largeArcFlag: boolean;
+  sweepFlag: boolean;
   x: x;
   y: y;
 }

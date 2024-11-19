@@ -345,17 +345,15 @@ export function buildPathFromElement(element: element): path {
       commands.push({ type: 'H', x: x });
       commands.push({ type: 'Z' });
     } else {
-      rx = rx || ry;
-      ry = ry || rx;
       commands.push({ type: 'M', x: x + rx, y: y });
       commands.push({ type: 'H', x: x + width - rx });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + width, y: y + ry });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x + width, y: y + ry });
       commands.push({ type: 'V', y: y + height - ry });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + width - rx, y: y + height });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x + width - rx, y: y + height });
       commands.push({ type: 'H', x: x + rx });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x, y: y + height - ry });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x, y: y + height - ry });
       commands.push({ type: 'V', y: y + ry });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + rx, y: y });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x + rx, y: y });
       commands.push({ type: 'Z' });
     }
     return commands;
@@ -367,8 +365,8 @@ export function buildPathFromElement(element: element): path {
     const r = element.r;
     let commands: d = [];
     commands.push({ type: 'M', x: cx - r, y: cy });
-    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + r, y: cy });
-    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx - r, y: cy });
+    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx + r, y: cy });
+    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx - r, y: cy });
     commands.push({ type: 'Z' });
     return commands;
   }
@@ -380,8 +378,8 @@ export function buildPathFromElement(element: element): path {
     const ry = element.ry;
     let commands: d = [];
     commands.push({ type: 'M', x: cx - rx, y: cy });
-    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + rx, y: cy });
-    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx - rx, y: cy });
+    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx + rx, y: cy });
+    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx - rx, y: cy });
     commands.push({ type: 'Z' });
     return commands;
   }
