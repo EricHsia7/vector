@@ -8,6 +8,7 @@ import { initializeEditor } from './editor/index';
 import { openNewDocument, closeNewDocument, createDocumentWithInputs } from './new_document/index';
 import { switchShapeType } from './editor/tools/shape';
 import { loadCSS } from './utilities/lazy-css';
+import { buildPathFromElement, samplePath } from './graphic/elements/path';
 
 import './theme.css';
 import './index.css';
@@ -62,6 +63,12 @@ window.vector = {
           exceptID: false
         })
       );
+      for (const element of plane1.elements) {
+        let p = buildPathFromElement(element);
+        console.log(element)
+        console.log(p);
+        console.log(samplePath(p, 2));
+      }
     }
   },
   toolbar: {
@@ -80,7 +87,7 @@ window.vector = {
     initializeEditor();
     console.log(0);
   },
-  secondlyInitialize:function()  {
+  secondlyInitialize: function () {
     loadCSS('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap', 'noto_sans_tc');
     loadCSS('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200', 'material_symbols');
   }
