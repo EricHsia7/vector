@@ -306,7 +306,7 @@ export function smoothPath(path: path): path {
   return path;
 }
 
-export function buildPathFromElement(element: element): path {
+export function elementToCommands(element: element): d {
   function rectToCommands(element: rect): d {
     const x = element.x;
     const y = element.y;
@@ -392,6 +392,7 @@ export function buildPathFromElement(element: element): path {
     }
     return commands;
   }
+
   let commands = [];
   switch (element.type) {
     case 'rect':
@@ -418,5 +419,10 @@ export function buildPathFromElement(element: element): path {
     default:
       throw new Error(`Unsupported element: ${element?.type}`);
   }
+  return commands;
+}
+
+export function buildPathFromElement(element: element): path {
+  const commands = elementToCommands(element);
   return buildPath(commands, element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
 }

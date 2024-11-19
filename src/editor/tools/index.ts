@@ -1,4 +1,6 @@
-import { elementType } from '../../graphic/attributes';
+import { elementToCommands } from '../../graphic/elements/path';
+import { editingVectorDocument } from '../index';
+
 import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './path';
 import { addShapeElement, modifyAddingShapeElement, settleAddingShapeElement } from './shape';
 
@@ -112,6 +114,8 @@ export function initializeTools(): void {
       default:
         break;
     }
+
+    console.log(editingVectorDocument.planes[0].elements.map((element) => elementToCommands(element)));
   });
 
   /*
