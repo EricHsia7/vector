@@ -63,7 +63,7 @@ window.vector = {
           exceptID: false
         })
       );
-      for (const element of plane1.elements) {
+      for (const element of plane1.elements.concat(plane0.elements)) {
         try {
           let p = buildPathFromElement(element);
           console.log(element);
