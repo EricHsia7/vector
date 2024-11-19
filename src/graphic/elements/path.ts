@@ -7,6 +7,7 @@ import { line } from './line';
 import { polyline } from './polyline';
 import { polygon } from './polygon';
 import { element } from './index';
+import { transformPoints } from '../transformation/index';
 
 export interface path {
   d: d;
@@ -42,7 +43,7 @@ export function buildPath(d: d, fill: fill, stroke: stroke, strokeWidth: strokeW
   };
 }
 
-export function samplePath(path: path, precision: number): points {
+export function samplePath(path: path, precision: number = 1, flatten: boolean = false): points {
   const commands = path.d;
   let points: points = [];
 
@@ -241,7 +242,13 @@ export function samplePath(path: path, precision: number): points {
         throw new Error(`Unsupported command type: ${command.type}`);
     }
   }
-
+  if (flatten) {
+    if (typeof path.transform === 'object' && Array.isArray(path.transform)) {
+      if (path.transform.length > 0) {
+        points = transformPoints(points, path.transform);
+      }
+    }
+  }
   return points;
 }
 

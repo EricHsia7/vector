@@ -68,7 +68,8 @@ window.vector = {
           let p = buildPathFromElement(element);
           console.log(element);
           console.log(p);
-          console.log(samplePath(p, 2));
+          let P = samplePath(p, 1, true);
+          console.log(P);
         } catch (e) {
           console.log(e);
         }
