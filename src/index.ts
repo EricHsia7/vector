@@ -64,10 +64,15 @@ window.vector = {
         })
       );
       for (const element of plane1.elements) {
+        try {
         let p = buildPathFromElement(element);
         console.log(element)
         console.log(p);
         console.log(samplePath(p, 2));
+        }
+        catch(e) {
+          console.log(e)
+        }
       }
     }
   },
