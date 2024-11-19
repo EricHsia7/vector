@@ -86,83 +86,63 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     return segmentPoints;
   }
 
-  function interpolateArc(rx: number, ry: number, xAxisRotation: number, largeArcFlag: boolean, sweepFlag: boolean, p1: point, p2: point, precision: number): points {
-    console.log(0);
-    const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+  function interpolateArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: 0 | 1, sweepFlag: 0 | 1, x: number, y: number, precision: number): points {
+    const distance = Math.hypot(x - p0.x, y - p0.y);
     const step = Math.round(distance / precision);
-    console.log(1, distance, step);
-    // Convert xAxisRotation to radians
-    const rotationRad = (xAxisRotation * Math.PI) / 180;
-    console.log(2, rotationRad);
 
-    // Arc endpoints
-    const x1 = p1.x;
-    const y1 = p1.y;
-    const x2 = p2.x;
-    const y2 = p2.y;
-    console.log(3, x1, y1, x2, y2);
+    // Helper to convert degrees to radians
+    const degToRad = (deg) => (deg * Math.PI) / 180;
 
-    // Calculate the midpoint between the two endpoints
-    const dx = (x2 - x1) / 2;
-    const dy = (y2 - y1) / 2;
-    console.log(4, dx, dy);
-
-    // Rotate the midpoint to the ellipse's local coordinates
+    // Calculate rotation matrix
+    const rotationRad = degToRad(xAxisRotation);
     const cosRot = Math.cos(rotationRad);
     const sinRot = Math.sin(rotationRad);
 
+    // Compute center of the ellipse and the angles
+    const dx = (p0.x - x) / 2;
+    const dy = (p0.y - y) / 2;
+
+    // Transform to the ellipse's coordinate space
     const x1p = cosRot * dx + sinRot * dy;
     const y1p = -sinRot * dx + cosRot * dy;
-    console.log(5, cosRot, sinRot, x1p, y1p);
 
-    // Corrected radii
-    const rxSq = rx * rx;
-    const rySq = ry * ry;
-    const x1pSq = x1p * x1p;
-    const y1pSq = y1p * y1p;
-    console.log(6, rxSq, rySq, x1pSq, y1pSq);
+    // Correct radii if necessary
+    const rxSq = rx ** 2;
+    const rySq = ry ** 2;
+    const x1pSq = x1p ** 2;
+    const y1pSq = y1p ** 2;
 
-    // Ensure radii are large enough
-    let radiiCheck = x1pSq / rxSq + y1pSq / rySq;
-    if (radiiCheck > 1) {
-      const scaleFactor = Math.sqrt(radiiCheck);
-      rx *= scaleFactor;
-      ry *= scaleFactor;
-    }
-    console.log(7, radiiCheck);
+    let radicant = (rxSq * rySq - rxSq * y1pSq - rySq * x1pSq) / (rxSq * y1pSq + rySq * x1pSq);
+    radicant = Math.max(0, radicant); // Ensure non-negative
+    const coef = (largeArcFlag !== sweepFlag ? 1 : -1) * Math.sqrt(radicant);
 
-    // Compute center
-    const cxpSign = largeArcFlag !== sweepFlag ? 1 : -1;
-    const sq = Math.max(0, (rxSq * rySq - rxSq * y1pSq - rySq * x1pSq) / (rxSq * y1pSq + rySq * x1pSq));
-    const coef = cxpSign * Math.sqrt(sq);
     const cxp = coef * ((rx * y1p) / ry);
     const cyp = coef * (-(ry * x1p) / rx);
 
-    // Translate back to the original coordinate system
-    const cx = cosRot * cxp - sinRot * cyp + (x1 + x2) / 2;
-    const cy = sinRot * cxp + cosRot * cyp + (y1 + y2) / 2;
+    // Transform back to the original coordinate space
+    const cx = cosRot * cxp - sinRot * cyp + (p0.x + x) / 2;
+    const cy = sinRot * cxp + cosRot * cyp + (p0.y + y) / 2;
 
     // Start and end angles
-    const startAngle = Math.atan2((y1p - cyp) / ry, (x1p - cxp) / rx);
-    const endAngle = Math.atan2((y2 - cy) / ry, (x2 - cx) / rx);
+    const theta1 = Math.atan2((y1p - cyp) / ry, (x1p - cxp) / rx);
+    const deltaTheta = Math.atan2((-y1p - cyp) / ry, (-x1p - cxp) / rx) - theta1;
 
-    // Determine sweep direction and normalize angles
-    const deltaAngle = sweepFlag ? (endAngle - startAngle) % (2 * Math.PI) : (startAngle - endAngle) % (2 * Math.PI);
+    // Ensure the angle is swept in the correct direction
+    const adjustedDeltaTheta = sweepFlag === 0 && deltaTheta > 0 ? deltaTheta - 2 * Math.PI : deltaTheta;
+    const finalDeltaTheta = sweepFlag === 1 && deltaTheta < 0 ? deltaTheta + 2 * Math.PI : adjustedDeltaTheta;
 
-    const sweep = sweepFlag ? deltaAngle : -deltaAngle;
-
-    // Sample points
-    let segmentPoints = [];
+    // Sample the arc
+    const segmentPoints = [];
     for (let i = 0; i < step; i++) {
-      const t = i / step;
-      const angle = startAngle + t * sweep;
-      const px = cx + rx * Math.cos(angle) * cosRot - ry * Math.sin(angle) * sinRot;
-      const py = cy + rx * Math.cos(angle) * sinRot + ry * Math.sin(angle) * cosRot;
-      segmentPoints.push({ x: px, y: py });
-      console.log(8, i, px, py);
-    }
-    console.log(9);
+      const t = i / step; // Proportion of the arc
+      const theta = theta1 + t * finalDeltaTheta;
 
+      // Parametric equation of the ellipse
+      const x = cosRot * (rx * Math.cos(theta)) - sinRot * (ry * Math.sin(theta)) + cx;
+      const y = sinRot * (rx * Math.cos(theta)) + cosRot * (ry * Math.sin(theta)) + cy;
+
+      segmentPoints.push({ x, y });
+    }
     return segmentPoints;
   }
 
@@ -229,10 +209,8 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
         previousControlPoint = smoothQuadControl;
         break;
       case 'A':
-        const arcStart = currentPoint;
-        const arcEnd = { x: command.x, y: command.y };
-        points.push(...interpolateArc(command.rx, command.ry, command.xAxisRotation, command.largeArcFlag, command.sweepFlag, arcStart, arcEnd, precision));
-        currentPoint = arcEnd;
+        points.push(...interpolateArc(currentPoint, command.rx, command.ry, command.xAxisRotation, command.largeArcFlag, command.sweepFlag, command.x, command.y, precision));
+        currentPoint = { x: command.x, y: command.y };
         previousControlPoint = null;
         break;
       case 'Z':
@@ -347,13 +325,13 @@ export function buildPathFromElement(element: element): path {
     } else {
       commands.push({ type: 'M', x: x + rx, y: y });
       commands.push({ type: 'H', x: x + width - rx });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x + width, y: y + ry });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + width, y: y + ry });
       commands.push({ type: 'V', y: y + height - ry });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x + width - rx, y: y + height });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + width - rx, y: y + height });
       commands.push({ type: 'H', x: x + rx });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x, y: y + height - ry });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x, y: y + height - ry });
       commands.push({ type: 'V', y: y + ry });
-      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: false, sweepFlag: true, x: x + rx, y: y });
+      commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 0, sweepFlag: 1, x: x + rx, y: y });
       commands.push({ type: 'Z' });
     }
     return commands;
@@ -365,8 +343,8 @@ export function buildPathFromElement(element: element): path {
     const r = element.r;
     let commands: d = [];
     commands.push({ type: 'M', x: cx - r, y: cy });
-    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx + r, y: cy });
-    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx - r, y: cy });
+    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + r, y: cy });
+    commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx - r, y: cy });
     commands.push({ type: 'Z' });
     return commands;
   }
@@ -378,8 +356,8 @@ export function buildPathFromElement(element: element): path {
     const ry = element.ry;
     let commands: d = [];
     commands.push({ type: 'M', x: cx - rx, y: cy });
-    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx + rx, y: cy });
-    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: true, sweepFlag: false, x: cx - rx, y: cy });
+    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + rx, y: cy });
+    commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx - rx, y: cy });
     commands.push({ type: 'Z' });
     return commands;
   }
