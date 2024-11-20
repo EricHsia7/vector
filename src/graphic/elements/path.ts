@@ -441,8 +441,8 @@ export function getPathBoundingBox(element: path): boundingBox {
   let pX = [];
   let pY = [];
   for (const point of points) {
-    pX.push(point);
-    pY.push(point);
+    pX.push(point.x);
+    pY.push(point.y);
   }
   const x0 = Math.min(...pX);
   const y0 = Math.min(...pY);
