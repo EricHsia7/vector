@@ -291,13 +291,12 @@ export function smoothPath(path: path): path {
 
   for (let i = 0; i < simplifiedPointsLength; i++) {
     const currentSimplifiedPoint = simplifiedPoints[i];
-    const previousSimplifiedPoint = simplifiedPoints[i - 1] || currentSimplifiedPoint;
     const nextSimplifiedPoint = simplifiedPoints[i + 1] || currentSimplifiedPoint;
     if (i === 0) {
       simplifiedCommands.push({ type: 'M', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y });
     } else {
       if (i === simplifiedPointsLength - 1) {
-        simplifiedCommands.push({ type: 'Q', x1: currentSimplifiedPoint.x, y1: currentSimplifiedPoint.y, x: (currentSimplifiedPoint.x + previousSimplifiedPoint.x) / 2, y: (currentSimplifiedPoint.y + previousSimplifiedPoint.y) / 2 });
+        simplifiedCommands.push({ type: 'L', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y });
       } else {
         simplifiedCommands.push({ type: 'Q', x1: currentSimplifiedPoint.x, y1: currentSimplifiedPoint.y, x: (currentSimplifiedPoint.x + nextSimplifiedPoint.x) / 2, y: (currentSimplifiedPoint.y + nextSimplifiedPoint.y) / 2 });
       }
