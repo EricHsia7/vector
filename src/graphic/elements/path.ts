@@ -319,13 +319,13 @@ export function smoothPath(path: path): path {
 }
 
 export function elementToPathCommands(element: element): d {
-  function rectToCommands(element: rect): d {
-    const x = element.x;
-    const y = element.y;
-    const width = element.width;
-    const height = element.height;
-    let rx = element.rx || 0;
-    let ry = element.ry || 0;
+  function rectToCommands(rect: rect): d {
+    const x = rect.x;
+    const y = rect.y;
+    const width = rect.width;
+    const height = rect.height;
+    let rx = rect.rx || 0;
+    let ry = rect.ry || 0;
 
     let commands: d = [];
     if (rx === 0 && ry === 0) {
@@ -349,10 +349,10 @@ export function elementToPathCommands(element: element): d {
     return commands;
   }
 
-  function circleToCommands(element: circle): d {
-    const cx = element.cx;
-    const cy = element.cy;
-    const r = element.r;
+  function circleToCommands(circle: circle): d {
+    const cx = circle.cx;
+    const cy = circle.cy;
+    const r = circle.r;
     let commands: d = [];
     commands.push({ type: 'M', x: cx - r, y: cy });
     commands.push({ type: 'A', rx: r, ry: r, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + r, y: cy });
@@ -361,11 +361,11 @@ export function elementToPathCommands(element: element): d {
     return commands;
   }
 
-  function ellipseToCommands(element: ellipse): d {
-    const cx = element.cx;
-    const cy = element.cy;
-    const rx = element.rx;
-    const ry = element.ry;
+  function ellipseToCommands(ellipse: ellipse): d {
+    const cx = ellipse.cx;
+    const cy = ellipse.cy;
+    const rx = ellipse.rx;
+    const ry = ellipse.ry;
     let commands: d = [];
     commands.push({ type: 'M', x: cx - rx, y: cy });
     commands.push({ type: 'A', rx: rx, ry: ry, xAxisRotation: 0, largeArcFlag: 1, sweepFlag: 0, x: cx + rx, y: cy });
@@ -374,19 +374,19 @@ export function elementToPathCommands(element: element): d {
     return commands;
   }
 
-  function lineToCommands(element: line): d {
-    const x1 = element.x1;
-    const y1 = element.y1;
-    const x2 = element.x2;
-    const y2 = element.y2;
+  function lineToCommands(line: line): d {
+    const x1 = line.x1;
+    const y1 = line.y1;
+    const x2 = line.x2;
+    const y2 = line.y2;
     let commands: d = [];
     commands.push({ type: 'M', x: x1, y: y1 });
     commands.push({ type: 'L', x: x2, y: y2 });
     return commands;
   }
 
-  function polyToCommands(element: polyline | polygon): d {
-    const points = element.points;
+  function polyToCommands(poly: polyline | polygon): d {
+    const points = poly.points;
     let commands: d = [];
     let index = 0;
     for (const point of points) {
@@ -399,7 +399,7 @@ export function elementToPathCommands(element: element): d {
       }
       index += 1;
     }
-    if (element.type === 'polygon') {
+    if (poly.type === 'polygon') {
       commands.push({ type: 'Z' });
     }
     return commands;
@@ -439,8 +439,8 @@ export function buildPathFromElement(element: element): path {
   return buildPath(commands, element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
 }
 
-export function getPathBoundingBox(element: path): boundingBox {
-  const points = samplePath(element, 1, true, true);
+export function getPathBoundingBox(path: path): boundingBox {
+  const points = samplePath(path, 1, true, true);
   let pX = [];
   let pY = [];
   for (const point of points) {
@@ -452,4 +452,28 @@ export function getPathBoundingBox(element: path): boundingBox {
   const x1 = Math.max(...pX);
   const y1 = Math.max(...pY);
   return { x0, y0, x1, y1 };
+}
+
+export function findPathIntersections(path1: path, path2: path): points {
+  const approxmiatePath1Points = samplePath(path1, 2, true, true);
+  const approxmiatePath2Points = samplePath(path2, 2, true, true);
+  const interval = 4;
+  let pointMap = {};
+  for (const point1 of approxmiatePath1Points) {
+    const x = Math.floor(point1.x / interval);
+    const y = Math.floor(point1.y / interval);
+    if (!pointMap.hasOwnProperty(x)) {
+      pointMap[x] = [];
+    }
+    pointMap[x].push(y);
+  }
+  for (const point2 of approxmiatePath2Points) {
+    const x = Math.floor(point2.x / interval);
+    const y = Math.floor(point2.y / interval);
+    if (!pointMap.hasOwnProperty(x)) {
+      pointMap[x] = [];
+    }
+    pointMap[x].push(y);
+  }
+  // TODO: check overlaps, further check
 }
