@@ -1,4 +1,4 @@
-import { x, y, width, height, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType } from '../attributes/index';
+import { x, y, width, height, rx, ry, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, boundingBox } from '../attributes/index';
 import { uuidv4 } from '../../utilities/index';
 
 export interface rect {
@@ -43,4 +43,17 @@ export function buildRect(x: x, y: y, width: width, height: height, rx: rx, ry: 
     id: uuidv4(),
     type: 'rect'
   };
+}
+
+export function getRectBoundingBox(element: rect): boundingBox {
+  const a = element.x;
+  const b = element.y;
+  const c = element.x + element.width;
+  const d = element.y + element.height;
+
+  const x0 = Math.min(a, c);
+  const y0 = Math.min(b, d);
+  const x1 = Math.max(a, c);
+  const y1 = Math.max(b, d);
+  return { x0, y0, x1, y1 };
 }

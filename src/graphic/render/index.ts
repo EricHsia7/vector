@@ -56,8 +56,8 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
     }
 
     function renderD(d: d, plane: plane): string {
-      var result = [];
-      for (var command of d) {
+      let result = [];
+      for (const command of d) {
         switch (command?.type) {
           case 'M':
             result.push(`M ${command.x + plane.x} ${command.y + plane.y}`);

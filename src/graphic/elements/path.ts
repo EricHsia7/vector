@@ -1,4 +1,4 @@
-import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, point, points } from '../attributes/index';
+import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, point, points, boundingBox } from '../attributes/index';
 import { uuidv4 } from '../../utilities/index';
 import { rect } from './rect';
 import { circle } from './circle';
@@ -43,7 +43,7 @@ export function buildPath(d: d, fill: fill, stroke: stroke, strokeWidth: strokeW
   };
 }
 
-export function samplePath(path: path, precision: number = 1, flatten: boolean = false): points {
+export function samplePath(path: path, precision: number = 1, flatten: boolean = false, detailedCurve: boolean = false): points {
   const commands = path.d;
   let points: points = [];
 
@@ -60,10 +60,13 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     return segmentPoints;
   }
 
-  function interpolateCubicBezier(p0: point, c1: point, c2: point, p1: point, precision: number): points {
+  function interpolateCubicBezier(p0: point, c1: point, c2: point, p1: point, precision: number, detailedCurve: boolean): points {
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
-    const step = distance / precision;
+    let step = Math.round(distance / precision);
+    if (detailedCurve) {
+      step *= 1.5;
+    }
     for (let i = 0; i <= step; i++) {
       const t = i / step;
       const x = Math.pow(1 - t, 3) * p0.x + 3 * Math.pow(1 - t, 2) * t * c1.x + 3 * (1 - t) * Math.pow(t, 2) * c2.x + Math.pow(t, 3) * p1.x;
@@ -73,10 +76,13 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     return segmentPoints;
   }
 
-  function interpolateQuadraticBezier(p0: point, c: point, p1: point, precision: number): points {
+  function interpolateQuadraticBezier(p0: point, c: point, p1: point, precision: number, detailedCurve: boolean): points {
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
-    const step = distance / precision;
+    let step = Math.round(distance / precision);
+    if (detailedCurve) {
+      step *= 1.5;
+    }
     for (let i = 0; i <= step; i++) {
       const t = i / step;
       const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * p1.x + Math.pow(t, 2) * c.x;
@@ -86,9 +92,12 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     return segmentPoints;
   }
 
-  function interpolateArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: 0 | 1, sweepFlag: 0 | 1, x: number, y: number, precision: number): points {
+  function interpolateArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: 0 | 1, sweepFlag: 0 | 1, x: number, y: number, precision: number, detailedCurve: boolean): points {
     const distance = Math.hypot(x - p0.x, y - p0.y);
-    const step = Math.round(distance / precision);
+    let step = Math.round(distance / precision);
+    if (detailedCurve) {
+      step *= 1.5;
+    }
 
     // Helper to convert degrees to radians
     const degToRad = (deg) => (deg * Math.PI) / 180;
@@ -179,7 +188,7 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
         const cubicControl1 = { x: command.x1, y: command.y1 };
         const cubicControl2 = { x: command.x2, y: command.y2 };
         const cubicEnd = { x: command.x, y: command.y };
-        points.push(...interpolateCubicBezier(cubicStart, cubicControl1, cubicControl2, cubicEnd, precision));
+        points.push(...interpolateCubicBezier(cubicStart, cubicControl1, cubicControl2, cubicEnd, precision, detailedCurve));
         currentPoint = cubicEnd;
         previousControlPoint = cubicControl2;
         break;
@@ -188,7 +197,7 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
         const smoothControl1 = previousControlPoint ? { x: 2 * smoothStart.x - previousControlPoint.x, y: 2 * smoothStart.y - previousControlPoint.y } : smoothStart;
         const smoothControl2 = { x: command.x2, y: command.y2 };
         const smoothEnd = { x: command.x, y: command.y };
-        points.push(...interpolateCubicBezier(smoothStart, smoothControl1, smoothControl2, smoothEnd, precision));
+        points.push(...interpolateCubicBezier(smoothStart, smoothControl1, smoothControl2, smoothEnd, precision, detailedCurve));
         currentPoint = smoothEnd;
         previousControlPoint = smoothControl2;
         break;
@@ -196,7 +205,7 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
         const quadStart = currentPoint;
         const quadControl = { x: command.x, y: command.y };
         const quadEnd = { x: command.x1, y: command.y1 };
-        points.push(...interpolateQuadraticBezier(quadStart, quadControl, quadEnd, precision));
+        points.push(...interpolateQuadraticBezier(quadStart, quadControl, quadEnd, precision, detailedCurve));
         currentPoint = quadEnd;
         previousControlPoint = quadControl;
         break;
@@ -204,12 +213,12 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
         const smoothQuadStart = currentPoint;
         const smoothQuadControl = previousControlPoint ? { x: 2 * smoothQuadStart.x - previousControlPoint.x, y: 2 * smoothQuadStart.y - previousControlPoint.y } : smoothQuadStart;
         const smoothQuadEnd = { x: command.x, y: command.y };
-        points.push(...interpolateQuadraticBezier(smoothQuadStart, smoothQuadControl, smoothQuadEnd, precision));
+        points.push(...interpolateQuadraticBezier(smoothQuadStart, smoothQuadControl, smoothQuadEnd, precision, detailedCurve));
         currentPoint = smoothQuadEnd;
         previousControlPoint = smoothQuadControl;
         break;
       case 'A':
-        points.push(...interpolateArc(currentPoint, command.rx, command.ry, command.xAxisRotation, command.largeArcFlag, command.sweepFlag, command.x, command.y, precision));
+        points.push(...interpolateArc(currentPoint, command.rx, command.ry, command.xAxisRotation, command.largeArcFlag, command.sweepFlag, command.x, command.y, precision, detailedCurve));
         currentPoint = { x: command.x, y: command.y };
         previousControlPoint = null;
         break;
@@ -284,7 +293,7 @@ export function smoothPath(path: path): path {
     }
   }
 
-  const points = samplePath(path, 1);
+  const points = samplePath(path, 1, false, false);
   const simplifiedPoints = simplifyPoints(points, 1);
   const simplifiedPointsLength = simplifiedPoints.length;
   let simplifiedCommands = [];
@@ -306,7 +315,7 @@ export function smoothPath(path: path): path {
   return path;
 }
 
-export function elementToCommands(element: element): d {
+export function elementToPathCommands(element: element): d {
   function rectToCommands(element: rect): d {
     const x = element.x;
     const y = element.y;
@@ -423,6 +432,21 @@ export function elementToCommands(element: element): d {
 }
 
 export function buildPathFromElement(element: element): path {
-  const commands = elementToCommands(element);
+  const commands = elementToPathCommands(element);
   return buildPath(commands, element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
+}
+
+export function getPathBoundingBox(element: path): boundingBox {
+  const points = samplePath(element, 1, true, true);
+  let pX = [];
+  let pY = [];
+  for (const point of points) {
+    pX.push(point);
+    pY.push(point);
+  }
+  const x0 = Math.min(...pX);
+  const y0 = Math.min(...pY);
+  const x1 = Math.max(...pX);
+  const y1 = Math.max(...pY);
+  return { x0, y0, x1, y1 };
 }

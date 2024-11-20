@@ -132,3 +132,10 @@ export type matrix = Array<Array<number>>;
 export type transform = Array<translate | scale | rotate | skewX | skewY>;
 
 export type id = string;
+
+export interface boundingBox {
+  x0: x;
+  y0: y;
+  x1: x;
+  y1: y;
+}
