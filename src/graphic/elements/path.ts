@@ -51,8 +51,8 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const step = distance / precision;
-    for (let i = 0; i < step; i++) {
-      const t = Math.min(Math.max(i / step, 0), 1);
+    for (let i = 0; i <= step; i++) {
+      const t = i / step;
       const x = p0.x + (p1.x - p0.x) * t;
       const y = p0.y + (p1.y - p0.y) * t;
       segmentPoints.push({ x, y });
@@ -64,8 +64,8 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const step = distance / precision;
-    for (let i = 0; i < step; i++) {
-      const t = Math.min(Math.max(i / step, 0), 1);
+    for (let i = 0; i <= step; i++) {
+      const t = i / step;
       const x = Math.pow(1 - t, 3) * p0.x + 3 * Math.pow(1 - t, 2) * t * c1.x + 3 * (1 - t) * Math.pow(t, 2) * c2.x + Math.pow(t, 3) * p1.x;
       const y = Math.pow(1 - t, 3) * p0.y + 3 * Math.pow(1 - t, 2) * t * c1.y + 3 * (1 - t) * Math.pow(t, 2) * c2.y + Math.pow(t, 3) * p1.y;
       segmentPoints.push({ x, y });
@@ -77,8 +77,8 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     const step = distance / precision;
-    for (let i = 0; i < step; i++) {
-      const t = Math.min(Math.max(i / step, 0), 1);
+    for (let i = 0; i <= step; i++) {
+      const t = i / step;
       const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * p1.x + Math.pow(t, 2) * c.x;
       const y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * p1.y + Math.pow(t, 2) * c.y;
       segmentPoints.push({ x, y });
@@ -133,7 +133,7 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
 
     // Sample the arc
     const segmentPoints = [];
-    for (let i = 0; i < step; i++) {
+    for (let i = 0; i <= step; i++) {
       const t = i / step; // Proportion of the arc
       const theta = theta1 + t * finalDeltaTheta;
 
