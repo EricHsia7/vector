@@ -291,7 +291,7 @@ export function smoothPath(path: path): path {
 
   for (let i = 0; i < simplifiedPointsLength; i++) {
     const currentSimplifiedPoint = simplifiedPoints[i];
-    const previousSimplifiedPoint simplifiedPoints[i - 1] || currentSimplifiedPoint;
+    const previousSimplifiedPoint = simplifiedPoints[i - 1] || currentSimplifiedPoint;
     const nextSimplifiedPoint = simplifiedPoints[i + 1] || currentSimplifiedPoint;
     if (i === 0) {
       simplifiedCommands.push({ type: 'M', x: currentSimplifiedPoint.x, y: currentSimplifiedPoint.y });
