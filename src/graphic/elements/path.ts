@@ -43,8 +43,7 @@ export function buildPath(d: d, fill: fill, stroke: stroke, strokeWidth: strokeW
   };
 }
 
-export function samplePath(path: path, precision: number = 1, flatten: boolean = false, detailedCurve: boolean = false): points {
-  const commands = path.d;
+export function samplePathCommands(commands: d, precision: number = 1, flatten: boolean = false, detailedCurve: boolean = false): points {
   let points: points = [];
 
   function interpolateLinear(p0: point, p1: point, precision: number): points {
@@ -240,6 +239,10 @@ export function samplePath(path: path, precision: number = 1, flatten: boolean =
     }
   }
   return points;
+}
+
+export function samplePath(path: path, precision: number = 1, flatten: boolean = false, detailedCurve: boolean = false): points {
+  return samplePathCommands(path.d, precision, flatten, detailedCurve);
 }
 
 export function smoothPath(path: path): path {
