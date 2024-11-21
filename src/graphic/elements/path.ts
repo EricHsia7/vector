@@ -467,9 +467,8 @@ export function findPathIntersections(path1: path, path2: path): points {
       pointMap[x] = {};
     }
     if (!pointMap[x].hasOwnProperty(y)) {
-      pointMap[x][y] = 0;
+      pointMap[x][y] = true;
     }
-    pointMap[x][y] += 1;
   }
   for (const point2 of approxmiatePath2Points) {
     const x = Math.floor(point2.x / interval);
@@ -478,7 +477,7 @@ export function findPathIntersections(path1: path, path2: path): points {
       pointMap[x] = {};
     }
     if (pointMap[x].hasOwnProperty(y)) {
-      candidatePoints.push({ x, y });
+      candidatePoints.push({ x: x * interval, y: y * interval });
     }
   }
   console.log(candidatePoints);
