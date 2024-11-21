@@ -8,7 +8,7 @@ import { initializeEditor } from './editor/index';
 import { openNewDocument, closeNewDocument, createDocumentWithInputs } from './new_document/index';
 import { switchShapeType } from './editor/tools/shape';
 import { loadCSS } from './utilities/lazy-css';
-import { buildPathFromElement, samplePath } from './graphic/elements/path';
+import { buildPathFromElement, findPathIntersections, samplePath } from './graphic/elements/path';
 
 import './theme.css';
 import './index.css';
@@ -74,6 +74,8 @@ window.vector = {
           console.log(e);
         }
       }
+
+      console.log(findPathIntersections(buildPathFromElement(rect1), buildPathFromElement(circle0)))
     }
   },
   toolbar: {

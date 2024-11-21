@@ -43,9 +43,7 @@ export function buildPath(d: d, fill: fill, stroke: stroke, strokeWidth: strokeW
   };
 }
 
-export function samplePathCommands(commands: d, precision: number = 1, flatten: boolean = false, detailedCurve: boolean = false): points {
-  let points: points = [];
-
+export function samplePathCommands(commands: d, precision: number = 1, detailedCurve: boolean = false): points {
   function interpolateLinear(p0: point, p1: point, precision: number): points {
     let segmentPoints: points = [];
     const distance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
@@ -154,6 +152,7 @@ export function samplePathCommands(commands: d, precision: number = 1, flatten: 
     return segmentPoints;
   }
 
+  let points: points = [];
   let currentPoint: point = { x: 0, y: 0 };
   let previousControlPoint: point | null = null;
 
@@ -231,6 +230,11 @@ export function samplePathCommands(commands: d, precision: number = 1, flatten: 
         throw new Error(`Unsupported command type: ${command.type}`);
     }
   }
+  return points;
+}
+
+export function samplePath(path: path, precision: number = 1, flatten: boolean = false, detailedCurve: boolean = false): points {
+  let points = samplePathCommands(path.d, precision, detailedCurve);
   if (flatten) {
     if (typeof path.transform === 'object' && Array.isArray(path.transform)) {
       if (path.transform.length > 0) {
@@ -239,10 +243,6 @@ export function samplePathCommands(commands: d, precision: number = 1, flatten: 
     }
   }
   return points;
-}
-
-export function samplePath(path: path, precision: number = 1, flatten: boolean = false, detailedCurve: boolean = false): points {
-  return samplePathCommands(path.d, precision, flatten, detailedCurve);
 }
 
 export function smoothPath(path: path): path {
@@ -459,21 +459,28 @@ export function findPathIntersections(path1: path, path2: path): points {
   const approxmiatePath2Points = samplePath(path2, 2, true, true);
   const interval = 4;
   let pointMap = {};
+  let candidatePoints = [];
   for (const point1 of approxmiatePath1Points) {
     const x = Math.floor(point1.x / interval);
     const y = Math.floor(point1.y / interval);
     if (!pointMap.hasOwnProperty(x)) {
-      pointMap[x] = [];
+      pointMap[x] = {};
     }
-    pointMap[x].push(y);
+    if (!pointMap[x].hasOwnProperty(y)) {
+      pointMap[x][y] = 0;
+    }
+    pointMap[x][y] += 1;
   }
   for (const point2 of approxmiatePath2Points) {
     const x = Math.floor(point2.x / interval);
     const y = Math.floor(point2.y / interval);
     if (!pointMap.hasOwnProperty(x)) {
-      pointMap[x] = [];
+      pointMap[x] = {};
     }
-    pointMap[x].push(y);
+    if (pointMap[x].hasOwnProperty(y)) {
+      candidatePoints.push({ x, y });
+    }
   }
+  console.log(candidatePoints);
   // TODO: check overlaps, further check
 }
