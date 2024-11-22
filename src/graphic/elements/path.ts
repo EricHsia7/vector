@@ -440,7 +440,8 @@ export function buildPathFromElement(element: element): path {
 }
 
 export function getPathLength(path: path): number {
-  const points = samplePath(path, 2, true, false);
+  const precision = 2;
+  const points = samplePath(path, precision, true, false);
   const pointsLength = points.length;
   let totalLength = 0;
   for (let i = 0; i < pointsLength; i++) {
@@ -448,7 +449,7 @@ export function getPathLength(path: path): number {
     const previousPoint = points[i - 1] || currentPoint;
     totalLength += Math.hypot(currentPoint.x - previousPoint.x, currentPoint.y - previousPoint.y);
   }
-  return totalLength;
+  return totalLength / precision;
 }
 
 export function getPathBoundingBox(path: path): boundingBox {
