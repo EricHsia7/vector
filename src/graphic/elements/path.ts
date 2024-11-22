@@ -480,6 +480,6 @@ export function findPathIntersections(path1: path, path2: path): points {
       candidatePoints.push({ x: x * interval, y: y * interval });
     }
   }
-  console.log(candidatePoints);
+  return (candidatePoints);
   // TODO: check overlaps, further check
 }

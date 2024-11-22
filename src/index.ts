@@ -75,7 +75,7 @@ window.vector = {
         }
       }
 
-      console.log(findPathIntersections(buildPathFromElement(rect1), buildPathFromElement(circle0)))
+      console.log(findPathIntersections(buildPathFromElement(rect1), buildPathFromElement(circle0)));
     }
   },
   toolbar: {
