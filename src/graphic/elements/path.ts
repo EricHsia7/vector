@@ -439,6 +439,18 @@ export function buildPathFromElement(element: element): path {
   return buildPath(commands, element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
 }
 
+export function getPathLength(path: path): number {
+  const points = samplePath(path, 1, true, true);
+  const pointsLength = points.length;
+  let totalLength = 0;
+  for (let i = 0; i < pointsLength; i++) {
+    const currentPoint = points[i];
+    const previousPoint = points[i - 1] || currentPoint;
+    totalLength += Math.hypot(currentPoint.x - previousPoint.x, currentPoint.y - previousPoint.y);
+  }
+  return totalLength;
+}
+
 export function getPathBoundingBox(path: path): boundingBox {
   const points = samplePath(path, 1, true, true);
   let pX = [];
@@ -480,6 +492,6 @@ export function findPathIntersections(path1: path, path2: path): points {
       candidatePoints.push({ x: x * interval, y: y * interval });
     }
   }
-  return (candidatePoints);
+  return candidatePoints;
   // TODO: check overlaps, further check
 }
