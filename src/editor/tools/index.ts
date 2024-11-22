@@ -1,4 +1,4 @@
-import { buildPathFromElement, elementToPathCommands, getPathBoundingBox, getPathLength } from '../../graphic/elements/path';
+import { buildPathFromElement, getPathCommandsLength } from '../../graphic/elements/path';
 import { editingVectorDocument } from '../index';
 
 import { addPathElement, modifyAddingPathElement, settleAddingPathElement } from './path';
@@ -115,7 +115,7 @@ export function initializeTools(): void {
         break;
     }
 
-    console.log(getPathLength(buildPathFromElement(editingVectorDocument.planes[0].elements[editingVectorDocument.planes[0].elements.length - 1])));
+    console.log(getPathCommandsLength(buildPathFromElement(editingVectorDocument.planes[0].elements[editingVectorDocument.planes[0].elements.length - 1]).d));
   });
 
   /*

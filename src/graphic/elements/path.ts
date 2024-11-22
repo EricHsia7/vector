@@ -439,6 +439,7 @@ export function buildPathFromElement(element: element): path {
   return buildPath(commands, element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
 }
 
+/*
 export function getPathLength(path: path): number {
   const points = samplePath(path, 1, true, false);
   const pointsLength = points.length;
@@ -450,6 +451,7 @@ export function getPathLength(path: path): number {
   }
   return totalLength;
 }
+*/
 
 export function getPathBoundingBox(path: path): boundingBox {
   const points = samplePath(path, 1, true, true);
@@ -464,6 +466,188 @@ export function getPathBoundingBox(path: path): boundingBox {
   const x1 = Math.max(...pX);
   const y1 = Math.max(...pY);
   return { x0, y0, x1, y1 };
+}
+
+export function getPathCommandsLength(commands: d): number {
+  function getStep(linearDistance: number): number {
+    const step = Math.floor((10 * Math.log10(linearDistance)) / Math.log10(30));
+    return step;
+  }
+
+  function measureLinear(p0: point, p1: point): number {
+    const length = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    return length;
+  }
+
+  function measureCubicBezier(p0: point, c1: point, c2: point, p1: point): number {
+    const linearDistance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    let step = getStep(linearDistance);
+    let length = 0;
+    for (let i = 1; i < step; i++) {
+      const t0 = (i - 1) / step;
+      const x0 = Math.pow(1 - t0, 3) * p0.x + 3 * Math.pow(1 - t0, 2) * t0 * c1.x + 3 * (1 - t0) * Math.pow(t0, 2) * c2.x + Math.pow(t0, 3) * p1.x;
+      const y0 = Math.pow(1 - t0, 3) * p0.y + 3 * Math.pow(1 - t0, 2) * t0 * c1.y + 3 * (1 - t0) * Math.pow(t0, 2) * c2.y + Math.pow(t0, 3) * p1.y;
+      const t = i / step;
+      const x = Math.pow(1 - t, 3) * p0.x + 3 * Math.pow(1 - t, 2) * t * c1.x + 3 * (1 - t) * Math.pow(t, 2) * c2.x + Math.pow(t, 3) * p1.x;
+      const y = Math.pow(1 - t, 3) * p0.y + 3 * Math.pow(1 - t, 2) * t * c1.y + 3 * (1 - t) * Math.pow(t, 2) * c2.y + Math.pow(t, 3) * p1.y;
+      length += Math.hypot(x - x0, y - y0);
+    }
+    return length;
+  }
+
+  function measureQuadraticBezier(p0: point, c: point, p1: point): number {
+    const linearDistance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    let step = getStep(linearDistance);
+    let length = 0;
+    for (let i = 1; i < step; i++) {
+      const t0 = (i - 1) / step;
+      const x0 = Math.pow(1 - t0, 2) * p0.x + 2 * (1 - t0) * t0 * p1.x + Math.pow(t0, 2) * c.x;
+      const y0 = Math.pow(1 - t0, 2) * p0.y + 2 * (1 - t0) * t0 * p1.y + Math.pow(t0, 2) * c.y;
+      const t = i / step;
+      const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * p1.x + Math.pow(t, 2) * c.x;
+      const y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * p1.y + Math.pow(t, 2) * c.y;
+      length += Math.hypot(x - x0, y - y0);
+    }
+    return length;
+  }
+
+  function measureArc(p0: point, rx: number, ry: number, xAxisRotation: number, largeArcFlag: 0 | 1, sweepFlag: 0 | 1, x: number, y: number): number {
+    const linearDistance = Math.hypot(x - p0.x, y - p0.y);
+    let step = getStep(linearDistance);
+
+    // Helper to convert degrees to radians
+    const degToRad = (deg) => (deg * Math.PI) / 180;
+
+    // Calculate rotation matrix
+    const rotationRad = degToRad(xAxisRotation);
+    const cosRot = Math.cos(rotationRad);
+    const sinRot = Math.sin(rotationRad);
+
+    // Compute center of the ellipse and the angles
+    const dx = (p0.x - x) / 2;
+    const dy = (p0.y - y) / 2;
+
+    // Transform to the ellipse's coordinate space
+    const x1p = cosRot * dx + sinRot * dy;
+    const y1p = -sinRot * dx + cosRot * dy;
+
+    // Correct radii if necessary
+    const rxSq = rx ** 2;
+    const rySq = ry ** 2;
+    const x1pSq = x1p ** 2;
+    const y1pSq = y1p ** 2;
+
+    let radicant = (rxSq * rySq - rxSq * y1pSq - rySq * x1pSq) / (rxSq * y1pSq + rySq * x1pSq);
+    radicant = Math.max(0, radicant); // Ensure non-negative
+    const coef = (largeArcFlag !== sweepFlag ? 1 : -1) * Math.sqrt(radicant);
+
+    const cxp = coef * ((rx * y1p) / ry);
+    const cyp = coef * (-(ry * x1p) / rx);
+
+    // Transform back to the original coordinate space
+    const cx = cosRot * cxp - sinRot * cyp + (p0.x + x) / 2;
+    const cy = sinRot * cxp + cosRot * cyp + (p0.y + y) / 2;
+
+    // Start and end angles
+    const theta1 = Math.atan2((y1p - cyp) / ry, (x1p - cxp) / rx);
+    const deltaTheta = Math.atan2((-y1p - cyp) / ry, (-x1p - cxp) / rx) - theta1;
+
+    // Ensure the angle is swept in the correct direction
+    const adjustedDeltaTheta = sweepFlag === 0 && deltaTheta > 0 ? deltaTheta - 2 * Math.PI : deltaTheta;
+    const finalDeltaTheta = sweepFlag === 1 && deltaTheta < 0 ? deltaTheta + 2 * Math.PI : adjustedDeltaTheta;
+
+    let length = 0;
+    for (let i = 1; i < step; i++) {
+      const t0 = (i - 1) / step; // Proportion of the arc
+      const theta0 = theta1 + t0 * finalDeltaTheta;
+      const x0 = cosRot * (rx * Math.cos(theta0)) - sinRot * (ry * Math.sin(theta0)) + cx;
+      const y0 = sinRot * (rx * Math.cos(theta0)) + cosRot * (ry * Math.sin(theta0)) + cy;
+      const t = i / step; // Proportion of the arc
+      const theta = theta1 + t * finalDeltaTheta;
+      const x = cosRot * (rx * Math.cos(theta)) - sinRot * (ry * Math.sin(theta)) + cx;
+      const y = sinRot * (rx * Math.cos(theta)) + cosRot * (ry * Math.sin(theta)) + cy;
+      length += Math.hypot(x0 - x, y0 - y);
+    }
+    return length;
+  }
+
+  let length: number = 0;
+  let currentPoint: point = { x: 0, y: 0 };
+  let previousControlPoint: point | null = null;
+
+  for (const command of commands) {
+    switch (command.type) {
+      case 'M':
+        currentPoint = { x: command.x, y: command.y };
+        length += 0;
+        previousControlPoint = null;
+        break;
+      case 'L':
+        const lineEnd = { x: command.x, y: command.y };
+        length += measureLinear(currentPoint, lineEnd);
+        currentPoint = lineEnd;
+        previousControlPoint = null;
+        break;
+      case 'H':
+        const horizontalEnd = { x: command.x, y: currentPoint.y };
+        length += measureLinear(currentPoint, horizontalEnd);
+        currentPoint = horizontalEnd;
+        previousControlPoint = null;
+        break;
+      case 'V':
+        const verticalEnd = { x: currentPoint.x, y: command.y };
+        length += measureLinear(currentPoint, verticalEnd);
+        currentPoint = verticalEnd;
+        previousControlPoint = null;
+        break;
+      case 'C':
+        const cubicStart = currentPoint;
+        const cubicControl1 = { x: command.x1, y: command.y1 };
+        const cubicControl2 = { x: command.x2, y: command.y2 };
+        const cubicEnd = { x: command.x, y: command.y };
+        length += measureCubicBezier(cubicStart, cubicControl1, cubicControl2, cubicEnd);
+        currentPoint = cubicEnd;
+        previousControlPoint = cubicControl2;
+        break;
+      case 'S':
+        const smoothStart = currentPoint;
+        const smoothControl1 = previousControlPoint ? { x: 2 * smoothStart.x - previousControlPoint.x, y: 2 * smoothStart.y - previousControlPoint.y } : smoothStart;
+        const smoothControl2 = { x: command.x2, y: command.y2 };
+        const smoothEnd = { x: command.x, y: command.y };
+        length += measureCubicBezier(smoothStart, smoothControl1, smoothControl2, smoothEnd);
+        currentPoint = smoothEnd;
+        previousControlPoint = smoothControl2;
+        break;
+      case 'Q':
+        const quadStart = currentPoint;
+        const quadControl = { x: command.x, y: command.y };
+        const quadEnd = { x: command.x1, y: command.y1 };
+        length += measureQuadraticBezier(quadStart, quadControl, quadEnd);
+        currentPoint = quadEnd;
+        previousControlPoint = quadControl;
+        break;
+      case 'T':
+        const smoothQuadStart = currentPoint;
+        const smoothQuadControl = previousControlPoint ? { x: 2 * smoothQuadStart.x - previousControlPoint.x, y: 2 * smoothQuadStart.y - previousControlPoint.y } : smoothQuadStart;
+        const smoothQuadEnd = { x: command.x, y: command.y };
+        length += measureQuadraticBezier(smoothQuadStart, smoothQuadControl, smoothQuadEnd);
+        currentPoint = smoothQuadEnd;
+        previousControlPoint = smoothQuadControl;
+        break;
+      case 'A':
+        length += measureArc(currentPoint, command.rx, command.ry, command.xAxisRotation, command.largeArcFlag, command.sweepFlag, command.x, command.y);
+        currentPoint = { x: command.x, y: command.y };
+        previousControlPoint = null;
+        break;
+      case 'Z':
+        length += 0;
+        previousControlPoint = null;
+        break;
+      default:
+        throw new Error(`Unsupported command type: ${command.type}`);
+    }
+  }
+  return length;
 }
 
 export function findPathIntersections(path1: path, path2: path): points {
