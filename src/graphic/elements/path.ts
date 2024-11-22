@@ -440,7 +440,7 @@ export function buildPathFromElement(element: element): path {
 }
 
 export function getPathLength(path: path): number {
-  const points = samplePath(path, 1, true, true);
+  const points = samplePath(path, 2, true, false);
   const pointsLength = points.length;
   let totalLength = 0;
   for (let i = 0; i < pointsLength; i++) {

@@ -115,7 +115,7 @@ export function initializeTools(): void {
         break;
     }
 
-    console.log(editingVectorDocument.planes[0].elements.map((element) => [elementToPathCommands(element), getPathLength(buildPathFromElement(element))]));
+    console.log(getPathLength(buildPathFromElement(editingVectorDocument.planes[0].elements[editingVectorDocument.planes[0].elements.length - 1])));
   });
 
   /*
