@@ -97,7 +97,7 @@ export function samplePathCommands(commands: d, precision: number = 1, detailedC
     }
 
     // Helper to convert degrees to radians
-    const degToRad = (deg) => (deg * Math.PI) / 180;
+    const degToRad = (deg: number) => (deg * Math.PI) / 180;
 
     // Calculate rotation matrix
     const rotationRad = degToRad(xAxisRotation);
@@ -500,24 +500,33 @@ export function getPathCommandsLength(commands: d): number {
       const d2 = derivative(t2, p0, c1, c2, p1);
 
       // Approximate length for this step
-      const segmentLength = Math.sqrt(((d1[0] + d2[0]) / 2) ** 2 + ((d1[1] + d2[1]) / 2) ** 2) * (1 / step); // Multiply by step size
+      const segmentLength = Math.sqrt(Math.pow((d1[0] + d2[0]) / 2, 2) + Math.pow((d1[1] + d2[1]) / 2, 2)) * (1 / step); // Multiply by step size
       length += segmentLength;
     }
     return length;
   }
 
   function measureQuadraticBezier(p0: point, c: point, p1: point): number {
+    function derivative(t: number, p0: point, c: point, p1: point): [number, number] {
+      const dx = 2 * (1 - t) * (p1.x - p0.x) + 2 * t * (c.x - p1.x);
+      const dy = 2 * (1 - t) * (p1.y - p0.y) + 2 * t * (c.y - p1.y);
+      return [dx, dy];
+    }
+
     const linearDistance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     let step = getStep(linearDistance);
     let length = 0;
-    for (let i = 1; i < step; i++) {
-      const t0 = (i - 1) / step;
-      const x0 = Math.pow(1 - t0, 2) * p0.x + 2 * (1 - t0) * t0 * p1.x + Math.pow(t0, 2) * c.x;
-      const y0 = Math.pow(1 - t0, 2) * p0.y + 2 * (1 - t0) * t0 * p1.y + Math.pow(t0, 2) * c.y;
-      const t = i / step;
-      const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * p1.x + Math.pow(t, 2) * c.x;
-      const y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * p1.y + Math.pow(t, 2) * c.y;
-      length += Math.hypot(x - x0, y - y0);
+    for (let i = 1; i <= step; i++) {
+      const t1 = (i - 1) / step;
+      const t2 = i / step;
+
+      // Derivatives at t1 and t2
+      const d1 = derivative(t1, p0, c, p1);
+      const d2 = derivative(t2, p0, c, p1);
+
+      // Approximate length for this step
+      const segmentLength = Math.sqrt(Math.pow((d1[0] + d2[0]) / 2, 2) + Math.pow((d1[1] + d2[1]) / 2, 2)) * (1 / step); // Multiply by step size
+      length += segmentLength;
     }
     return length;
   }
