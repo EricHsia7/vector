@@ -29,3 +29,19 @@ export function buildPlane(x: x, y: y, width: width, height: height, root: root,
     type: 'plane'
   };
 }
+
+export function searchElementOnPlane(plane: plane, id: id): elements {
+  let result = [];
+  for (const element of plane.elements) {
+    if (element.id === id) {
+      result.push(element);
+      break;
+    }
+  }
+  if (plane.subPlanes.length > 0) {
+    for (const subPlane of plane.subPlanes) {
+      result.push(searchElementOnPlane(subPlane, id));
+    }
+  }
+  return result;
+}
