@@ -470,7 +470,7 @@ export function getPathBoundingBox(path: path): boundingBox {
 
 export function getPathCommandsLength(commands: d): number {
   function getStep(linearDistance: number): number {
-    const step = Math.floor((10 * Math.log10(linearDistance)) / Math.log10(40));
+    const step = Math.floor((10 * Math.log10(linearDistance)) / Math.log10(30));
     return step;
   }
 
@@ -513,7 +513,7 @@ export function getPathCommandsLength(commands: d): number {
       return [dx, dy];
     }
 
-    const linearDistance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    const linearDistance = Math.hypot(p0.x - c.x, p0.y - c.y) + Math.hypot(c.x - p1.x, c.y - p1.y);
     let step = getStep(linearDistance);
     let length = 0;
     for (let i = 1; i <= step; i++) {
@@ -537,7 +537,7 @@ export function getPathCommandsLength(commands: d): number {
     let step = getStep(linearDistance);
 
     // Helper to convert degrees to radians
-    const degToRad = (deg) => (deg * Math.PI) / 180;
+    const degToRad = (deg: number) => (deg * Math.PI) / 180;
 
     // Calculate rotation matrix
     const rotationRad = degToRad(xAxisRotation);
