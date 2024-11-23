@@ -480,17 +480,28 @@ export function getPathCommandsLength(commands: d): number {
   }
 
   function measureCubicBezier(p0: point, c1: point, c2: point, p1: point): number {
+    function derivative(t: number, p0: point, c1: point, c2: point, p1: point): [number, number] {
+      // dx/dt and dy/dt
+      const dx = 3 * (1 - t) ** 2 * (c1.x - p0.x) + 6 * (1 - t) * t * (c2.x - c1.x) + 3 * t ** 2 * (p1.x - c2.x);
+      const dy = 3 * (1 - t) ** 2 * (c1.y - p0.y) + 6 * (1 - t) * t * (c2.y - c1.y) + 3 * t ** 2 * (p1.y - c2.y);
+      return [dx, dy];
+    }
     const linearDistance = Math.hypot(p1.x - p0.x, p1.y - p0.y);
     let step = getStep(linearDistance);
+
+    // Numerical integration using the trapezoidal rule
     let length = 0;
-    for (let i = 1; i < step; i++) {
-      const t0 = (i - 1) / step;
-      const x0 = Math.pow(1 - t0, 3) * p0.x + 3 * Math.pow(1 - t0, 2) * t0 * c1.x + 3 * (1 - t0) * Math.pow(t0, 2) * c2.x + Math.pow(t0, 3) * p1.x;
-      const y0 = Math.pow(1 - t0, 3) * p0.y + 3 * Math.pow(1 - t0, 2) * t0 * c1.y + 3 * (1 - t0) * Math.pow(t0, 2) * c2.y + Math.pow(t0, 3) * p1.y;
-      const t = i / step;
-      const x = Math.pow(1 - t, 3) * p0.x + 3 * Math.pow(1 - t, 2) * t * c1.x + 3 * (1 - t) * Math.pow(t, 2) * c2.x + Math.pow(t, 3) * p1.x;
-      const y = Math.pow(1 - t, 3) * p0.y + 3 * Math.pow(1 - t, 2) * t * c1.y + 3 * (1 - t) * Math.pow(t, 2) * c2.y + Math.pow(t, 3) * p1.y;
-      length += Math.hypot(x - x0, y - y0);
+    for (let i = 1; i <= step; i++) {
+      const t1 = (i - 1) / step;
+      const t2 = i / step;
+
+      // Derivatives at t1 and t2
+      const d1 = derivative(t1, p0, c1, c2, p1);
+      const d2 = derivative(t2, p0, c1, c2, p1);
+
+      // Approximate length for this step
+      const segmentLength = Math.sqrt(((d1[0] + d2[0]) / 2) ** 2 + ((d1[1] + d2[1]) / 2) ** 2) * (1 / step); // Multiply by step size
+      length += segmentLength;
     }
     return length;
   }
