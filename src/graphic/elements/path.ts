@@ -470,7 +470,7 @@ export function getPathBoundingBox(path: path): boundingBox {
 
 export function getPathCommandsLength(commands: d): number {
   function getStep(linearDistance: number): number {
-    const step = Math.floor((10 * Math.log10(linearDistance)) / Math.log10(65));
+    const step = Math.floor((10 * Math.log10(linearDistance)) / Math.log10(40));
     return step;
   }
 
@@ -526,6 +526,7 @@ export function getPathCommandsLength(commands: d): number {
 
       // Approximate length for this step
       const segmentLength = Math.sqrt(Math.pow((d1[0] + d2[0]) / 2, 2) + Math.pow((d1[1] + d2[1]) / 2, 2)) * (1 / step); // Multiply by step size
+      console.log(t1, t2, d1, d2, segmentLength);
       length += segmentLength;
     }
     return length;
