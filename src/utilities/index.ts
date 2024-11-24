@@ -31,3 +31,7 @@ export function approximateFraction(decimal: number, maxDenominator: number = 10
 
   return [bestNumerator, bestDenominator];
 }
+
+export function fractionToDecimal(fraction: fraction): number {
+  return fraction[0] / fraction[1];
+}

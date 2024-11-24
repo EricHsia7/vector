@@ -8,7 +8,7 @@ import { polyline } from '../elements/polyline';
 import { polygon } from '../elements/polygon';
 
 import { createTransformationMatrix } from '../transformation/index';
-import { points, transform } from '../attributes/index';
+import { metaPoints, points, transform } from '../attributes/index';
 
 interface renderConfig {
   flattenTransform: boolean;
@@ -96,6 +96,21 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
       return result.join(' ');
     }
 
+    function renderMetaPoints(metaPoints: metaPoints): string {
+      let result = [];
+      let index = 0;
+      let minTime = 0;
+      for (const metaPoint of metaPoints) {
+        if (index === 0) {
+          minTime = metaPoint.time;
+          result.push(`T ${minTime}`);
+        }
+        result.push(`P ${metaPoint.x} ${metaPoint.y} ${metaPoint.f[0]} ${metaPoint.f[1]} ${metaPoint.time - minTime}`);
+        index += 1;
+      }
+      return result.join(' ');
+    }
+
     function renderRect(rect: rect, plane: plane): string {
       var rectWidth: number = Math.abs(rect.width);
       var rectHeight: number = Math.abs(rect.height);
@@ -131,7 +146,7 @@ export function renderPlaneAsXML(plane: plane, config: renderConfig): string {
     }
 
     function renderPath(path: path, plane: plane): string {
-      return `<path d="${renderD(path.d, plane)}" fill="${path.fill}" stroke="${path.stroke}" stroke-width="${path.strokeWidth}" stroke-dasharray="${path.strokeDasharray}" stroke-linecap="${path.strokeLinecap}" stroke-linejoin="${path.strokeLinejoin}" transform="${renderTransform(path.transform, config)}" opacity="${path.opacity}" visibility="${path.visibility}" ${config.exceptID ? '' : ` id="${path.id}" `}/>`;
+      return `<path d="${renderD(path.d, plane)}" meta-points="${renderMetaPoints(path.metaPoints)}" fill="${path.fill}" stroke="${path.stroke}" stroke-width="${path.strokeWidth}" stroke-dasharray="${path.strokeDasharray}" stroke-linecap="${path.strokeLinecap}" stroke-linejoin="${path.strokeLinejoin}" transform="${renderTransform(path.transform, config)}" opacity="${path.opacity}" visibility="${path.visibility}" ${config.exceptID ? '' : ` id="${path.id}" `}/>`;
     }
 
     for (var element of plane.elements) {
