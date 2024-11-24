@@ -24,7 +24,7 @@ let currentStroke: stroke = '#888888';
 let currentStrokeWidth: strokeWidth = 3;
 let currentShapeType: elementType = 'rect';
 
-export function addShapeElement(cursorX: number, cursorY: number): void {
+export function addShapeElement(cursorX: number, cursorY: number, force: number, time: number): void {
   if (!addingShape) {
     switch (currentShapeType) {
       case 'rect':

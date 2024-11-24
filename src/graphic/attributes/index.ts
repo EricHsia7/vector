@@ -11,6 +11,8 @@ export type rx = number; // The x-axis radius (for rounded corners)
 export type ry = number; // The y-axis radius (for rounded corners)
 export type deg = number; // The angle in degrees
 export type rad = number; // The angle in radius
+export type force = number; // The force of pointer
+export type time = number; // The timestamp in milliseconds
 
 export interface point {
   x: x;
@@ -18,6 +20,15 @@ export interface point {
 }
 
 export type points = Array<point>;
+
+export interface metaPoint {
+  x: x;
+  y: y;
+  force: force;
+  time: time;
+}
+
+export type metaPoints = Array<metaPoint>;
 
 interface moveTo {
   type: 'M';
@@ -91,7 +102,7 @@ export type d = (moveTo | lineTo | horizontalLineTo | verticalLineTo | cubicBezi
 // Presentation attributes
 export type fill = string | null; // The fill color or pattern
 export type stroke = string; // The stroke color or pattern
-export type strokeWidth = string; // The width of the stroke
+export type strokeWidth = number | string | null; // The width of the stroke
 export type strokeDasharray = string; // Pattern of dashes and gaps for the stroke
 export type strokeLinecap = 'butt' | 'round' | 'square'; // Shape at the end of open subpaths
 export type strokeLinejoin = 'miter' | 'round' | 'bevel'; // Shape at the corners of paths

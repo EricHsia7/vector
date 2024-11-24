@@ -16,14 +16,14 @@ let currentPathType: 'mono' | 'fountain' = 'mono';
 
 export function switchPenType(): void {}
 
-export function addPathElement(cursorX: number, cursorY: number): void {
+export function addPathElement(cursorX: number, cursorY: number, force: number, time: number): void {
   if (!addingPath) {
     switch (currentPathType) {
       case 'mono':
-        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], null, currentStroke, currentStrokeWidth));
+        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], [{ x: cursorX, y: cursorY, force: force, time: time }], null, currentStroke, currentStrokeWidth));
         break;
       case 'fountain':
-        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], null, currentStroke, currentStrokeWidth));
+        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], [{ x: cursorX, y: cursorY, force: force, time: time }], null, currentStroke, currentStrokeWidth));
         break;
       default:
         break;
@@ -37,12 +37,13 @@ export function addPathElement(cursorX: number, cursorY: number): void {
   }
 }
 
-export function modifyAddingPathElement(cursorX: number, cursorY: number): void {
+export function modifyAddingPathElement(cursorX: number, cursorY: number, force: number, time: number): void {
   if (addingPath) {
     switch (currentPathType) {
       case 'mono':
         for (let addingPathElement of addingPathElements) {
           addingPathElement.d.push({ type: 'L', x: cursorX, y: cursorY });
+          addingPathElement.metaPoints.push({ x: cursorX, y: cursorY, force: force, time: time });
         }
         break;
       case 'fountain':
@@ -56,7 +57,7 @@ export function modifyAddingPathElement(cursorX: number, cursorY: number): void 
   }
 }
 
-export function settleAddingPathElement(cursorX: number, cursorY: number): void {
+export function settleAddingPathElement(cursorX: number, cursorY: number, force: number, time: number): void {
   if (addingPath) {
     addingPath = false;
     modifyAddingPathElement(cursorX, cursorY);

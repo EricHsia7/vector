@@ -15,6 +15,8 @@ export type tools = 'select' | 'shape' | 'path' | 'move';
 let currentCursorX: number = 0;
 let currentCursorY: number = 0;
 let currentTouchPointIdentifier: number = 0;
+let currentForce: number = 0;
+let currentTime: number = 0;
 
 export let currentTool: tools = 'select';
 export let selectedElements: Array<string> = [];
@@ -32,22 +34,26 @@ export function initializeTools(): void {
   editorCanvasElement.addEventListener(events[0], (event) => {
     event.preventDefault(); // Prevent scrolling
 
+    currentTime = new Date().getTime();
+
     if (isTouchDevice) {
       const touch = event.touches[0];
       currentCursorX = touch.clientX;
       currentCursorY = touch.clientY;
       currentTouchPointIdentifier = touch.identifier * 1;
+      currentForce = touch.force || 0;
     } else {
       currentCursorX = event.offsetX;
       currentCursorY = event.offsetY;
+      currentForce = 0;
     }
 
     switch (currentTool) {
       case 'shape':
-        addShapeElement(currentCursorX, currentCursorY);
+        addShapeElement(currentCursorX, currentCursorY, currentForce, currentTime);
         break;
       case 'path':
-        addPathElement(currentCursorX, currentCursorY);
+        addPathElement(currentCursorX, currentCursorY, currentForce, currentTime);
         break;
       default:
         break;
@@ -56,6 +62,9 @@ export function initializeTools(): void {
 
   editorCanvasElement.addEventListener(events[1], (event) => {
     event.preventDefault(); // Prevent scrolling
+
+    currentTime = new Date().getTime();
+
     if (isTouchDevice) {
       var touches: [] = [];
       for (var t in event.touches) {
@@ -67,18 +76,20 @@ export function initializeTools(): void {
       if (touch) {
         currentCursorX = touch.clientX;
         currentCursorY = touch.clientY;
+        currentForce = touch.force || 0;
       }
     } else {
       currentCursorX = event.offsetX;
       currentCursorY = event.offsetY;
+      currentForce = 0;
     }
 
     switch (currentTool) {
       case 'shape':
-        modifyAddingShapeElement(currentCursorX, currentCursorY);
+        modifyAddingShapeElement(currentCursorX, currentCursorY, currentForce, currentTime);
         break;
       case 'path':
-        modifyAddingPathElement(currentCursorX, currentCursorY);
+        modifyAddingPathElement(currentCursorX, currentCursorY, currentForce, currentTime);
         break;
       default:
         break;
@@ -87,6 +98,9 @@ export function initializeTools(): void {
 
   editorCanvasElement.addEventListener(events[2], (event) => {
     event.preventDefault(); // Prevent scrolling
+
+    currentTime = new Date().getTime();
+
     if (isTouchDevice) {
       var touches = [];
       for (var t in event.changedTouches) {
@@ -98,24 +112,25 @@ export function initializeTools(): void {
       if (touch) {
         currentCursorX = touch.clientX;
         currentCursorY = touch.clientY;
+        currentForce = touch.force || 0;
       }
     } else {
       currentCursorX = event.offsetX;
       currentCursorY = event.offsetY;
+      currentForce = 0;
     }
 
     switch (currentTool) {
       case 'shape':
-        settleAddingShapeElement(currentCursorX, currentCursorY);
+        settleAddingShapeElement(currentCursorX, currentCursorY, currentForce, currentTime);
         break;
       case 'path':
-        settleAddingPathElement(currentCursorX, currentCursorY);
+        settleAddingPathElement(currentCursorX, currentCursorY, currentForce, currentTime);
         break;
       default:
         break;
     }
-
-    console.log(getPathCommandsLength(buildPathFromElement(editingVectorDocument.planes[0].elements[editingVectorDocument.planes[0].elements.length - 1]).d));
+    console.log(editingVectorDocument.planes[0].elements[editingVectorDocument.planes[0].elements.length - 1]);
   });
 
   /*

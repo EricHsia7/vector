@@ -1,4 +1,4 @@
-import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, point, points, boundingBox } from '../attributes/index';
+import { d, fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, strokeLinejoin, opacity, visibility, transform, id, elementType, point, points, boundingBox, metaPoints } from '../attributes/index';
 import { uuidv4 } from '../../utilities/index';
 import { rect } from './rect';
 import { circle } from './circle';
@@ -11,6 +11,8 @@ import { transformPoints } from '../transformation/index';
 
 export interface path {
   d: d;
+
+  metaPoints: metaPoints;
 
   fill?: fill;
   stroke?: stroke;
@@ -26,9 +28,10 @@ export interface path {
   type: elementType;
 }
 
-export function buildPath(d: d, fill: fill, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): path {
+export function buildPath(d: d, metaPoints: metaPoints, fill: fill, stroke: stroke, strokeWidth: strokeWidth, strokeDasharray: strokeDasharray, strokeLinecap: strokeLinecap, strokeLinejoin: strokeLinejoin, transform: transform, opacity: opacity, visibility: visibility): path {
   return {
     d: d || [],
+    metaPoints: metaPoints || [],
     fill: fill || 'none',
     stroke: stroke || 'none',
     strokeWidth: strokeWidth || 0,
@@ -436,22 +439,8 @@ export function elementToPathCommands(element: element): d {
 
 export function buildPathFromElement(element: element): path {
   const commands = elementToPathCommands(element);
-  return buildPath(commands, element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
+  return buildPath(commands, [], element?.fill, element?.stroke, element?.strokeWidth, element?.strokeDasharray, element?.strokeLinecap, element?.strokeLinejoin, element?.transform, element?.opacity, element?.visibility);
 }
-
-/*
-export function getPathLength(path: path): number {
-  const points = samplePath(path, 1, true, false);
-  const pointsLength = points.length;
-  let totalLength = 0;
-  for (let i = 1; i < pointsLength; i++) {
-    const previousPoint = points[i - 1];
-    const currentPoint = points[i];
-    totalLength += Math.hypot(previousPoint.x - currentPoint.x, previousPoint.y - currentPoint.y);
-  }
-  return totalLength;
-}
-*/
 
 export function getPathBoundingBox(path: path): boundingBox {
   const points = samplePath(path, 1, true, true);
