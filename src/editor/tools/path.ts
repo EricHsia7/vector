@@ -5,6 +5,7 @@ import { buildPlane, plane } from '../../graphic/plane/index';
 import { renderAddingPathPlane, renderEditorPlane } from '../display/index';
 import { currentViewHeight, currentViewWidth } from '../index';
 import { buildPath, smoothPath } from '../../graphic/elements/path';
+import { approximateFraction } from '../../utilities/index';
 
 let addingPathElements: elements = [];
 let addingPath: boolean = false;
@@ -20,10 +21,10 @@ export function addPathElement(cursorX: number, cursorY: number, force: number, 
   if (!addingPath) {
     switch (currentPathType) {
       case 'mono':
-        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], [{ x: cursorX, y: cursorY, force: force, time: time }], null, currentStroke, currentStrokeWidth));
+        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], [{ x: cursorX, y: cursorY, f: approximateFraction(force), time: time }], null, currentStroke, currentStrokeWidth));
         break;
       case 'fountain':
-        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], [{ x: cursorX, y: cursorY, force: force, time: time }], null, currentStroke, currentStrokeWidth));
+        addingPathElements.push(buildPath([{ type: 'M', x: cursorX, y: cursorY }], [{ x: cursorX, y: cursorY, f: approximateFraction(force), time: time }], null, currentStroke, currentStrokeWidth));
         break;
       default:
         break;
@@ -43,7 +44,7 @@ export function modifyAddingPathElement(cursorX: number, cursorY: number, force:
       case 'mono':
         for (let addingPathElement of addingPathElements) {
           addingPathElement.d.push({ type: 'L', x: cursorX, y: cursorY });
-          addingPathElement.metaPoints.push({ x: cursorX, y: cursorY, force: force, time: time });
+          addingPathElement.metaPoints.push({ x: cursorX, y: cursorY, f: approximateFraction(force), time: time });
         }
         break;
       case 'fountain':

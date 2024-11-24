@@ -1,3 +1,5 @@
+import { fraction } from '../../utilities/index';
+
 export type elementType = 'rect' | 'circle' | 'ellipse' | 'line' | 'polyline' | 'polygon' | 'path';
 
 export type x = number; // The x-coordinate of the upper-left corner
@@ -12,6 +14,7 @@ export type ry = number; // The y-axis radius (for rounded corners)
 export type deg = number; // The angle in degrees
 export type rad = number; // The angle in radius
 export type force = number; // The force of pointer
+export type f = fraction; // The force of pointer in fraction
 export type time = number; // The timestamp in milliseconds
 
 export interface point {
@@ -24,7 +27,7 @@ export type points = Array<point>;
 export interface metaPoint {
   x: x;
   y: y;
-  force: force;
+  f: f;
   time: time;
 }
 
